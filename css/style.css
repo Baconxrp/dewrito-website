@@ -21,6 +21,11 @@ body {
     background: transparent;
 }
 
+/* Shift pink glow in Slogan.png to cyan to match logo */
+.dewrito-logo-img {
+	filter: hue-rotate(210deg);
+}
+
 h1,
 h2,
 h3,
