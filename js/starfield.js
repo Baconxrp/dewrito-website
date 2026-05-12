@@ -1,21 +1,22 @@
 (function($) {
 	'use strict';
 
-	$(window).on('load', function() {
+	function initStarfield() {
 		// Starfield canvas
 		const canvas = document.createElement('canvas');
 		canvas.id = 'starfield-canvas';
 		canvas.style.position = 'fixed';
 		canvas.style.top = '0';
 		canvas.style.left = '0';
-		canvas.style.width = '100%';
-		canvas.style.height = '100%';
+		canvas.width = window.innerWidth;
+		canvas.height = window.innerHeight;
 		canvas.style.zIndex = '-1';
 		document.body.prepend(canvas);
 
 		const ctx = canvas.getContext('2d');
 		let stars = [];
-		let width, height;
+		let width = canvas.width;
+		let height = canvas.height;
 		let scrollY = 0;
 
 		// Three parallax layers: far (slow), mid (medium), near (fast)
@@ -24,11 +25,6 @@
 			{ count: 100, minR: 0.5, maxR: 1.4, speed: 0.08, color: 'rgba(203,160,240,' },
 			{ count: 40,  minR: 1.0, maxR: 2.2, speed: 0.18, color: 'rgba(255,220,255,' }
 		];
-
-		function resize() {
-			width = canvas.width = window.innerWidth;
-			height = canvas.height = window.innerHeight;
-		}
 
 		function createStars() {
 			stars = [];
@@ -43,7 +39,7 @@
 						layer: idx,
 						pulseSpeed: Math.random() * 0.025 + 0.005,
 						pulseOffset: Math.random() * Math.PI * 2,
-						layerOffset: Math.random() * 200 // for parallax drift
+						layerOffset: Math.random() * 200
 					});
 				}
 				idx++;
@@ -53,7 +49,7 @@
 		function drawStars(time) {
 			ctx.clearRect(0, 0, width, height);
 
-			// Deep space gradient — shifts subtly with scroll for depth
+			// Deep space gradient
 			const scrollShift = scrollY * 0.0003;
 			const gx = width / 2 + scrollShift * 200;
 			const gy = height / 2 + scrollShift * 100;
@@ -64,7 +60,7 @@
 			ctx.fillStyle = grad;
 			ctx.fillRect(0, 0, width, height);
 
-			// Nebulae — shift with scroll for parallax depth
+			// Nebulae
 			const n1x = width * 0.3 - scrollY * 0.02;
 			const n1y = height * 0.4 - scrollY * 0.03;
 			const n1Grad = ctx.createRadialGradient(n1x, n1y, 0, n1x, n1y, 350);
@@ -89,11 +85,9 @@
 				const pulse = Math.sin(time * s.pulseSpeed + s.pulseOffset);
 				const opacity = s.opacity * (0.5 + 0.5 * pulse);
 
-				// Parallax Y offset
 				const py = s.y - scrollY * layer.speed + s.layerOffset * layer.speed;
 				const px = s.x + Math.sin(time * 0.0002 + s.pulseOffset) * (s.layer + 1) * 0.5;
 
-				// Wrap stars that go off screen
 				let drawY = py;
 				if (drawY < -10) drawY += height + 20;
 				if (drawY > height + 10) drawY -= height + 20;
@@ -114,7 +108,7 @@
 				ctx.arc(px, drawY, s.r, 0, Math.PI * 2);
 				ctx.fill();
 
-				// Bright stars get a cross flare
+				// Bright stars cross flare
 				if (s.r > 1.5 && opacity > 0.6) {
 					ctx.strokeStyle = layer.color + (opacity * 0.15) + ')';
 					ctx.lineWidth = 0.5;
@@ -131,18 +125,25 @@
 			requestAnimationFrame(drawStars);
 		}
 
-		resize();
 		createStars();
 		requestAnimationFrame(drawStars);
 
 		window.addEventListener('resize', () => {
-			resize();
+			width = canvas.width = window.innerWidth;
+			height = canvas.height = window.innerHeight;
 			createStars();
 		});
-	});
+	}
+
+	// Run immediately if already loaded, otherwise wait
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', initStarfield);
+	} else {
+		initStarfield();
+	}
 
 	// CRT / scanline overlay
-	$(window).on('load', function() {
+	function initCRT() {
 		const overlay = document.createElement('div');
 		overlay.id = 'crt-overlay';
 		overlay.style.position = 'fixed';
@@ -154,13 +155,18 @@
 		overlay.style.pointerEvents = 'none';
 		overlay.style.background = 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.04) 2px, rgba(0,0,0,0.04) 4px)';
 		document.body.appendChild(overlay);
-	});
+	}
+
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', initCRT);
+	} else {
+		initCRT();
+	}
 
 	// Parallax scroll for page elements
 	$(window).on('scroll', function() {
 		scrollY = $(window).scrollTop();
 
-		// Hero logo parallax — moves slower than scroll (floats down)
 		const logo = $('.dewrito-logo-img');
 		if (logo.length) {
 			const heroH = $('.hero-section').outerHeight() || 600;
@@ -169,7 +175,6 @@
 			logo.css('opacity', 1 - progress * 0.8);
 		}
 
-		// Hero text parallax — moves slightly faster (floats up)
 		const heroText = $('.hero-text-wrapper');
 		if (heroText.length) {
 			const heroH = $('.hero-section').outerHeight() || 600;
@@ -178,7 +183,6 @@
 			heroText.css('opacity', 1 - progress * 0.6);
 		}
 
-		// Intro boxes parallax — subtle float
 		$('.intro-text-box').each(function(i) {
 			const box = $(this);
 			const rect = box[0].getBoundingClientRect();
@@ -189,7 +193,6 @@
 			}
 		});
 
-		// Blog / featured boxes subtle parallax
 		$('.featured-box').each(function() {
 			const box = $(this);
 			const rect = box[0].getBoundingClientRect();

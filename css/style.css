@@ -17,8 +17,8 @@ body {
  	font-family: 'Roboto', sans-serif;
  	-webkit-font-smoothing: antialiased;
  	font-smoothing: antialiased;
-    /* background handled by starfield canvas */
-    background: transparent;
+    /* Fallback deep space color — starfield canvas renders over this */
+    background: #030112;
 }
 
 h1,
