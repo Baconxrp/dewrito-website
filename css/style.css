@@ -29,6 +29,7 @@ h6 {
 	margin: 0;
 	color: #111111;
 	font-weight: 500;
+	text-shadow: 0 0 10px rgba(203, 139, 180, 0.6), 0 0 20px rgba(203, 139, 180, 0.3);
 }
 
 h1 {
@@ -57,9 +58,10 @@ h6 {
 
 p {
 	font-size: 15px;
-	color: #585858;
+	color: #d4d0e0;
 	line-height: 1.6;
 	font-weight: 500;
+	text-shadow: 0 0 8px rgba(203, 139, 180, 0.5), 0 0 16px rgba(203, 139, 180, 0.2);
 }
 
 img {
@@ -659,13 +661,8 @@ ol {
 ---------------------*/
 
 .intro-section {
-	/* Use background image and cover the entire section */
-	background-image: url("../img/background.png");
-	background-repeat: no-repeat;
-	background-position: center top;
-	background-size: cover;
-	/* fallback color */
-	background-color: #0c062e;
+	/* No background — starfield shows through */
+	background: transparent;
 	padding: 115px 0;
 }
 
@@ -682,13 +679,15 @@ ol {
 .text-box h3 {
 	margin-bottom: 40px;
 	max-width: 370px;
+	color: #ffffff;
 }
 
 .text-box p {
 	font-size: 15px;
 	font-weight: 500;
-	color: #68647d;
+	color: #d4d0e0;
 	margin-bottom: 35px;
+	text-shadow: 0 0 8px rgba(203, 139, 180, 0.5), 0 0 16px rgba(203, 139, 180, 0.2);
 }
 
 .text-box .read-more {
@@ -708,17 +707,8 @@ ol {
 ---------------------*/
 
 .blog-section {
-	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#501755+0,2d1854+100 */
-	background: #501755;
-	/* Old browsers */
-	/* FF3.6-15 */
-	background: -webkit-linear-gradient(45deg, #501755 0%, #2d1854 100%);
-	/* Chrome10-25,Safari5.1-6 */
-	background: -o-linear-gradient(45deg, #501755 0%, #2d1854 100%);
-	background: linear-gradient(45deg, #501755 0%, #2d1854 100%);
-	/* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#501755', endColorstr='#2d1854', GradientType=1);
-	/* IE6-9 fallback on horizontal gradient */
+	/* No background — starfield shows through */
+	background: transparent;
 }
 
 .blog-section .section-title {
@@ -992,8 +982,11 @@ ol {
 .featured-box {
 	float: right;
 	width: calc(50% + 156px);
-	background: #fff;
+	background: rgba(12, 6, 46, 0.55);
+	backdrop-filter: blur(6px);
 	padding: 100px 50px 130px 79px;
+	border-radius: 12px;
+	border: 1px solid rgba(203, 139, 180, 0.15);
 }
 
 .featured-box .text-box {
@@ -1001,7 +994,7 @@ ol {
 }
 
 .featured-box .text-box .top-meta {
-	color: #68647d;
+	color: #b8b4c8;
 }
 
 .featured-box .text-box h3 {
@@ -1014,22 +1007,13 @@ ol {
 }
 
 .featured-box .text-box .read-more {
-	color: #251e2f;
+	color: #e84b9a;
 }
 
 .gradient-bg,
 .newsletter-section {
-	background: #3e0f3d;
-	/* Old browsers */
-	/* FF3.6-15 */
-	background: -webkit-linear-gradient(left, #3e0f3d 0%, #1c0f3b 100%);
-	/* Chrome10-25,Safari5.1-6 */
-	background: -webkit-gradient(linear, left top, right top, from(#3e0f3d), to(#1c0f3b));
-	background: -o-linear-gradient(left, #3e0f3d 0%, #1c0f3b 100%);
-	background: linear-gradient(to right, #3e0f3d 0%, #1c0f3b 100%);
-	/* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3e0f3d', endColorstr='#1c0f3b', GradientType=1);
-	/* IE6-9 */
+	/* No background — starfield shows through */
+	background: transparent;
 }
 
 /* --------------------
@@ -1073,18 +1057,8 @@ ol {
 
 .footer-section {
 	text-align: center;
-	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#330d38+0,190d36+100 */
-	background: #330d38;
-	/* Old browsers */
-	/* FF3.6-15 */
-	background: -webkit-linear-gradient(left, #330d38 0%, #190d36 100%);
-	/* Chrome10-25,Safari5.1-6 */
-	background: -webkit-gradient(linear, left top, right top, from(#330d38), to(#190d36));
-	background: -o-linear-gradient(left, #330d38 0%, #190d36 100%);
-	background: linear-gradient(to right, #330d38 0%, #190d36 100%);
-	/* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#330d38', endColorstr='#190d36', GradientType=1);
-	/* IE6-9 */
+	/* No background — starfield shows through */
+	background: transparent;
 }
 
 .footer-section .container {
@@ -1124,12 +1098,13 @@ ol {
 .copyright {
 	font-size: 12px;
 	font-weight: 500;
-	color: #9190a5;
-	opacity: 0.20;
+	color: #b8b4c8;
+	opacity: 0.8;
+	text-shadow: 0 0 6px rgba(203, 139, 180, 0.3);
 }
 
 .copyright a {
-	color: #9190a5;
+	color: #d4a0c0;
 }
 
 .copyright a:hover {
@@ -1181,17 +1156,8 @@ ol {
 
 .games-section {
 	padding: 108px 0;
-	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#501755+0,2d1854+100 */
-	background: #501755;
-	/* Old browsers */
-	/* FF3.6-15 */
-	background: -webkit-linear-gradient(45deg, #501755 0%, #2d1854 100%);
-	/* Chrome10-25,Safari5.1-6 */
-	background: -o-linear-gradient(45deg, #501755 0%, #2d1854 100%);
-	background: linear-gradient(45deg, #501755 0%, #2d1854 100%);
-	/* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#501755', endColorstr='#2d1854', GradientType=1);
-	/* IE6-9 fallback on horizontal gradient */
+	/* No background — starfield shows through */
+	background: transparent;
 }
 
 .game-filter {
@@ -1302,17 +1268,8 @@ ol {
 .blog-page,
 .contact-page {
 	padding: 104px 0;
-	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#501755+0,2d1854+100 */
-	background: #501755;
-	/* Old browsers */
-	/* FF3.6-15 */
-	background: -webkit-linear-gradient(45deg, #501755 0%, #2d1854 100%);
-	/* Chrome10-25,Safari5.1-6 */
-	background: -o-linear-gradient(45deg, #501755 0%, #2d1854 100%);
-	background: linear-gradient(45deg, #501755 0%, #2d1854 100%);
-	/* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#501755', endColorstr='#2d1854', GradientType=1);
-	/* IE6-9 fallback on horizontal gradient */
+	/* No background — starfield shows through */
+	background: transparent;
 }
 
 .game-single-preview {
@@ -1321,7 +1278,7 @@ ol {
 
 .game-single-content .gs-meta {
 	font-size: 18px;
-	color: #68647d;
+	color: #b8b4c8;
 	font-weight: 500;
 	margin-bottom: 20px;
 }
@@ -1344,13 +1301,15 @@ ol {
 .game-single-content p {
 	font-size: 16px;
 	font-weight: 500;
-	color: #68647d;
+	color: #d4d0e0;
 	line-height: 1.8;
 	margin-bottom: 70px;
+	text-shadow: 0 0 8px rgba(203, 139, 180, 0.5), 0 0 16px rgba(203, 139, 180, 0.2);
 }
 
 .rating-widget {
-	background: #34164b;
+	background: rgba(12, 6, 46, 0.6);
+	backdrop-filter: blur(4px);
 	padding: 55px 0 30px;
 }
 
@@ -1451,7 +1410,7 @@ ol {
 .game-author-info p {
 	font-size: 16px;
 	font-weight: 500;
-	color: #68647d;
+	color: #d4d0e0;
 	line-height: 1.8;
 	margin-bottom: 0;
 }
@@ -1475,6 +1434,8 @@ ol {
 
 .review-content p {
 	margin-bottom: 40px;
+	color: #d4d0e0;
+	text-shadow: 0 0 8px rgba(203, 139, 180, 0.5), 0 0 16px rgba(203, 139, 180, 0.2);
 }
 
 .review-content .rating {
@@ -1574,8 +1535,9 @@ ol {
 
 .contact-text p {
 	line-height: 1.9;
-	color: #68647d;
+	color: #d4d0e0;
 	margin-bottom: 50px;
+	text-shadow: 0 0 8px rgba(203, 139, 180, 0.5), 0 0 16px rgba(203, 139, 180, 0.2);
 }
 
 .cont-info {

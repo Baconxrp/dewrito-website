@@ -153,6 +153,9 @@ footer .footer-logo img + * {    /* rare cases */
 }
 
 .hero-section .hero-item.set-bg {
+  /* Remove hero background — starfield shows through */
+  background: transparent !important;
+  background-image: none !important;
   /* Set exact height instead of min-height to prevent overflow space */
   height: 90vh !important;               /* 90% of viewport - adjust to 80vh/100vh as needed */
   min-height: unset !important;           /* remove any conflicting min-height */
@@ -160,9 +163,6 @@ footer .footer-logo img + * {    /* rare cases */
   padding: 0 !important;
   margin: 0 !important;
   overflow: hidden !important;            /* hide any accidental overflow */
-  background-size: cover !important;
-  background-position: center center !important;
-  background-repeat: no-repeat !important;
 }
 
 /* Remove forced br spacing & make content hug the edges */
