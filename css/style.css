@@ -386,15 +386,7 @@ ol {
 }
 
 .main-menu li a:after {
-	position: absolute;
-	content: "";
-	width: 20px;
-	height: 20px;
-	right: 0;
-	top: 1px;
-	background-image: url("../img/icons/arrow-down.png");
-	background-repeat: no-repeat;
-	background-position: right center;
+	display: none;
 }
 
 .main-menu li a i {
@@ -650,7 +642,7 @@ ol {
 /* Rounded corners for primary menu container and register buttons */
 .main-menu.primary-menu {
 	display: inline-block; /* shrink to menu width so radius is visible */
-	background: rgba(8,22,30,0.6);
+	background: transparent;
 	padding: 6px 18px;
 	border-radius: 10px;
 }
