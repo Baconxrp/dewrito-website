@@ -37,7 +37,7 @@
 						r: Math.random() * (layer.maxR - layer.minR) + layer.minR,
 						opacity: Math.random() * 0.7 + 0.3,
 						layer: idx,
-						pulseSpeed: Math.random() * 0.025 + 0.005,
+						pulseSpeed: Math.random() * 0.008 + 0.001,
 						pulseOffset: Math.random() * Math.PI * 2,
 						layerOffset: Math.random() * 200
 					});
