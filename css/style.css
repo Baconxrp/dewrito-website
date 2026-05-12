@@ -329,7 +329,7 @@ ol {
 }
 
 .header-bar-warp {
-	background: #081624;
+	background: rgba(3, 1, 18, 0.7);
 	padding: 14px 30px 0; /* reduced height */
 	-webkit-box-shadow: 0 0 9px 3px rgba(226, 30, 228, 0.12);
 	box-shadow: 0 0 9px 3px rgba(226, 30, 228, 0.12);
@@ -415,7 +415,6 @@ ol {
 	padding-top: 0;
 	padding-bottom: 60px;
 	position: relative;
-	z-index: 1;
 }
 
 @media (max-width: 767px) {
