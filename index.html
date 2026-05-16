@@ -221,6 +221,76 @@ footer .footer-logo img + * {    /* rare cases */
     padding-left: 10px;
   }
 }
+
+/* Matrix Chat Widget */
+.matrix-chat-widget {
+  background: rgba(3, 1, 18, 0.85);
+  border: 1px solid rgba(0, 212, 255, 0.15);
+  border-radius: 12px;
+  overflow: hidden;
+  height: 100%;
+  min-height: 400px;
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+}
+
+.matrix-chat-header {
+  padding: 12px 16px;
+  background: rgba(0, 212, 255, 0.06);
+  border-bottom: 1px solid rgba(0, 212, 255, 0.12);
+  text-align: center;
+}
+
+.matrix-chat-title {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  color: #00d4ff;
+  text-shadow: 0 0 8px rgba(0, 212, 255, 0.4);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.matrix-chat-subtitle {
+  display: block;
+  font-size: 11px;
+  color: #7a8fa8;
+  margin-top: 2px;
+}
+
+.matrix-chat-loading {
+  display: none;
+  padding: 40px 16px;
+  text-align: center;
+  color: #7a8fa8;
+  font-size: 14px;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.matrix-chat-loading .fa-spinner {
+  color: #00d4ff;
+  margin-right: 8px;
+}
+
+.matrix-chat-iframe {
+  flex: 1;
+  width: 100%;
+  border: none;
+  min-height: 380px;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: 991px) {
+  .matrix-chat-widget {
+    margin-top: 2rem;
+    min-height: 350px;
+  }
+  .matrix-chat-iframe {
+    min-height: 330px;
+  }
+}
+
 .user-panel a {
 filter: hue-rotate(210deg) drop-shadow(0 0 15px #00d4ff) drop-shadow(0 0 30px rgba(0,212,255,0.6));
   }
@@ -290,6 +360,25 @@ filter: hue-rotate(210deg) drop-shadow(0 0 15px #00d4ff) drop-shadow(0 0 30px rg
         <!-- mt-3 = ~16px top margin – adjust mt-2 / mt-4 if needed -->
       </div>
       <div class="slogan"></div>
+    </div>
+    <!-- Matrix Chat Widget -->
+    <div class="col-md-4">
+      <div class="matrix-chat-widget">
+        <div class="matrix-chat-header">
+          <span class="matrix-chat-title">Matrix Chat</span>
+          <span class="matrix-chat-subtitle">Connect with the community</span>
+        </div>
+        <div class="matrix-chat-loading" id="matrix-loading">
+          <i class="fa fa-spinner fa-spin"></i> Connecting to Matrix...
+        </div>
+        <iframe
+          src="https://app.element.io/#/room/#dewrito:dewrito.net?embed"
+          class="matrix-chat-iframe"
+          title="Matrix Chat"
+          allow="microphone"
+          onerror="document.getElementById('matrix-loading').style.display='block'"
+        ></iframe>
+      </div>
     </div>
   </div>
 </div>
@@ -361,6 +450,26 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 	<script src="js/jquery.magnific-popup.min.js"></script>
 	<script src="js/main.js"></script>
 	<script src="js/starfield.js"></script>
+
+	<!-- Matrix widget: hide loading spinner when iframe loads -->
+	<script>
+	(function() {
+		var iframe = document.querySelector('.matrix-chat-iframe');
+		var loader = document.getElementById('matrix-loading');
+		if (iframe && loader) {
+			var loaded = false;
+			function hideLoader() {
+				if (!loaded) {
+					loaded = true;
+					loader.style.display = 'none';
+				}
+			}
+			iframe.addEventListener('load', hideLoader);
+			// Fallback: hide after 10s regardless (Element can be slow)
+			setTimeout(hideLoader, 10000);
+		}
+	})();
+	</script>
 
 
 
