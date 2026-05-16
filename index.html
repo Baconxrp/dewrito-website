@@ -337,16 +337,18 @@ filter: hue-rotate(210deg) drop-shadow(0 0 15px #00d4ff) drop-shadow(0 0 30px rg
       </div>
       <div class="slogan"></div>
     </div>
-    <!-- Matrix Room Viewer -->
+    <!-- Matrix Chat Widget -->
     <div class="col-md-4">
       <div class="matrix-chat-widget">
-        <div class="matrix-chat-loading" id="matrix-loading">
-          <i class="fa fa-spinner fa-spin"></i> Loading Matrix room...
+        <div class="matrix-chat-header">
+          <span class="matrix-chat-title">Matrix Chat</span>
+          <span class="matrix-chat-subtitle">Connect with the community</span>
         </div>
         <iframe
-          src="hydrogen/#/room/#dewrito:dewrito.net"
+          src="https://app.sable.moe/#/room/#dewrito:dewrito.net?embed&hs_url=https://matrix.dewrito.net&username=@viewer:dewrito.net&password=viewerpassword"
           class="matrix-chat-iframe"
-          title="Dewrito Matrix Room"
+          title="Matrix Chat"
+          allow="microphone"
         ></iframe>
       </div>
     </div>
