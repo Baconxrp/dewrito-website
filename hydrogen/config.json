@@ -1,0 +1,19 @@
+{
+  "push": {
+    "appId": "io.element.hydrogen.web",
+    "gatewayUrl": "https://matrix.org",
+    "applicationServerKey": "BC-gpSdVHEXhvHSHS0AzzWrQoukv2BE7KzpoPO_FfPacqOo3l1pdqz7rSgmB04pZCWaHPz7XRe6fjLaC-WPDopM"
+  },
+  "defaultHomeServer": {
+    "url": "https://matrix.dewrito.net",
+    "name": "Dewrito"
+  },
+  "bugReportEndpointUrl": "https://rageshakes.element.io/api/submit",
+  "themeManifests": [
+    "assets/theme-element.json"
+  ],
+  "defaultTheme": {
+    "light": "element-light",
+    "dark": "element-dark"
+  }
+}
