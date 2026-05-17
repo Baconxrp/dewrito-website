@@ -3,8 +3,8 @@
 <head>
 	<title>Dewrito</title>
 	<meta charset="UTF-8">
-	<meta name="description" content="Dewrito community Matrix chat and Fluxer client">
-	<meta name="keywords" content="matrix, element, chat, dewrito, community">
+	<meta name="description" content="Dewrito community server and Fluxer client">
+	<meta name="keywords" content="dewrito, fluxer, community, game server">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!-- Favicon -->
 	<link href="img/favicon.ico" rel="shortcut icon"/>
@@ -26,258 +26,6 @@
 
 	<!-- Main Stylesheets -->
 	<link rel="stylesheet" href="css/style.css"/>
-
-
-	<!--[if lt IE 9]>
-		  <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-	  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-	<![endif]-->
-<style>
-.hero-text-wrapper {
-  text-align: left;                /* force left alignment */
-  margin-left: 0;                  /* no left indent */
-  padding-left: 0%;                /* optional: small indent from edge */
-  max-width: 80%;                  /* prevent it from stretching full width */
-}
-
-.dewrito-logo-img {
-  display: block;
-  margin-bottom: 1rem;             /* space before the "Have what you want." text */
-  filter: hue-rotate(210deg) drop-shadow(0 0 15px #00d4ff) drop-shadow(0 0 30px rgba(0,212,255,0.6));
-  /* optional extra glow if your PNG doesn't have it baked in */
-}
-
-@media (max-width: 768px) {
-  .dewrito-logo-img {
-    max-width: 90%;                /* bigger on mobile if needed */
-  }
-  .hero-text-wrapper {
-    padding-left: 0%;
-  }
-}
-						
-/* Change main menu font to Nunito */
-.main-menu.primary-menu a {
-  font-family: 'Nunito', sans-serif;
-  /* Optional: tweak weight/style for better look */
-  font-weight: 600;          /* medium-bold – Nunito looks great at 500–700 */
-  /* font-weight: 700;       /* bolder alternative */
-  /* letter-spacing: 0.5px;  /* subtle spacing if you want */
-	
-}
-
-/* Optional: make dropdowns (if any) match */
-.main-menu.primary-menu ul a {
-  font-family: 'Nunito', sans-serif;
-  font-weight: 500;
-    
-}
-
-/* If the active/hover states override font – force them too */
-.main-menu.primary-menu a:hover,
-.main-menu.primary-menu li.active > a,
-.main-menu.primary-menu li.current-menu-item > a {
-  font-family: 'Nunito', sans-serif !important;
-    
-}						
-						
-						/* Set Nunito as the primary font for the entire page */
-body,
-html {
-  font-family: 'Nunito', sans-serif !important;
-  
-}
-
-/* Target common text-containing elements to force Nunito */
-p, 
-h1, h2, h3, h4, h5, h6,
-span, 
-div,
-a:not(.main-menu a),           /* exclude main menu since we already set it */
-li:not(.main-menu li),
-.intro-text-box,
-.intro-section,
-.footer-section,
-.footer-menu a,
-.copyright,
-.widget-title,
-.read-more,
-.top-meta,
-.user-panel,
-.header-social p,
-.site-btn,
-.hero-text-wrapper,
-.slogan {
-  font-family: 'Nunito', sans-serif !important;
-  
-}
-
-/* Optional: fine-tune weights & sizes for better look (Nunito shines at 400–700) */
-body {
-  font-weight: 400;             /* regular/default */
-}
-
-h1, h2, h3 {
-  font-weight: 700;             /* bold headings */
-    filter: hue-rotate(210deg) drop-shadow(0 0 15px #00d4ff) drop-shadow(0 0 30px rgba(0,212,255,0.6));
-}
-
-h4, h5, h6 {
-  font-weight: 600;
-}
-
-p, li, .intro-text-box p {
-  font-weight: 400;
-  line-height: 1.6;             /* improved readability */
-    filter: hue-rotate(210deg) drop-shadow(0 0 15px #00d4ff) drop-shadow(0 0 30px rgba(0,212,255,0.6));
-}
-
-/* Keep special fonts where you probably want them (logos, signatures, etc.) */
-.dewrito-logo-img + .slogan,     /* if you add text in .slogan later */
-footer .footer-logo img + * {    /* rare cases */
-  font-family: inherit;          /* don't override if intentionally different */
-    
-}
-
-/* If any Bootstrap or template classes fight back */
-.text-white, 
-.text-left, 
-.text-center {
-  font-family: 'Nunito', sans-serif !important;
-}
-						
-/* Fix purple/empty bar below hero - remove extra space & lock height */
-.hero-section {
-  margin-bottom: 0 !important;
-  padding-bottom: 0 !important;
-}
-
-.hero-section .hero-item.set-bg {
-  /* Remove hero background — starfield shows through */
-  background: transparent !important;
-  background-image: none !important;
-  /* Set exact height instead of min-height to prevent overflow space */
-  height: 90vh !important;               /* 90% of viewport - adjust to 80vh/100vh as needed */
-  min-height: unset !important;           /* remove any conflicting min-height */
-  max-height: 100vh;                      /* cap it so it never overflows */
-  padding: 0 !important;
-  margin: 0 !important;
-  overflow: hidden !important;            /* hide any accidental overflow */
-}
-
-/* Remove forced br spacing & make content hug the edges */
-.hero-section .container {
-  height: 100%;
-  padding-top: 1rem;                      /* small breathing room at top if needed */
-  padding-bottom: 0 !important;
-  margin: 0 auto;
-}
-
-.hero-section .row {
-  height: 100%;
-  margin: 0;
-}
-
-.hero-section br {
-  display: none;                          /* hide all those <br> tags - they're causing most of the gap! */
-}
-
-/* If the template adds padding via JS or style.css, force zero bottom */
-.hero-section .hero-item > .container > .row > div {
-  padding-bottom: 0 !important;
-}
-/* Align hero content left edge with intro section content */
-.hero-section .container,
-.intro-section .container {
-  padding-left: 15px;   /* Bootstrap default container padding – match it */
-  padding-right: 15px;
-}
-
-/* Force hero text to align like the intro boxes */
-.hero-text-wrapper {
-  padding-left: 15px;          /* small indent to match intro feel – adjust 0–30px */
-  margin-left: 0 !important;
-  text-align: left !important;
-}
-
-/* Make sure the intro headings have no extra left offset */
-.intro-text-box {
-  padding-left: 15px;          /* consistent with hero */
-  margin-left: 0;
-}
-
-/* Optional: make "Enter the Matrix" look more aligned/connected visually */
-.intro-section h3 {
-  margin-top: 0;               /* reduce top space if needed */
-  padding-left: 0;
-  font-size: 1.8rem;           /* tweak size if it helps visual match */
-  font-weight: 700;
-}
-
-/* For better mobile stacking/alignment */
-@media (max-width: 767.98px) {
-  .hero-text-wrapper,
-  .intro-text-box {
-    padding-left: 10px;
-  }
-}
-
-/* Matrix Chat Widget */
-.matrix-chat-widget {
-  background: rgba(3, 1, 18, 0.85);
-  border: 1px solid rgba(0, 212, 255, 0.15);
-  border-radius: 12px;
-  overflow: hidden;
-  height: 100%;
-  min-height: 380px;
-  box-shadow: 0 0 20px rgba(0, 212, 255, 0.08);
-  display: flex;
-  flex-direction: column;
-}
-
-.matrix-chat-loading {
-  display: none;
-  padding: 40px 16px;
-  text-align: center;
-  color: #7a8fa8;
-  font-size: 14px;
-  background: rgba(0, 0, 0, 0.3);
-}
-
-.matrix-chat-loading .fa-spinner {
-  color: #00d4ff;
-  margin-right: 8px;
-}
-
-.matrix-chat-iframe {
-  flex: 1;
-  width: 100%;
-  border: none;
-  min-height: 360px;
-  background: rgba(0, 0, 0, 0.3);
-}
-
-@media (max-width: 991px) {
-  .matrix-chat-widget {
-    margin-top: 2rem;
-    min-height: 350px;
-  }
-  .matrix-chat-iframe {
-    min-height: 330px;
-  }
-}
-
-.user-panel a {
-filter: hue-rotate(210deg) drop-shadow(0 0 15px #00d4ff) drop-shadow(0 0 30px rgba(0,212,255,0.6));
-  }
-
-  .user-panel a:hover {
-    filter: hue-rotate(210deg) drop-shadow(0 0 15px #00d4ff) drop-shadow(0 0 30px rgba(0,212,255,0.6));
-  }
-
-  .user-panel a {
-  }					
-						</style>
 </head>
 <body>
 	<!-- Page Preloder -->
@@ -297,7 +45,7 @@ filter: hue-rotate(210deg) drop-shadow(0 0 15px #00d4ff) drop-shadow(0 0 30px rg
 			<div class="header-bar-warp d-flex">
 				<!-- site logo -->
 				<a href="index.html" class="site-logo">
-					<img src="./img/logo.png" alt="">
+					<img src="./img/logo.png" alt="Dewrito"/>
 				</a>
 				<nav class="top-nav-area w-100">
 					<div class="user-panel">
@@ -337,21 +85,6 @@ filter: hue-rotate(210deg) drop-shadow(0 0 15px #00d4ff) drop-shadow(0 0 30px rg
       </div>
       <div class="slogan"></div>
     </div>
-    <!-- Matrix Chat Widget -->
-    <div class="col-md-4">
-      <div class="matrix-chat-widget">
-        <div class="matrix-chat-header">
-          <span class="matrix-chat-title">Matrix Chat</span>
-          <span class="matrix-chat-subtitle">Connect with the community</span>
-        </div>
-        <iframe
-          src="https://app.sable.moe/#/room/#dewrito:dewrito.net?embed&hs_url=https://matrix.dewrito.net&username=@viewer:dewrito.net&password=viewerpassword"
-          class="matrix-chat-iframe"
-          title="Matrix Chat"
-          allow="microphone"
-        ></iframe>
-      </div>
-    </div>
   </div>
 </div>
   </div>
@@ -369,7 +102,7 @@ filter: hue-rotate(210deg) drop-shadow(0 0 15px #00d4ff) drop-shadow(0 0 30px rg
 					<div class="intro-text-box text-box text-white">
 						
 						<h3>Enter the Matrix</h3>
-						<p class="text-white">Experience the digital reality of Matrix. Dive into the Federation and explore the simulation, and break free from traditional platforms. Control your privacy, control the world.</p>
+						<p class="text-white">Host your own chat server. Join the #dewrito space to connect with the community, share game servers, and coordinate events — all on the open Matrix protocol.</p>
 						
 					</div>
 				</div>
@@ -377,7 +110,7 @@ filter: hue-rotate(210deg) drop-shadow(0 0 15px #00d4ff) drop-shadow(0 0 30px rg
 					<div class="intro-text-box text-box text-white">
 						
 						<h3>Fluxer is Live!</h3>
-						<p class="text-white">Fluxer is here to disrupt the flow! Join the energy waves and unleach your potential, and ride the flux. The future of chat.</p>
+						<p class="text-white">Real-time chat, voice calls, and screen sharing — all self-hosted. Fluxer is the privacy-first alternative to Discord, built for communities that value control.</p>
 						
 					</div>
 				</div>
@@ -396,7 +129,7 @@ filter: hue-rotate(210deg) drop-shadow(0 0 15px #00d4ff) drop-shadow(0 0 30px rg
 	<footer class="footer-section">
 		<div class="container">
 			<a href="#" class="footer-logo">
-				<img src="./img/logo.png" alt="">
+				<img src="./img/logo.png" alt="Dewrito"/>
 			</a>
 			<!--<div class="footer-social d-flex justify-content-center">
 				<a href="#"><i class="fa fa-pinterest"></i></a>
@@ -405,9 +138,9 @@ filter: hue-rotate(210deg) drop-shadow(0 0 15px #00d4ff) drop-shadow(0 0 30px rg
 				<a href="#"><i class="fa fa-dribbble"></i></a>
 				<a href="#"><i class="fa fa-behance"></i></a>
 			</div>-->
-			<div class="copyright"><a href=""><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved
-<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></div>
+			<div class="copyright">
+Copyright &copy;<script>document.write(new Date().getFullYear());</script> Dewrito.net — Community-run server infrastructure.
+</div>
 		</div>
 	</footer>
 	<!-- Footer section end -->
@@ -422,30 +155,5 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 	<script src="js/jquery.magnific-popup.min.js"></script>
 	<script src="js/main.js"></script>
 	<script src="js/starfield.js"></script>
-
-	<!-- Matrix widget: hide loading spinner when iframe loads -->
-	<script>
-	(function() {
-		var iframe = document.querySelector('.matrix-chat-iframe');
-		var loader = document.getElementById('matrix-loading');
-		if (iframe && loader) {
-			var loaded = false;
-			function hideLoader() {
-				if (!loaded) {
-					loaded = true;
-					loader.style.display = 'none';
-				}
-			}
-			iframe.addEventListener('load', hideLoader);
-			// Fallback: hide after 10s regardless (Element can be slow)
-			setTimeout(hideLoader, 10000);
-		}
-	})();
-	</script>
-
-
-
-
-
-	</body>
+</body>
 </html>

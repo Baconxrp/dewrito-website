@@ -1806,3 +1806,231 @@ ol {
 		margin-bottom: 20px;
 	}
 }
+
+/* ========================================
+   Dewrito custom styles
+   ======================================== */
+
+/* Nunito as primary font */
+body, html,
+p, h1, h2, h3, h4, h5, h6,
+span, div,
+a:not(.main-menu a),
+li:not(.main-menu li),
+.intro-text-box, .intro-section, .footer-section,
+.footer-menu a, .copyright, .widget-title,
+.read-more, .top-meta, .user-panel,
+.header-social p, .site-btn, .hero-text-wrapper,
+.slogan, .text-white, .text-left, .text-center {
+	font-family: 'Nunito', sans-serif;
+}
+
+.hero-text-wrapper {
+	text-align: left;
+	margin-left: 0;
+	padding-left: 15px;
+	max-width: 80%;
+}
+
+.dewrito-logo-img {
+	display: block;
+	margin-bottom: 1rem;
+	filter: hue-rotate(210deg) drop-shadow(0 0 15px #00d4ff) drop-shadow(0 0 30px rgba(0,212,255,0.6));
+}
+
+@media (max-width: 768px) {
+	.dewrito-logo-img {
+		max-width: 90%;
+	}
+	.hero-text-wrapper {
+		padding-left: 10px;
+	}
+}
+
+/* Main menu font */
+.main-menu.primary-menu a,
+.main-menu.primary-menu ul a {
+	font-family: 'Nunito', sans-serif;
+	font-weight: 600;
+}
+.main-menu.primary-menu li.active > a,
+.main-menu.primary-menu li.current-menu-item > a {
+	font-weight: 600;
+}
+
+/* Heading weights */
+h1, h2, h3 {
+	font-weight: 700;
+}
+h4, h5, h6 {
+	font-weight: 600;
+}
+
+/* Subtle text shadow for headings only */
+h1, h2, h3 {
+	filter: hue-rotate(210deg) drop-shadow(0 0 15px #00d4ff) drop-shadow(0 0 30px rgba(0,212,255,0.6));
+}
+
+/* User panel links */
+.user-panel a {
+	filter: hue-rotate(210deg) drop-shadow(0 0 15px #00d4ff) drop-shadow(0 0 30px rgba(0,212,255,0.6));
+}
+.user-panel a:hover {
+	filter: hue-rotate(210deg) drop-shadow(0 0 15px #00d4ff) drop-shadow(0 0 30px rgba(0,212,255,0.6));
+}
+
+/* Hero section overrides */
+.hero-section {
+	margin-bottom: 0 !important;
+	padding-bottom: 0 !important;
+}
+.hero-section .hero-item.set-bg {
+	background: transparent !important;
+	background-image: none !important;
+	height: 90vh !important;
+	min-height: unset !important;
+	max-height: 100vh;
+	padding: 0 !important;
+	margin: 0 !important;
+	overflow: hidden !important;
+}
+.hero-section .container {
+	height: 100%;
+	padding-top: 1rem;
+	padding-bottom: 0 !important;
+	margin: 0 auto;
+}
+.hero-section .row {
+	height: 100%;
+	margin: 0;
+}
+.hero-section br {
+	display: none;
+}
+.hero-section .hero-item > .container > .row > div {
+	padding-bottom: 0 !important;
+}
+.hero-section .container,
+.intro-section .container {
+	padding-left: 15px;
+	padding-right: 15px;
+}
+.intro-text-box {
+	padding-left: 15px;
+	margin-left: 0;
+}
+.intro-section h3 {
+	margin-top: 0;
+	padding-left: 0;
+	font-size: 1.8rem;
+	font-weight: 700;
+}
+
+@media (max-width: 767.98px) {
+	.hero-text-wrapper,
+	.intro-text-box {
+		padding-left: 10px;
+	}
+}
+
+/* Page top section — transparent for starfield */
+.page-top-section {
+	background: transparent !important;
+	background-image: none !important;
+}
+
+/* Terms/contact content styling */
+.tos-content strong {
+	color: #f0c0e0;
+}
+.tos-content a {
+	color: #00d4ff;
+	text-decoration: underline;
+}
+.tos-content a:hover {
+	color: #f0c0e0;
+}
+
+/* Age gate overlay */
+#age-gate-overlay {
+	position: fixed;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.92);
+	backdrop-filter: blur(4px);
+	z-index: 999999;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: white;
+	font-family: 'Nunito', sans-serif;
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+#age-gate-overlay.visible {
+	opacity: 1;
+	visibility: visible;
+}
+.age-gate-box {
+	background: rgba(30, 20, 40, 0.88);
+	border: 2px solid #00d4ff;
+	border-radius: 16px;
+	padding: 3rem 2.5rem;
+	max-width: 480px;
+	width: 90%;
+	text-align: center;
+	box-shadow: 0 0 40px rgba(203, 139, 180, 0.5),
+				0 0 80px rgba(0, 212, 255, 0.3);
+}
+.age-gate-box h2 {
+	font-size: 2.1rem;
+	margin-bottom: 1.2rem;
+	color: #f0c0e0;
+	filter: drop-shadow(0 0 12px #00d4ff);
+}
+.age-gate-box p {
+	font-size: 1.15rem;
+	margin-bottom: 2rem;
+	line-height: 1.5;
+	color: #e0c0d8;
+}
+.age-buttons {
+	display: flex;
+	gap: 1.5rem;
+	justify-content: center;
+	flex-wrap: wrap;
+}
+.age-btn {
+	padding: 0.9rem 2.2rem;
+	font-size: 1.15rem;
+	font-weight: 600;
+	border: none;
+	border-radius: 50px;
+	cursor: pointer;
+	transition: all 0.25s ease;
+}
+.age-btn-yes {
+	background: #00d4ff;
+	color: white;
+	box-shadow: 0 0 20px rgba(203,139,180,0.7);
+}
+.age-btn-yes:hover {
+	background: #e0a0d0;
+	transform: translateY(-2px);
+	box-shadow: 0 0 30px rgba(203,139,180,0.9);
+}
+.age-btn-no {
+	background: #4a2c3e;
+	color: #d0b0c8;
+	border: 1px solid #7a5a6e;
+}
+.age-btn-no:hover {
+	background: #3a1f30;
+	color: #f0c0e0;
+}
+#age-denied {
+	margin-top: 1.8rem;
+	font-size: 1.1rem;
+	color: #ff9999;
+	display: none;
+}
