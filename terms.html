@@ -1,211 +1,121 @@
 <!DOCTYPE html>
-<html lang="zxx">
+<html lang="en">
 <head>
-	<title>Dewrito | ToS
-	</title>
-	<meta charset="UTF-8">
-	<meta name="description" content="Dewrito community Matrix chat and Fluxer client">
-	<meta name="keywords" content="matrix, element, chat, dewrito, community">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<!-- Favicon -->
-	<link href="img/favicon.ico" rel="shortcut icon"/>
-
-	<!-- Google Font -->
-	<link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,500,500i,700,700i,900,900i" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-
-	<!-- Stylesheets -->
-	<link rel="stylesheet" href="css/bootstrap.min.css"/>
-	<link rel="stylesheet" href="css/font-awesome.min.css"/>
-	<link rel="stylesheet" href="css/slicknav.min.css"/>
-	<link rel="stylesheet" href="css/owl.carousel.min.css"/>
-	<link rel="stylesheet" href="css/magnific-popup.css"/>
-	<link rel="stylesheet" href="css/animate.css"/>
-
-	<!-- Main Stylesheets -->
-	<link rel="stylesheet" href="css/style.css"/>
+  <title>Dewrito | Terms of Service</title>
+  <meta charset="UTF-8">
+  <meta name="description" content="Dewrito.net Terms of Service and Community Guidelines.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="img/favicon.ico" rel="shortcut icon"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/site.css">
 </head>
 <body>
-	<!-- Page Preloder -->
-	<div id="preloder">
-		<div class="loader"></div>
-	</div>
 
-	<!-- Header section -->
-	<header class="header-section">
-		<div class="header-warp">
-			<div class="header-social d-flex justify-content-end">
-				<p class="text-white">Community:</p>
-				<a href="https://matrix.to/#/#dewrito:dewrito.net" target="_blank" title="Official Matrix Space"><i class="fa fa-dribbble"></i></a>
-				<a href="https://fluxer.dewrito.net/invite/BQVNmkEW" target="_blank" title="Official Fluxer Space"><i class="fa fa-comments"></i></a>
-				<!-- <a href="#"><i class="fa fa-github"></i></a> -->
-			</div>
-			<div class="header-bar-warp d-flex">
-				<!-- site logo -->
-				<a href="index.html" class="site-logo">
-					<img src="./img/logo.png" alt="Dewrito"/>
-				</a>
-				<nav class="top-nav-area w-100">
-					<div class="user-panel">
-						<a href="https://app.sable.moe/login/dewrito.net" target="_blank">Open Matrix</a>
-						&nbsp;|&nbsp;
-						<a href="https://fluxer.dewrito.net" target="_blank">Open Fluxer</a>
-					</div>
-					<!-- Menu -->
-					<ul class="main-menu primary-menu">
-						<li><a href="register.html">Register</a></li>
-						<li><a href="terms.html">Terms</a></li>
-						<li><a href="contact.html">Contact</a></li>
-						<li><a href="donate.html">Support Us</a></li>
-					</ul>
-				</nav>
-			</div>
-		</div>
-	</header>
-	<!-- Header section end -->
+<canvas id="starfield"></canvas>
 
-	<!-- Page top section -->
-	<section class="page-top-section ">
-		<div class="page-info">
-			<h2>Dewrito.net | Terms of Service & Community Guidelines</h2>
-			<hr>
-		</div>
-	</section>
-	<!-- Page top end-->
+<!-- Navigation -->
+<nav class="navbar" id="navbar">
+  <div class="container">
+    <a href="index.html" class="nav-logo"><img src="img/logo.png" alt="Dewrito"></a>
+    <ul class="nav-links">
+      <li><a href="index.html#features">Features</a></li>
+      <li><a href="index.html#community">Community</a></li>
+      <li><a href="register.html">Register</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-cta"><a href="index.html" class="btn-secondary">Back Home</a></div>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation"><span></span><span></span><span></span></button>
+  </div>
+</nav>
 
-	<!-- Contact page -->
-<section class="contact-page section-pad">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-10 offset-lg-1 text-white terms-content tos-content">
-					<!-- START: Paste the real ToS here from https://fluxer.dewrito.net/terms -->
-					<p><strong>Effective Date:</strong> [March 8, 2026]<br>
-					<strong>Last Updated:</strong> [March 8, 2026 (added self-hosted Fluxer chat support)]</p>
+<header class="page-header">
+  <h1>Terms of Service & Community Guidelines</h1>
+  <p style="margin: 0 auto;"><strong>Effective:</strong> March 8, 2026 · <strong>Last Updated:</strong> March 8, 2026</p>
+</header>
 
-					<p>Welcome to Dewrito.net (the "Service"), a Matrix protocol homeserver for decentralized, secure, federated communication, along with self-hosted Fluxer instances for real-time instant messaging, VoIP (voice/video calls), screen sharing, and community features (built as an open-source Discord alternative under AGPLv3). By accessing, registering for, or using the Service (including Matrix federation, Fluxer channels, or any interactions), you agree to these Terms of Service ("ToS") and our incorporated Community Guidelines. If you do not agree, do not use the Service.</p>
+<section class="content-section">
+  <p>Welcome to Dewrito.net (the "Service"), a Matrix protocol homeserver for decentralized, secure, federated communication, along with self-hosted Fluxer instances for real-time instant messaging, VoIP, screen sharing, and community features. By accessing, registering for, or using the Service, you agree to these Terms of Service and our incorporated Community Guidelines.</p>
 
-					<h3>1. Definitions</h3>
-						<ul>
-							<li><strong>Service:</strong> Our Matrix homeserver (rooms, bridges, bots, federation features) and self-hosted Fluxer chat platform (channels, VoIP, media sharing, moderation tools, and related features).</li>
-							<li><strong>You/User:</strong> Any individual or entity using the Service (account holder, community member, or federated participant).</li>
-							<li><strong>Content/User Materials:</strong> Messages, files, rooms/channels, media, voice calls, screen shares, custom emojis/stickers, or other data you post, upload, transmit, or generate.</li>
-							<li><strong>Federation:</strong> Matrix inter-server communication (e.g., with matrix.org); Fluxer operates on per-instance basis (no native cross-instance federation).</li>
-							<li><strong>Providers:</strong> Third parties we use (e.g., PayPal/Stripe for payments, Porkbun for domains, Cloudflare for networking/security).</li>
-						</ul>
-						</br>
-					<h3>2. Eligibility and Accounts</h3>
-						<ul>
-							<li>You must be at least 18 years old with a valid, verified email address.</li>
-							<li>You are responsible for maintaining account security (passwords, credentials). Report unauthorized access immediately.</li>
-							<li>Accounts are personal; community/business use is allowed but must comply with all rules below.</li>
-							<li>We may require identity verification for compliance (e.g., age, payments, legal obligations).</li>
-						</ul>
-						</br>
-					<h3>3. Community Guidelines (Adapted from Matrix.org & Fluxer Norms)</h3>
-						<p>We strive for a welcoming, respectful community across both Matrix and Fluxer features. Violations may result in content removal, channel bans, or account suspension. This applies to all rooms/channels, messages, calls, and interactions (and encourages the same in federated Matrix rooms or your Fluxer communities).</p>
-						<p><strong>Expectations:</strong> Be friendly, patient, welcoming, considerate, respectful. Honor diversity (race, gender, orientation, disability, etc.). No discrimination. Resolve disagreements constructively.</p>
-						<p><strong>Unacceptable Behavior</strong> (Harassment includes but is not limited to): Offensive comments on protected characteristics; deliberate misgendering/deadnaming; threats, violence incitement, stalking, intimidation; unwelcome sexual attention or explicit content; sustained disruption, doxxing, outing private info; pattern of inappropriate contact after requests to stop.</p>
-						<p>We do not act on good-faith boundary-setting, tone complaints, or non-malicious discussion.</p>
-						<p><strong>Reporting:</strong> Use in-client tools (Matrix reports or Fluxer moderation) or email abuse@dewrito.net. Immediate action possible via bots/moderation tools. Reports handled confidentially.</p>
-					<h3>4. Fluxer-Specific Rules (Self-Hosted Chat & VoIP)</h3>
-						<p>Fluxer features are provided for personal, community, or group use (aligned with AGPLv3 open-source licensing). Self-hosting gives full control, but you must follow these rules:</p>
-						<ul>
-							<li>Use for lawful, non-abusive communication: text chat, voice/video calls, screen sharing, custom emojis/stickers, roles, etc.</li>
-							<li>Commercial hosting/monetization (e.g., charging for access, premium features, or "Plutonium"-style tiers on your instance) is allowed only if you comply with AGPLv3 (provide source code) and our general prohibited activities (no high-risk businesses).</li>
-							<li>Respect privacy: Do not record calls without consent; enable E2EE where available.</li>
-							<li>Prohibited: Spam/bots flooding channels; generating/sharing CSAM, explicit adult content (banned under general rules), hate speech, threats, or illegal material; circumventing moderation tools.</li>
-							<li>Excessive resource use (e.g., overloading VoIP servers, bulk spam calls) may result in throttling or suspension.</li>
-							<li>Fluxer is provided "as-is"; performance depends on your setup/hardware; no uptime guarantees.</li>
-							<li>You retain control of your instance data but grant us a limited license to store/transmit/moderate shared content as needed.</li>
-						</ul>
-					<h3>5. User Conduct, Content, and Prohibited Activities</h3>
-						<p>Use the Service only for lawful purposes. You warrant your Content does not violate these rules and grant us a worldwide, royalty-free license to host, transmit, and moderate it (including Matrix federation or Fluxer instance storage).</p>
-						<p><strong>Strictly Prohibited</strong> (to ensure Matrix/Fluxer compliance, prevent defederation, avoid Provider deplatforming):</p>
-						<ul>
-							<li>Any illegal activity (US, UK, EU, local laws): CSAM/child exploitation (proactive scanning/reporting); hate/harassment/threats; fraud; drugs/weapons; human trafficking; suicide encouragement.</li>
-							<li>Spam/phishing/technical abuse: Bulk messages/calls, malware, DDoS, hacking, disrupting federation/other users.</li>
-							<li>Intellectual property violations (DMCA takedowns honored).</li>
-							<li>High-risk/prohibited businesses (PayPal/Stripe compliance): Adult/sexual content/services (porn, AI-generated explicit—including voice deepfakes); gambling; drugs/firearms; crypto mining/ICOs; pyramid schemes; any restricted items.</li>
-							<li>Fluxer/Matrix-specific: Impersonation; bot spam in channels; non-consensual recording/sharing of calls; circumventing bans/filters.</li>
-							<li>Domain/Cloudflare abuse: Phishing, malware, botnets, undue network burden.</li>
-							<li>Other: Exceeding fair usage; violating export laws; false sponsorship claims.</li>
-						</ul>
-						<p>We proactively moderate and may use blocklists or tools. Abuse risks defederation (Matrix) or Provider suspension.</p>
-					<h3>6. Payments (If Applicable)</h3>
-        				<p>Paid plans use PayPal or Stripe. Comply with their AUP/Prohibited lists. Fees non-refundable except as required by law.</p>
-					<h3>7. Moderation, Enforcement, and Termination</h3>
-						<p>We may remove Content, suspend/limit/terminate accounts (with or without notice) for violations, legal needs, or risk.</p>
-						<p>Appeals: support@dewrito.net (no guarantee).</p>
-						<p>Providers may suspend services independently.</p>
-						<p>Termination: Access ends; back up your data.</p>
+  <h2>1. Definitions</h2>
+  <ul>
+    <li><strong>Service:</strong> Our Matrix homeserver (rooms, bridges, bots, federation features) and self-hosted Fluxer chat platform (channels, VoIP, media sharing, moderation tools).</li>
+    <li><strong>You/User:</strong> Any individual or entity using the Service.</li>
+    <li><strong>Content:</strong> Messages, files, rooms/channels, media, voice calls, screen shares, and other data you transmit.</li>
+    <li><strong>Federation:</strong> Matrix inter-server communication. Fluxer operates on a per-instance basis (no native cross-instance federation).</li>
+  </ul>
 
-					<h3>8. Disclaimers and Liability</h3>
-						<p>Service "AS IS"—no warranties (availability, security, federation/VoIP quality).</p>
-						<p>Not liable for data loss, third-party actions, or indirect damages.</p>
-						<p>You indemnify us, Providers (Matrix Foundation, PayPal, Stripe, Porkbun, Cloudflare), and affiliates.</p>
-						<p>No liability for federation decisions or Fluxer community norms.</p>
+  <h2>2. Eligibility and Accounts</h2>
+  <ul>
+    <li>You must be at least 18 years old with a valid, verified email address.</li>
+    <li>You are responsible for maintaining account security. Report unauthorized access immediately.</li>
+    <li>Accounts are personal; community/business use is allowed but must comply with all rules below.</li>
+    <li>We may require identity verification for compliance (age, payments, legal obligations).</li>
+  </ul>
 
-					<h3>9. Privacy</h3>
-        				<p>See separate Privacy Policy. Data processed per law; Matrix federation shares metadata; Fluxer instances are user-controlled.</p>
-					<h3>10. Governing Law and Disputes</h3>
-						<p>United States law (USA). Class action waiver where permitted.</p>
+  <h2>3. Community Guidelines</h2>
+  <p>We strive for a welcoming, respectful community across both Matrix and Fluxer features. Violations may result in content removal, channel bans, or account suspension.</p>
+  <p><strong>Expectations:</strong> Be friendly, patient, welcoming, considerate, respectful. Honor diversity (race, gender, orientation, disability, etc.). No discrimination. Resolve disagreements constructively.</p>
+  <p><strong>Unacceptable Behavior</strong> includes: offensive comments on protected characteristics; deliberate misgendering/deadnaming; threats or violence incitement; stalking and intimidation; unwelcome sexual attention; sustained disruption; doxxing; pattern of inappropriate contact after requests to stop.</p>
+  <p>We do not act on good-faith boundary-setting, tone complaints, or non-malicious discussion. Report violations via in-client tools or email <strong>abuse@dewrito.net</strong>.</p>
 
-					<h3>11. Miscellaneous</h3>
-        				<p>Severability; no waiver unless written.</p>
-        				<p>Contact: support@dewrito.net or abuse@dewrito.net.</p>
+  <h2>4. Fluxer-Specific Rules</h2>
+  <ul>
+    <li>Use for lawful communication: text chat, voice/video calls, screen sharing.</li>
+    <li>Commercial hosting is allowed only if you comply with AGPLv3 and our general prohibited activities.</li>
+    <li>Respect privacy: do not record calls without consent; enable E2EE where available.</li>
+    <li><strong>Prohibited:</strong> spam/bots flooding channels; CSAM, explicit adult content, hate speech, threats, illegal material; circumventing moderation tools.</li>
+    <li>Excessive resource use may result in throttling or suspension.</li>
+    <li>Fluxer is provided "as-is"; no uptime guarantees.</li>
+  </ul>
 
-					<!-- END: Replace placeholder with real copied text -->
+  <h2>5. User Conduct and Prohibited Activities</h2>
+  <p><strong>Strictly Prohibited:</strong></p>
+  <ul>
+    <li>Any illegal activity: CSAM, hate/harassment/threats, fraud, drugs/weapons, human trafficking.</li>
+    <li>Spam/phishing/technical abuse: bulk messages/calls, malware, DDoS, hacking.</li>
+    <li>Intellectual property violations (DMCA takedowns honored).</li>
+    <li>High-risk businesses (PayPal/Stripe compliance): adult content, gambling, drugs/firearms, crypto mining/ICOs.</li>
+    <li>Fluxer/Matrix-specific: impersonation, bot spam, non-consensual recording, circumventing bans.</li>
+  </ul>
 
-					<!-- Remove or comment out the dummy contact info if not needed -->
-					<!-- 
-					<div class="cont-info">
-						<div class="ci-icon"><img src="img/icons/location.png" alt=""></div>
-						<div class="ci-text">Main Str, no 23, New York</div>
-					</div>
-					... etc.
-					-->
-				</div>
-			</div>
-		</div>
-	</section>
-	<!-- Contact page end-->
+  <h2>6. Payments</h2>
+  <p>Paid plans use PayPal or Stripe. Comply with their AUP/Prohibited lists. Fees are non-refundable except as required by law.</p>
 
-	<footer class="footer-section">
-		<div class="container">
-			<a href="#" class="footer-logo">
-				<img src="./img/logo.png" alt="Dewrito"/>
-			</a>
-			<!--<div class="footer-social d-flex justify-content-center">
-				<a href="#"><i class="fa fa-pinterest"></i></a>
-				<a href="#"><i class="fa fa-facebook"></i></a>
-				<a href="#"><i class="fa fa-twitter"></i></a>
-				<a href="#"><i class="fa fa-dribbble"></i></a>
-				<a href="#"><i class="fa fa-behance"></i></a>
-			</div>-->
-			<div class="copyright">
-Copyright &copy;<script>document.write(new Date().getFullYear());</script> Dewrito.net — Community-driven Matrix infrastructure.
-</div>
-		</div>
-	</footer>
-	<!-- Footer section end -->
+  <h2>7. Moderation, Enforcement, and Termination</h2>
+  <p>We may remove content, suspend/limit/terminate accounts for violations, legal needs, or risk. Appeals: <strong>support@dewrito.net</strong>. Providers may suspend services independently.</p>
 
+  <h2>8. Disclaimers and Liability</h2>
+  <p>Service provided "AS IS" — no warranties regarding availability, security, or federation/VoIP quality. Not liable for data loss, third-party actions, or indirect damages. You indemnify us and our providers.</p>
 
-	<!--====== Javascripts & Jquery ======-->
-	<script src="js/jquery-3.2.1.min.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-	<script src="js/jquery.slicknav.min.js"></script>
-	<script src="js/owl.carousel.min.js"></script>
-	<script src="js/jquery.sticky-sidebar.min.js"></script>
-	<script src="js/jquery.magnific-popup.min.js"></script>
-	<script src="js/main.js"></script>
-	<script src="js/starfield.js"></script>
+  <h2>9. Privacy</h2>
+  <p>Data processed per applicable law. Matrix federation shares metadata; Fluxer instances are user-controlled.</p>
 
+  <h2>10. Governing Law</h2>
+  <p>United States law applies. Class action waiver where permitted.</p>
 
+  <h2>11. Miscellaneous</h2>
+  <p>Contact: <strong>support@dewrito.net</strong> or <strong>abuse@dewrito.net</strong>.</p>
+</section>
 
+<footer class="footer">
+  <div class="container">
+    <p class="footer-text">&copy; <span id="year"></span> Dewrito.net — Community-run server infrastructure.</p>
+    <ul class="footer-links">
+      <li><a href="register.html">Register</a></li>
+      <li><a href="terms.html">Terms</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="donate.html">Support Us</a></li>
+    </ul>
+  </div>
+</footer>
 
-
-	</body>
+<script src="js/starfield.js"></script>
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+  const navbar = document.getElementById('navbar');
+  const navToggle = document.getElementById('navToggle');
+  navToggle.addEventListener('click', () => navbar.classList.toggle('mobile-open'));
+  document.querySelectorAll('.nav-links a').forEach(link => link.addEventListener('click', () => navbar.classList.remove('mobile-open')));
+</script>
+</body>
 </html>

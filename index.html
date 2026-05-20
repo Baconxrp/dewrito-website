@@ -1,159 +1,190 @@
 <!DOCTYPE html>
-<html lang="zxx">
+<html lang="en">
 <head>
-	<title>Dewrito</title>
-	<meta charset="UTF-8">
-	<meta name="description" content="Dewrito community server and Fluxer client">
-	<meta name="keywords" content="dewrito, fluxer, community, game server">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<!-- Favicon -->
-	<link href="img/favicon.ico" rel="shortcut icon"/>
-
-	<!-- Google Font -->
-	<link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,500,500i,700,700i,900,900i" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-
-	<!-- Stylesheets -->
-	<link rel="stylesheet" href="css/bootstrap.min.css"/>
-	<link rel="stylesheet" href="css/font-awesome.min.css"/>
-	<link rel="stylesheet" href="css/slicknav.min.css"/>
-	<link rel="stylesheet" href="css/owl.carousel.min.css"/>
-	<link rel="stylesheet" href="css/magnific-popup.css"/>
-	<link rel="stylesheet" href="css/animate.css"/>
-
-	<!-- Main Stylesheets -->
-	<link rel="stylesheet" href="css/style.css"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Dewrito — Community-run server infrastructure for the Dewrito community. Matrix chat, Fluxer client, and open collaboration.">
+  <title>Dewrito — Community Infrastructure</title>
+  <link href="img/favicon.ico" rel="shortcut icon"/>
+  <!-- Google Fonts: Inter + JetBrains Mono -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/site.css">
 </head>
 <body>
-	<!-- Page Preloder -->
-	<div id="preloder">
-		<div class="loader"></div>
-	</div>
 
-	<!-- Header section -->
-	<header class="header-section">
-		<div class="header-warp">
-			<div class="header-social d-flex justify-content-end">
-				<p class="text-white">Community:</p>
-				<a href="https://matrix.to/#/#dewrito:dewrito.net" target="_blank" title="Official Matrix Space"><i class="fa fa-dribbble"></i></a>
-				<a href="https://fluxer.dewrito.net/invite/BQVNmkEW" target="_blank" title="Official Fluxer Space"><i class="fa fa-comments"></i></a>
-				<!-- <a href="#"><i class="fa fa-github"></i></a> -->
-			</div>
-			<div class="header-bar-warp d-flex">
-				<!-- site logo -->
-				<a href="index.html" class="site-logo">
-					<img src="./img/logo.png" alt="Dewrito"/>
-				</a>
-				<nav class="top-nav-area w-100">
-					<div class="user-panel">
-						<a href="https://app.sable.moe/login/dewrito.net" target="_blank">Open Matrix</a>
-						&nbsp;|&nbsp;
-						<a href="https://fluxer.dewrito.net" target="_blank">Open Fluxer</a>
-					</div>
-					<!-- Menu -->
-					<ul class="main-menu primary-menu">
-						<li><a href="register.html">Register</a></li>
-						<li><a href="terms.html">Terms</a></li>
-						<li><a href="contact.html">Contact</a></li>
-						<li><a href="donate.html">Support Us</a></li>
-					</ul>
-				</nav>
-			</div>
-		</div>
-	</header>
-	<!-- Header section end -->
+<!-- Starfield Background -->
+<canvas id="starfield"></canvas>
 
-
-<!-- Hero section -->
-<section class="hero-section overflow-hidden">
-  <div class="hero-item  d-flex align-items-center justify-content-center text-center">
-    <div class="container">
-  <div class="row align-items-center justify-content-start h-100">  <!-- justify-content-start = left align -->
-    <div class="col-md-8 text-left">
-      <div class="hero-text-wrapper text-left w-100">
-        <img 
-          src="img/Slogan.png" 
-          alt="Dewrito" 
-          class="dewrito-logo-img img-fluid" 
-          style="max-width: 700px; width: 80%; height: auto;"
-        >
-        <a href="register.html" class="site-btn mt-3 d-inline-block">Register</a>
-        <!-- mt-3 = ~16px top margin – adjust mt-2 / mt-4 if needed -->
-      </div>
-      <div class="slogan"></div>
+<!-- Navigation -->
+<nav class="navbar" id="navbar">
+  <div class="container">
+    <a href="index.html" class="nav-logo">
+      <img src="img/logo.png" alt="Dewrito">
+    </a>
+    <ul class="nav-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#community">Community</a></li>
+      <li><a href="register.html">Register</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="register.html" class="btn-primary">Get Started</a>
     </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
   </div>
-</div>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero">
+  <div class="hero-content">
+    <span class="mono-label section-label">Community Infrastructure</span>
+    <h1><span class="gradient-text">Dewrito</span></h1>
+    <p class="hero-subtitle">
+      Community-run server infrastructure for the Dewrito community. 
+      Connect via Matrix, collaborate with Fluxer, and help keep the lights on.
+    </p>
+    <div class="hero-actions">
+      <a href="register.html" class="btn-primary">
+        <!-- SVG: User Plus -->
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+        Register
+      </a>
+      <a href="#community" class="btn-secondary">
+        <!-- SVG: Message Circle -->
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Join the Community
+      </a>
+    </div>
   </div>
 </section>
 
-	
-	<!-- Hero section end-->
+<!-- Features Section -->
+<section class="section" id="features">
+  <div class="container">
+    <span class="mono-label section-label">What We Offer</span>
+    <h2>Built by the community, for the community.</h2>
+    
+    <div class="features-grid">
+      <!-- Matrix Card -->
+      <div class="feature-card">
+        <div class="feature-icon matrix">
+          <!-- SVG: Shield (Matrix/Security) -->
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h3>Matrix Chat</h3>
+        <p>Host your own chat server on the open Matrix protocol. Full control, full privacy, no vendor lock-in.</p>
+      </div>
 
+      <!-- Fluxer Card -->
+      <div class="feature-card">
+        <div class="feature-icon fluxer">
+          <!-- SVG: Zap (Fluxer/Speed) -->
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        </div>
+        <h3>Fluxer Client</h3>
+        <p>Real-time chat, voice calls, and screen sharing — all self-hosted. The privacy-first alternative to Discord.</p>
+      </div>
 
-	<!-- Intro section -->
-	<section class="intro-section">
-		<div class="container">
-			<div class="row">
-				<div class="col-md-4">
-					<div class="intro-text-box text-box text-white">
-						
-						<h3>Enter the Matrix</h3>
-						<p class="text-white">Host your own chat server. Join the #dewrito space to connect with the community, share game servers, and coordinate events — all on the open Matrix protocol.</p>
-						
-					</div>
-				</div>
-				<div class="col-md-4">
-					<div class="intro-text-box text-box text-white">
-						
-						<h3>Fluxer is Live!</h3>
-						<p class="text-white">Real-time chat, voice calls, and screen sharing — all self-hosted. Fluxer is the privacy-first alternative to Discord, built for communities that value control.</p>
-						
-					</div>
-				</div>
-				<div class="col-md-4">
-					<div class="intro-text-box text-box">
-						
-						<a href="donate.html" class="site-btn"><br><br><h3>   SUPPORT US   </h3></a><br><br>
-						<p class="text-white">Help us keep the servers running.</p>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
-	<!-- Intro section end -->
+      <!-- Community Card -->
+      <div class="feature-card">
+        <div class="feature-icon community">
+          <!-- SVG: Users (Community) -->
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <h3>Open Community</h3>
+        <p>No game servers, no corporate backing — just a community keeping infrastructure running for everyone.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-	<footer class="footer-section">
-		<div class="container">
-			<a href="#" class="footer-logo">
-				<img src="./img/logo.png" alt="Dewrito"/>
-			</a>
-			<!--<div class="footer-social d-flex justify-content-center">
-				<a href="#"><i class="fa fa-pinterest"></i></a>
-				<a href="#"><i class="fa fa-facebook"></i></a>
-				<a href="#"><i class="fa fa-twitter"></i></a>
-				<a href="#"><i class="fa fa-dribbble"></i></a>
-				<a href="#"><i class="fa fa-behance"></i></a>
-			</div>-->
-			<div class="copyright">
-Copyright &copy;<script>document.write(new Date().getFullYear());</script> Dewrito.net — Community-run server infrastructure.
-</div>
-		</div>
-	</footer>
-	<!-- Footer section end -->
+<!-- Matrix Community Section -->
+<section class="section matrix-section" id="community">
+  <div class="container">
+    <div class="matrix-grid">
+      <div class="matrix-info">
+        <span class="mono-label section-label">Community Hub</span>
+        <h2>Join the <span class="gradient-text">#dewrito</span> space</h2>
+        <p>
+          The Matrix protocol is open, federated, and privacy-respecting. 
+          Our official #dewrito space on matrix.dewrito.net is where the community 
+          connects, shares information, and coordinates — all on infrastructure we control.
+        </p>
+      </div>
 
+      <div class="matrix-links">
+        <!-- Sable Matrix Client -->
+        <a href="https://app.sable.moe/login/dewrito.net" target="_blank" rel="noopener" class="matrix-link-item">
+          <span class="matrix-link-label">Open Matrix (Sable)</span>
+          <span class="matrix-link-desc">#dewrito:dewrito.net →</span>
+        </a>
 
-	<!--====== Javascripts & Jquery ======-->
-	<script src="js/jquery-3.2.1.min.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-	<script src="js/jquery.slicknav.min.js"></script>
-	<script src="js/owl.carousel.min.js"></script>
-	<script src="js/jquery.sticky-sidebar.min.js"></script>
-	<script src="js/jquery.magnific-popup.min.js"></script>
-	<script src="js/main.js"></script>
-	<script src="js/starfield.js"></script>
+        <!-- Fluxer -->
+        <a href="https://fluxer.dewrito.net" target="_blank" rel="noopener" class="matrix-link-item">
+          <span class="matrix-link-label">Fluxer Chat & Voice</span>
+          <span class="matrix-link-desc">Launch →</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Support Section -->
+<section class="section support-section" id="support">
+  <div class="container">
+    <span class="mono-label section-label">Sustain the Infrastructure</span>
+    <h2>Help keep the servers running.</h2>
+    
+    <div class="support-card">
+      <p>
+        Our infrastructure is community-funded and community-maintained. 
+        Every contribution helps us keep the Matrix homeserver, Fluxer deployment, 
+        and all services online for everyone.
+      </p>
+      <a href="donate.html" class="btn-primary">
+        <!-- SVG: Heart -->
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        Support Us
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <p class="footer-text">&copy; <span id="year"></span> Dewrito.net — Community-run server infrastructure.</p>
+    <ul class="footer-links">
+      <li><a href="register.html">Register</a></li>
+      <li><a href="terms.html">Terms</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="donate.html">Support Us</a></li>
+    </ul>
+  </div>
+</footer>
+
+<!-- Scripts -->
+<script src="js/starfield.js"></script>
+<script>
+  // Update copyright year
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Mobile nav toggle
+  const navbar = document.getElementById('navbar');
+  const navToggle = document.getElementById('navToggle');
+  
+  navToggle.addEventListener('click', () => {
+    navbar.classList.toggle('mobile-open');
+  });
+
+  // Close mobile menu on link click
+  document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', () => {
+      navbar.classList.remove('mobile-open');
+    });
+  });
+</script>
 </body>
 </html>

@@ -1,217 +1,178 @@
 <!DOCTYPE html>
-<html lang="zxx">
+<html lang="en">
 <head>
-	<title>Dewrito | Register</title>
-	<meta charset="UTF-8">
-	<meta name="description" content="Dewrito community server and Fluxer client">
-	<meta name="keywords" content="dewrito, fluxer, community, game server">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<!-- Favicon -->
-	<link href="img/favicon.ico" rel="shortcut icon"/>
-
-	<!-- Google Font -->
-	<link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,500,500i,700,700i,900,900i" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-	<!-- Stylesheets -->
-	<link rel="stylesheet" href="css/bootstrap.min.css"/>
-	<link rel="stylesheet" href="css/font-awesome.min.css"/>
-	<link rel="stylesheet" href="css/slicknav.min.css"/>
-	<link rel="stylesheet" href="css/owl.carousel.min.css"/>
-	<link rel="stylesheet" href="css/magnific-popup.css"/>
-	<link rel="stylesheet" href="css/animate.css"/>
-
-	<!-- Main Stylesheets -->
-	<link rel="stylesheet" href="css/style.css"/>
+  <title>Dewrito | Register</title>
+  <meta charset="UTF-8">
+  <meta name="description" content="Register for Dewrito community services — Matrix chat and Fluxer client.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="img/favicon.ico" rel="shortcut icon"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/site.css">
 </head>
 <body>
 
-	<!-- Age Verification Overlay -->
-	<div id="age-gate-overlay">
-		<div class="age-gate-box">
-			<h2>Age Verification</h2>
-			<p>You must be at least 18 years old to access Dewrito.net services and community.</p>
-			
-			<div class="age-buttons">
-				<button class="age-btn age-btn-yes" onclick="confirmAge(true)">I am 18 or older</button>
-				<button class="age-btn age-btn-no"  onclick="confirmAge(false)">I am under 18</button>
-			</div>
+<canvas id="starfield"></canvas>
 
-			<div id="age-denied">
-				Sorry, you must be 18+ to enter this site.<br>
-				You will be redirected in a few seconds...
-			</div>
-		</div>
-	</div>
+<!-- Age Gate -->
+<div id="age-gate-overlay">
+  <div class="age-gate-box">
+    <span class="mono-label section-label">Age Verification</span>
+    <h2>You must be 18+</h2>
+    <p>To access Dewrito.net services and community, you must be at least 18 years old.</p>
+    <div class="age-buttons">
+      <button class="btn-primary" onclick="confirmAge(true)">I am 18 or older</button>
+      <button class="btn-secondary" onclick="confirmAge(false)">I am under 18</button>
+    </div>
+    <div id="age-denied">
+      Sorry, you must be 18+ to enter this site.<br>You will be redirected shortly...
+    </div>
+  </div>
+</div>
 
-	<!-- Page Preloder -->
-	<div id="preloder">
-		<div class="loader"></div>
-	</div>
+<!-- Navigation -->
+<nav class="navbar" id="navbar">
+  <div class="container">
+    <a href="index.html" class="nav-logo">
+      <img src="img/logo.png" alt="Dewrito">
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html#features">Features</a></li>
+      <li><a href="index.html#community">Community</a></li>
+      <li><a href="register.html">Register</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="index.html" class="btn-secondary">Back Home</a>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
 
-	<!-- Header section -->
-	<header class="header-section">
-		<div class="header-warp">
-			<div class="header-social d-flex justify-content-end">
-				<p class="text-white">Community:</p>
-				<a href="https://matrix.to/#/#dewrito:dewrito.net" target="_blank" title="Official Matrix Space"><i class="fa fa-dribbble"></i></a>
-				<a href="https://fluxer.dewrito.net/invite/BQVNmkEW" target="_blank" title="Official Fluxer Space"><i class="fa fa-comments"></i></a>
-			</div>
-			<div class="header-bar-warp d-flex">
-				<!-- site logo -->
-				<a href="index.html" class="site-logo">
-					<img src="./img/logo.png" alt="Dewrito"/>
-				</a>
-				<nav class="top-nav-area w-100">
-					<div class="user-panel">
-						<a href="https://app.sable.moe/login/dewrito.net" target="_blank">Open Matrix</a>
-						&nbsp;|&nbsp;
-						<a href="https://fluxer.dewrito.net" target="_blank">Open Fluxer</a>
-					</div>
-					<!-- Menu -->
-					<ul class="main-menu primary-menu">
-						<li><a href="register.html">Register</a></li>
-						<li><a href="terms.html">Terms</a></li>
-						<li><a href="contact.html">Contact</a></li>
-						<li><a href="donate.html">Support Us</a></li>
-					</ul>
-				</nav>
-			</div>
-		</div>
-	</header>
-	<!-- Header section end -->
+<!-- Page Header -->
+<header class="page-header">
+  <h1>Choose Your Client</h1>
+  <p style="margin: 0 auto;">By registering you agree to our <a href="terms.html">Terms of Service</a>.</p>
+</header>
 
-	<!-- Page top section -->
-	<section class="page-top-section ">
-		<div class="page-info">
-			<h2>Dewrito.net | Registration</h2>
-			<hr>
-		</div>
-	</section>
-	<!-- Page top end-->
+<!-- Content Section -->
+<section class="content-section">
+  <!-- Matrix Card -->
+  <div class="client-grid">
+    <div class="client-card">
+      <h3>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3ecf8e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Matrix
+      </h3>
+      <p>The open, decentralized communication protocol. Full control, end-to-end encryption, and federation across servers.</p>
+      
+      <div style="margin-bottom: var(--space-md);">
+        <strong style="color: var(--accent-green); font-size: 0.85rem;">Pros</strong>
+        <ul style="font-size: 0.875rem; color: var(--text-secondary); margin-top: var(--space-xs);">
+          <li>Decentralized & federated — no single company controls it</li>
+          <li>End-to-end encryption available in private rooms</li>
+          <li>Interoperable with Discord, IRC via bridges</li>
+          <li>Fully open-source, community-driven, privacy-first</li>
+        </ul>
+      </div>
 
-	<!-- Intro section -->
-	 	<section class="intro-section">
-		<div class="container">
-	 				<p class="text-white">By registering to these services you are agreeing to the terms and conditions of using dewrito.net</p>
-		</div></div>	
-		<section class="intro-section">
-		<div class="container">
-			<div class="row">
-				<div class="col-md-4">
-					<div>
-						<a href="https://app.sable.moe/register/dewrito.net" target="_blank" class="site-btn"><br><h3>Matrix</h3></a>
-						</div>
-					<div class="intro-text-box text-box text-white">
-						
-						
-					</br>
-						<h4>Pros:</h4>
-						<ul>
-							<li>Decentralized & federated — No single company controls it; you can self-host or choose servers, avoiding lock-in.</li>
-							<li>End-to-end encryption (E2EE) available — Especially strong in private rooms for secure chats.</li>
-							<li>Interoperable & bridgeable — Connects to other networks (Discord, IRC, etc.) via bridges.</li>
-							<li>Open standard — Fully open-source, community-driven, with strong focus on privacy and no central data mining.</li>
-						</ul>
-					</br>
-						<h4>Cons:</h4>
-						<ul>
-							<li>Performance issues — Can feel slow or laggy, especially in large rooms or on mobile/low-end devices.</li>
-							<li>Metadata exposure — Not all metadata is encrypted; homeservers see who talks to whom.</li>
-							<li>Client & UX fragmentation — Different clients (Cinny, Commet etc.) vary in features, polish, and bugs.</li>
-							<li>Setup complexity — Making spaces or joining the right rooms can be tricky for beginners.</li>
-						</ul>
-					<br>
-					<p class="text-white">Choose Matrix if you want true decentralization, maximum interoperability, and strong encryption even across servers (great for privacy-focused or federated communities like dewrito.net).</p>
-					</div>
-				</div>
-				<div class="col-md-4">
-					<div>
-						<a href="https://fluxer.dewrito.net" target="_blank" class="site-btn"><br><h3>Fluxer</h3></a>
-						</div>
-					<div class="intro-text-box text-box text-white">
-						
-						
-					</br>
-						<h4>Pros:</h4>
-						<ul>
-							<li>Familiar Discord-like experience — Easy transition: channels, roles, voice/video calls, screen sharing, markdown, file sharing.</li>
-							<li>Privacy-first & open-source — Strong emphasis on user privacy, no ads, transparent team, better policy than Discord.</li>
-							<li>Lightweight & fast — Runs smoother and uses fewer resources than Discord or heavy Matrix clients.</li>
-							<li>Community/moderation tools — Good for groups: roles, permissions, audit logs, no heavy corporate restrictions.</li>
-						</ul>
-					</br>
-						<h4>Cons:</h4>
-						<ul>
-							<li>Very new / still maturing (launched ~2026) — Missing some polish, features, and full mobile apps (web/PWA mainly for now; native apps in progress).</li>
-							<li>Centralized by default — While open-source and self-hostable, the main instance is run by one team (less federation than Matrix).</li>
-							<li>No federation (yet?) — Unlike Matrix, rooms/servers don't seamlessly federate across instances by default.</li>
-						</ul>
-					<br>
-					<p class="text-white">Choose Fluxer if you want a smoother, more Discord-feeling app with solid privacy and less hassle, especially for gaming/groups/friends (and you're okay with it being newer).</p>
-					</div>
-				</div>
-				<div class="col-md-4">
-					<div class="intro-text-box text-box">
-						
-						<a href="donate.html" class="site-btn"></br><h3>   SUPPORT US   </h3></a></br></br>
-						<p class="text-white">Help us keep the servers running.</p>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
-	<!-- Intro section end -->
+      <div style="margin-bottom: var(--space-lg);">
+        <strong style="color: rgba(240, 100, 100, 0.8); font-size: 0.85rem;">Cons</strong>
+        <ul style="font-size: 0.875rem; color: var(--text-secondary); margin-top: var(--space-xs);">
+          <li>Can feel slow in large rooms or on low-end devices</li>
+          <li>Some metadata exposed to homeserver</li>
+          <li>Client UX varies (Cinny, Commet, etc.)</li>
+          <li>Joining the right rooms can be tricky for beginners</li>
+        </ul>
+      </div>
 
-	<footer class="footer-section">
-		<div class="container">
-			<a href="#" class="footer-logo">
-				<img src="./img/logo.png" alt="Dewrito"/>
-			</a>
-			<div class="copyright">
-				Copyright &copy;<script>document.write(new Date().getFullYear());</script> Dewrito.net — Community-driven Matrix infrastructure.
-			</div>
-		</div>
-	</footer>
+      <a href="https://app.sable.moe/register/dewrito.net" target="_blank" rel="noopener" class="btn-primary" style="width: 100%; justify-content: center;">
+        Register on Matrix →
+      </a>
+    </div>
 
-	<!--====== Javascripts & Jquery ======-->
-	<script src="js/jquery-3.2.1.min.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-	<script src="js/jquery.slicknav.min.js"></script>
-	<script src="js/owl.carousel.min.js"></script>
-	<script src="js/jquery.sticky-sidebar.min.js"></script>
-	<script src="js/jquery.magnific-popup.min.js"></script>
-	<script src="js/main.js"></script>
-	<script src="js/starfield.js"></script>
+    <!-- Fluxer Card -->
+    <div class="client-card">
+      <h3>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        Fluxer
+      </h3>
+      <p>A Discord-like experience with strong privacy. Channels, roles, voice/video calls, screen sharing — all self-hosted.</p>
+      
+      <div style="margin-bottom: var(--space-md);">
+        <strong style="color: var(--accent-cyan); font-size: 0.85rem;">Pros</strong>
+        <ul style="font-size: 0.875rem; color: var(--text-secondary); margin-top: var(--space-xs);">
+          <li>Familiar Discord-like experience — easy transition</li>
+          <li>Privacy-first, open-source, no ads</li>
+          <li>Lightweight & fast — smoother than heavy clients</li>
+          <li>Good community tools: roles, permissions, audit logs</li>
+        </ul>
+      </div>
 
-	<!-- Age Gate Logic -->
-	<script>
-		function showAgeGate() {
-			document.getElementById('age-gate-overlay').classList.add('visible');
-		}
+      <div style="margin-bottom: var(--space-lg);">
+        <strong style="color: rgba(240, 100, 100, 0.8); font-size: 0.85rem;">Cons</strong>
+        <ul style="font-size: 0.875rem; color: var(--text-secondary); margin-top: var(--space-xs);">
+          <li>Newer product (~2026) — still maturing in polish</li>
+          <li>Centralized by default (self-hostable but single-instance)</li>
+          <li>No federation yet — rooms don't federate across instances</li>
+        </ul>
+      </div>
 
-		function confirmAge(isOver18) {
-			if (isOver18) {
-				localStorage.setItem('dewritoAgeVerified', 'yes');
-				document.getElementById('age-gate-overlay').classList.remove('visible');
-			} else {
-				document.getElementById('age-denied').style.display = 'block';
-				setTimeout(() => {
-					window.location.href = 'https://www.google.com'; // ← change to whatever "safe" page you want
-				}, 2600);
-			}
-		}
+      <a href="https://fluxer.dewrito.net" target="_blank" rel="noopener" class="btn-primary" style="width: 100%; justify-content: center; background: var(--accent-cyan);">
+        Open Fluxer →
+      </a>
+    </div>
+  </div>
 
-		// Check on load
-		window.addEventListener('load', function() {
-			const verified = localStorage.getItem('dewritoAgeVerified');
-			if (verified !== 'yes') {
-				showAgeGate();
-			}
-		});
-	</script>
+  <hr class="divider">
 
+  <!-- Support CTA -->
+  <div style="text-align: center;">
+    <h3>Help keep the servers running</h3>
+    <p style="margin: var(--space-sm) auto var(--space-lg);">Our infrastructure is community-funded. Every contribution matters.</p>
+    <a href="donate.html" class="btn-secondary">Support Us</a>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <p class="footer-text">&copy; <span id="year"></span> Dewrito.net — Community-run server infrastructure.</p>
+    <ul class="footer-links">
+      <li><a href="register.html">Register</a></li>
+      <li><a href="terms.html">Terms</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="donate.html">Support Us</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script src="js/starfield.js"></script>
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  const navbar = document.getElementById('navbar');
+  const navToggle = document.getElementById('navToggle');
+  navToggle.addEventListener('click', () => navbar.classList.toggle('mobile-open'));
+  document.querySelectorAll('.nav-links a').forEach(link => link.addEventListener('click', () => navbar.classList.remove('mobile-open')));
+
+  // Age Gate Logic
+  function confirmAge(isOver18) {
+    if (isOver18) {
+      localStorage.setItem('dewritoAgeVerified', 'yes');
+      document.getElementById('age-gate-overlay').style.display = 'none';
+    } else {
+      document.getElementById('age-denied').style.display = 'block';
+      setTimeout(() => window.location.href = 'https://www.google.com', 2600);
+    }
+  }
+
+  if (localStorage.getItem('dewritoAgeVerified') !== 'yes') {
+    document.getElementById('age-gate-overlay').style.display = 'flex';
+  } else {
+    document.getElementById('age-gate-overlay').style.display = 'none';
+  }
+</script>
 </body>
 </html>

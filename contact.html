@@ -1,144 +1,109 @@
 <!DOCTYPE html>
-<html lang="zxx">
+<html lang="en">
 <head>
-	<title>Dewrito | Contact</title>
-	<meta charset="UTF-8">
-	<meta name="description" content="Dewrito community server and Fluxer client">
-	<meta name="keywords" content="dewrito, fluxer, community, game server">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<!-- Favicon -->
-	<link href="img/favicon.ico" rel="shortcut icon"/>
-
-	<!-- Google Font -->
-	<link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,500,500i,700,700i,900,900i" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-
-	<!-- Stylesheets -->
-	<link rel="stylesheet" href="css/bootstrap.min.css"/>
-	<link rel="stylesheet" href="css/font-awesome.min.css"/>
-	<link rel="stylesheet" href="css/slicknav.min.css"/>
-	<link rel="stylesheet" href="css/owl.carousel.min.css"/>
-	<link rel="stylesheet" href="css/magnific-popup.css"/>
-	<link rel="stylesheet" href="css/animate.css"/>
-
-	<!-- Main Stylesheets -->
-	<link rel="stylesheet" href="css/style.css"/>
+  <title>Dewrito | Contact</title>
+  <meta charset="UTF-8">
+  <meta name="description" content="Contact Dewrito — reporting, support, and federation admin information.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="img/favicon.ico" rel="shortcut icon"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/site.css">
 </head>
 <body>
-	<!-- Page Preloder -->
-	<div id="preloder">
-		<div class="loader"></div>
-	</div>
 
-	<!-- Header section -->
-	<header class="header-section">
-		<div class="header-warp">
-			<div class="header-social d-flex justify-content-end">
-				<p class="text-white">Community:</p>
-				<a href="https://matrix.to/#/#dewrito:dewrito.net" target="_blank" title="Official Matrix Space"><i class="fa fa-dribbble"></i></a>
-				<a href="https://fluxer.dewrito.net/invite/BQVNmkEW" target="_blank" title="Official Fluxer Space"><i class="fa fa-comments"></i></a>
-				<!-- <a href="#"><i class="fa fa-github"></i></a> -->
-			</div>
-			<div class="header-bar-warp d-flex">
-				<!-- site logo -->
-				<a href="index.html" class="site-logo">
-					<img src="./img/logo.png" alt="Dewrito"/>
-				</a>
-				<nav class="top-nav-area w-100">
-					<div class="user-panel">
-						<a href="https://app.sable.moe/login/dewrito.net" target="_blank">Open Matrix</a>
-						&nbsp;|&nbsp;
-						<a href="https://fluxer.dewrito.net" target="_blank">Open Fluxer</a>
-					</div>
-					<!-- Menu -->
-					<ul class="main-menu primary-menu">
-						<li><a href="register.html">Register</a></li>
-						<li><a href="terms.html">Terms</a></li>
-						<li><a href="contact.html">Contact</a></li>
-						<li><a href="donate.html">Support Us</a></li>
-					</ul>
-				</nav>
-			</div>
-		</div>
-	</header>
-	<!-- Header section end -->
+<canvas id="starfield"></canvas>
 
-	<!-- Page top section -->
-	<section class="page-top-section ">
-		<div class="page-info">
-			<h2>Dewrito.net | Contact</h2>
-			<hr>
-		</div>
-	</section>
-	<!-- Page top end-->
+<!-- Navigation -->
+<nav class="navbar" id="navbar">
+  <div class="container">
+    <a href="index.html" class="nav-logo"><img src="img/logo.png" alt="Dewrito"></a>
+    <ul class="nav-links">
+      <li><a href="index.html#features">Features</a></li>
+      <li><a href="index.html#community">Community</a></li>
+      <li><a href="register.html">Register</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-cta"><a href="index.html" class="btn-secondary">Back Home</a></div>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation"><span></span><span></span><span></span></button>
+  </div>
+</nav>
 
-	<!-- Contact page -->
-<section class="contact-page section-pad">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-10 offset-lg-1 text-white terms-content tos-content">
-					<h3>Reporting Accounts and Support</h3>
-						<p>Help us keeping this place clean by reporting illegal contact and accounts that are violating our terms of service. 
-							Note for matrix users: that if you use your client to report remote users, only dewrito.net will receive the report.
-							If you report bad users, please note that often more details are needed.</p>
+<header class="page-header">
+  <h1>Contact & Reporting</h1>
+  <p style="margin: 0 auto;">Help us keep the community safe. Report violations or reach out for support.</p>
+</header>
 
-						<h3>Matrix Federation Server Admins</h3>
-						<p>We will work with you to enforce our terms against dewrito.net users that are creating issues with your matrix homeserver.</p>
-						<p><strong>Email:</strong> support@dewrito.net</p>
-						<p><strong>Visit the official dewrito matrix:</strong> https://matrix.to/#/#dewrito:dewrito.net</p>
-						<p><strong>Visit the official dewrito fluxer:</strong> https://fluxer.dewrito.net/invite/BQVNmkEW</p>
-					<!-- END: Replace placeholder with real copied text -->
+<section class="content-section">
+  <div class="contact-grid">
+    <!-- General Support -->
+    <div class="contact-card">
+      <h3>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        General Support
+      </h3>
+      <p style="margin-bottom: var(--space-sm);">For account issues, registration help, or general questions about our services.</p>
+      <p><strong>Email:</strong> <a href="mailto:support@dewrito.net" style="color: var(--accent-cyan);">support@dewrito.net</a></p>
+    </div>
 
-					<!-- Remove or comment out the dummy contact info if not needed -->
-					<!-- 
-					<div class="cont-info">
-						<div class="ci-icon"><img src="img/icons/location.png" alt=""></div>
-						<div class="ci-text">Main Str, no 23, New York</div>
-					</div>
-					... etc.
-					-->
-				</div>
-			</div>
-		</div>
-	</section>
-	<!-- Contact page end-->
+    <!-- Abuse Reporting -->
+    <div class="contact-card">
+      <h3>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        Report Abuse
+      </h3>
+      <p style="margin-bottom: var(--space-sm);">Report users or content violating our Terms of Service. Include details, timestamps, and context for faster action.</p>
+      <p><strong>Email:</strong> <a href="mailto:abuse@dewrito.net" style="color: #f87171;">abuse@dewrito.net</a></p>
+    </div>
 
-	<footer class="footer-section">
-		<div class="container">
-			<a href="#" class="footer-logo">
-				<img src="./img/logo.png" alt="Dewrito"/>
-			</a>
-			<!--<div class="footer-social d-flex justify-content-center">
-				<a href="#"><i class="fa fa-pinterest"></i></a>
-				<a href="#"><i class="fa fa-facebook"></i></a>
-				<a href="#"><i class="fa fa-twitter"></i></a>
-				<a href="#"><i class="fa fa-dribbble"></i></a>
-				<a href="#"><i class="fa fa-behance"></i></a>
-			</div>-->
-			<div class="copyright">
-Copyright &copy;<script>document.write(new Date().getFullYear());</script> Dewrito.net — Community-run server infrastructure.
-</div>
-		</div>
-	</footer>
-	<!-- Footer section end -->
+    <!-- Federation Admins -->
+    <div class="contact-card">
+      <h3>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3ecf8e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Federation Admins
+      </h3>
+      <p style="margin-bottom: var(--space-sm);">We work with other Matrix homeserver admins to enforce our terms against dewrito.net users causing issues on your server.</p>
+      <p><strong>Email:</strong> <a href="mailto:support@dewrito.net" style="color: var(--accent-green);">support@dewrito.net</a></p>
+    </div>
 
+    <!-- Community Spaces -->
+    <div class="contact-card">
+      <h3>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Community Spaces
+      </h3>
+      <p style="margin-bottom: var(--space-sm);">Join our official spaces to chat, get help, and stay updated.</p>
+      <ul style="font-size: 0.875rem; color: var(--text-secondary); list-style: none; padding: 0;">
+        <li style="margin-bottom: var(--space-xs);">📡 <a href="https://matrix.to/#/#dewrito:dewrito.net" target="_blank" rel="noopener" style="color: var(--accent-cyan);">#dewrito:dewrito.net</a></li>
+        <li>⚡ <a href="https://fluxer.dewrito.net/invite/BQVNmkEW" target="_blank" rel="noopener" style="color: var(--accent-green);">Fluxer Invite</a></li>
+      </ul>
+    </div>
+  </div>
 
-	<!--====== Javascripts & Jquery ======-->
-	<script src="js/jquery-3.2.1.min.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-	<script src="js/jquery.slicknav.min.js"></script>
-	<script src="js/owl.carousel.min.js"></script>
-	<script src="js/jquery.sticky-sidebar.min.js"></script>
-	<script src="js/jquery.magnific-popup.min.js"></script>
-	<script src="js/main.js"></script>
-	<script src="js/starfield.js"></script>
+  <hr class="divider">
 
+  <h3>Reporting on Matrix</h3>
+  <p>If you use your Matrix client to report remote users, only dewrito.net will receive the report. For comprehensive reports, please include as much detail as possible — usernames, timestamps, room context, and screenshots if available.</p>
+</section>
 
+<footer class="footer">
+  <div class="container">
+    <p class="footer-text">&copy; <span id="year"></span> Dewrito.net — Community-run server infrastructure.</p>
+    <ul class="footer-links">
+      <li><a href="register.html">Register</a></li>
+      <li><a href="terms.html">Terms</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="donate.html">Support Us</a></li>
+    </ul>
+  </div>
+</footer>
 
-
-
-	</body>
+<script src="js/starfield.js"></script>
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+  const navbar = document.getElementById('navbar');
+  const navToggle = document.getElementById('navToggle');
+  navToggle.addEventListener('click', () => navbar.classList.toggle('mobile-open'));
+  document.querySelectorAll('.nav-links a').forEach(link => link.addEventListener('click', () => navbar.classList.remove('mobile-open')));
+</script>
+</body>
 </html>
