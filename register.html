@@ -13,22 +13,6 @@
 
 <canvas id="starfield"></canvas>
 
-<!-- Age Gate -->
-<div id="age-gate-overlay">
-  <div class="age-gate-box">
-    <span class="mono-label section-label">Age Verification</span>
-    <h2>You must be 18+</h2>
-    <p>To access Dewrito.net services and community, you must be at least 18 years old.</p>
-    <div class="age-buttons">
-      <button class="btn-primary" onclick="confirmAge(true)">I am 18 or older</button>
-      <button class="btn-secondary" onclick="confirmAge(false)">I am under 18</button>
-    </div>
-    <div id="age-denied">
-      Sorry, you must be 18+ to enter this site.<br>You will be redirected shortly...
-    </div>
-  </div>
-</div>
-
 <!-- Navigation -->
 <nav class="navbar" id="navbar">
   <div class="container">
@@ -87,8 +71,8 @@
         </ul>
       </div>
 
-      <a href="https://app.sable.moe/register/dewrito.net" target="_blank" rel="noopener" class="btn-primary" style="width: 100%; justify-content: center;">
-        Register on Matrix →
+      <a href="https://app.sable.moe/register/dewrito.net" class="btn-primary" style="width: 100%; justify-content: center;">
+        Open Matrix →
       </a>
     </div>
 
@@ -156,23 +140,6 @@
   const navToggle = document.getElementById('navToggle');
   navToggle.addEventListener('click', () => navbar.classList.toggle('mobile-open'));
   document.querySelectorAll('.nav-links a').forEach(link => link.addEventListener('click', () => navbar.classList.remove('mobile-open')));
-
-  // Age Gate Logic
-  function confirmAge(isOver18) {
-    if (isOver18) {
-      localStorage.setItem('dewritoAgeVerified', 'yes');
-      document.getElementById('age-gate-overlay').style.display = 'none';
-    } else {
-      document.getElementById('age-denied').style.display = 'block';
-      setTimeout(() => window.location.href = 'https://www.google.com', 2600);
-    }
-  }
-
-  if (localStorage.getItem('dewritoAgeVerified') !== 'yes') {
-    document.getElementById('age-gate-overlay').style.display = 'flex';
-  } else {
-    document.getElementById('age-gate-overlay').style.display = 'none';
-  }
 </script>
 </body>
 </html>

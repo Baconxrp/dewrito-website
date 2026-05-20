@@ -603,6 +603,8 @@ a:hover {
   border-radius: var(--radius-md);
   padding: var(--space-xl);
   transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
 }
 
 .client-card:hover {
@@ -617,6 +619,10 @@ a:hover {
 .client-card p {
   font-size: 0.875rem;
   margin-bottom: var(--space-md);
+}
+
+.client-card .btn-primary {
+  margin-top: auto;
 }
 
 /* ---- Contact Cards ---- */
