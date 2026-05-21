@@ -314,6 +314,20 @@ a:hover {
   transition: all 0.3s ease;
 }
 
+/* Hamburger → X animation when menu is open */
+.navbar.mobile-open .nav-toggle span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.navbar.mobile-open .nav-toggle span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+
+.navbar.mobile-open .nav-toggle span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
 /* ---- Hero Section ---- */
 .hero {
   min-height: 100vh;
@@ -682,6 +696,16 @@ a:hover {
     --space-2xl: 32px;
   }
 
+  .hero {
+    min-height: auto;
+    padding-top: calc(64px + var(--space-2xl));
+    padding-bottom: var(--space-2xl);
+  }
+
+  .hero-content {
+    padding: var(--space-xl) var(--space-md);
+  }
+
   .nav-links,
   .nav-cta {
     display: none;
@@ -691,29 +715,36 @@ a:hover {
     display: flex;
   }
 
-  /* Mobile menu */
+  /* Mobile menu — uses flexbox, no hardcoded heights */
+  .navbar.mobile-open {
+    height: auto;
+    max-height: calc(100vh - 64px);
+    overflow-y: auto;
+  }
+
   .navbar.mobile-open .nav-links {
     display: flex;
     flex-direction: column;
-    position: absolute;
-    top: 64px;
-    left: 0;
-    right: 0;
-    background: rgba(5, 5, 16, 0.95);
-    backdrop-filter: blur(20px);
-    padding: var(--space-lg);
+    position: static;
+    background: transparent;
+    backdrop-filter: none;
+    padding: var(--space-md) var(--space-lg) var(--space-md);
     border-bottom: 1px solid var(--border-subtle);
     gap: var(--space-md);
+    animation: slideDown 0.25s ease-out;
   }
 
   .navbar.mobile-open .nav-cta {
     display: flex;
-    position: absolute;
-    top: calc(64px + 200px);
-    left: 0;
-    right: 0;
-    padding: 0 var(--space-lg) var(--space-lg);
-    border-bottom: 1px solid var(--border-subtle);
+    position: static;
+    padding: var(--space-md) var(--space-lg) var(--space-xl);
+    border-bottom: none;
+    animation: slideDown 0.25s ease-out 0.05s both;
+  }
+
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
 
   .features-grid {
