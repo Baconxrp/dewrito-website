@@ -8,8 +8,8 @@
 
     const ctx = canvas.getContext('2d');
     let stars = [];
-    let width = window.innerWidth;
-    let height = window.innerHeight;
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
     let scrollY = 0;
 
     // Three parallax layers: far (slow), mid (medium), near (fast)
