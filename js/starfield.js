@@ -118,13 +118,22 @@
       requestAnimationFrame(drawStars);
     }
 
+    // ==================== FIXED INITIALIZATION ====================
     createStars();
     requestAnimationFrame(drawStars);
 
-    window.addEventListener('resize', () => {
+    // Improved resize handler
+    function handleResize() {
       width = canvas.width = window.innerWidth;
       height = canvas.height = window.innerHeight;
       createStars();
+    }
+
+    window.addEventListener('resize', handleResize);
+    
+    // Force correct size after page fully loads (this fixes the main issue)
+    window.addEventListener('load', () => {
+      setTimeout(handleResize, 60);
     });
 
     // Parallax scroll — vanilla JS (no jQuery)
