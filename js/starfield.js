@@ -1,4 +1,4 @@
-// Dewrito Starfield — vanilla JS, no dependencies
+// Dewrito Starfield — Fixed initialization
 (function() {
   'use strict';
 
@@ -8,11 +8,10 @@
 
     const ctx = canvas.getContext('2d');
     let stars = [];
-    let width = canvas.width = window.innerWidth;
-    let height = canvas.height = window.innerHeight;
+    let width = 0;
+    let height = 0;
     let scrollY = 0;
 
-    // Three parallax layers: far (slow), mid (medium), near (fast)
     const LAYERS = [
       { count: 180, minR: 0.2, maxR: 0.8, speed: 0.03, color: 'rgba(180,160,220,' },
       { count: 100, minR: 0.5, maxR: 1.4, speed: 0.08, color: 'rgba(203,160,240,' },
@@ -39,10 +38,17 @@
       }
     }
 
+    function resizeCanvas() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+      createStars();
+    }
+
     function drawStars(time) {
+      if (width === 0 || height === 0) return;
+
       ctx.clearRect(0, 0, width, height);
 
-      // Deep space gradient (matches CSS --bg-primary)
       const scrollShift = scrollY * 0.0003;
       const gx = width / 2 + scrollShift * 200;
       const gy = height / 2 + scrollShift * 100;
@@ -53,7 +59,7 @@
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, width, height);
 
-      // Nebulae — cyan and purple tinted to match dewrito brand
+      // Nebulae...
       const n1x = width * 0.3 - scrollY * 0.02;
       const n1y = height * 0.4 - scrollY * 0.03;
       const n1Grad = ctx.createRadialGradient(n1x, n1y, 0, n1x, n1y, 350);
@@ -72,7 +78,7 @@
       ctx.fillStyle = n2Grad;
       ctx.fillRect(0, 0, width, height);
 
-      // Draw stars per layer
+      // Draw stars (same as before)
       for (const s of stars) {
         const layer = LAYERS[s.layer];
         const pulse = Math.sin(time * s.pulseSpeed + s.pulseOffset);
@@ -85,7 +91,6 @@
         if (drawY < -10) drawY += height + 20;
         if (drawY > height + 10) drawY -= height + 20;
 
-        // Star glow
         const glow = ctx.createRadialGradient(px, drawY, 0, px, drawY, s.r * 5);
         glow.addColorStop(0, layer.color + (opacity * 0.5) + ')');
         glow.addColorStop(0.3, layer.color + (opacity * 0.15) + ')');
@@ -95,13 +100,11 @@
         ctx.arc(px, drawY, s.r * 5, 0, Math.PI * 2);
         ctx.fill();
 
-        // Star core
         ctx.fillStyle = layer.color + opacity + ')';
         ctx.beginPath();
         ctx.arc(px, drawY, s.r, 0, Math.PI * 2);
         ctx.fill();
 
-        // Bright stars cross flare
         if (s.r > 1.5 && opacity > 0.6) {
           ctx.strokeStyle = layer.color + (opacity * 0.15) + ')';
           ctx.lineWidth = 0.5;
@@ -118,29 +121,27 @@
       requestAnimationFrame(drawStars);
     }
 
-    // ==================== FIXED INITIALIZATION ====================
-    createStars();
+    // ==================== FIXED TIMING ====================
+    resizeCanvas();                    // First attempt
     requestAnimationFrame(drawStars);
 
-    // Improved resize handler
-    function handleResize() {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
-      createStars();
-    }
+    window.addEventListener('resize', resizeCanvas);
 
-    window.addEventListener('resize', handleResize);
-    
-    // Force correct size after page fully loads (this fixes the main issue)
+    // Multiple fallback triggers — this usually solves the huge stars issue
     window.addEventListener('load', () => {
-      setTimeout(handleResize, 60);
+      setTimeout(resizeCanvas, 10);
+      setTimeout(resizeCanvas, 100);
+      setTimeout(resizeCanvas, 300);
     });
 
-    // Parallax scroll — vanilla JS (no jQuery)
+    // Also try after a short delay in case of heavy layout
+    setTimeout(resizeCanvas, 200);
+
+    // Scroll parallax
     let ticking = false;
-    window.addEventListener('scroll', function() {
+    window.addEventListener('scroll', () => {
       if (!ticking) {
-        requestAnimationFrame(function() {
+        requestAnimationFrame(() => {
           scrollY = window.pageYOffset;
           ticking = false;
         });
@@ -149,7 +150,6 @@
     }, { passive: true });
   }
 
-  // Run immediately or wait for DOM
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initStarfield);
   } else {
