@@ -28,30 +28,27 @@
   </div>
 </nav>
 
-<header class="page-header">
+<header class="page-header" style="padding-top: calc(64px + var(--space-xl)); padding-bottom: var(--space-md);">
   <h1>Support the Infrastructure</h1>
   <p style="margin: 0 auto;">Our services are community-funded and community-maintained. Every contribution keeps the lights on.</p>
 </header>
 
-<section class="content-section">
-  <div style="text-align: center; margin-bottom: var(--space-2xl);">
+<section class="content-section" style="padding-top: var(--space-md); padding-bottom: var(--space-lg);">
+  <div style="text-align: center; margin-bottom: var(--space-md);">
     <h3>What your support covers</h3>
-    <p style="margin: var(--space-md) auto;">Dedicated hardware, bandwidth, domain registration, and ongoing maintenance for our Matrix homeserver, Fluxer deployment, and all community services.</p>
+    <p style="margin: var(--space-sm) auto;">Dedicated hardware, bandwidth, domain registration, and ongoing maintenance for our Matrix homeserver, Fluxer deployment, and all community services.</p>
   </div>
 
-  <!-- Placeholder for donation buttons -->
-  <div style="display: flex; justify-content: center; gap: var(--space-lg); flex-wrap: wrap;">
-    <a href="#" class="btn-primary" style="opacity: 0.5; cursor: not-allowed;">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-      Donate (Coming Soon)
-    </a>
+  <!-- NowPayments Donation Widget -->
+  <div style="display: flex; justify-content: center; margin-top: var(--space-sm);">
+    <iframe src="https://nowpayments.io/embeds/donation-widget?api_key=1ae4ee4d-9c49-4389-a2a4-479bbb7728e9" style="height: 680px; max-width: 500px;" frameborder="0" style="border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,0.3);"></iframe>
   </div>
 
-  <hr class="divider">
+  <hr class="divider" style="margin-top: var(--space-lg); margin-bottom: var(--space-lg);">
 
   <h3 style="text-align: center;">Other ways to help</h3>
   
-  <div class="contact-grid" style="margin-top: var(--space-xl);">
+  <div class="contact-grid" style="margin-top: var(--space-md);">
     <div class="contact-card">
       <h3>Spread the Word</h3>
       <p>Tell others about Dewrito. More users = more justification for keeping infrastructure running.</p>
@@ -60,11 +57,6 @@
     <div class="contact-card">
       <h3>Contribute Skills</h3>
       <p>We always need help with server maintenance, documentation, and community moderation.</p>
-    </div>
-
-    <div class="contact-card">
-      <h3>Donate Hardware</h3>
-      <p>Old servers or networking gear? We can put them to work running our services.</p>
     </div>
   </div>
 </section>
