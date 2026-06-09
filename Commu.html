@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Community Ads • dewrito.net</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #0a0a14;
+      color: #fff;
+      text-align: center;
+      padding: 40px 20px;
+    }
+    .container { max-width: 1100px; margin: 0 auto; }
+    h1 { color: #00ff9d; }
+    .subtitle { color: #888; margin-bottom: 20px; }
+
+    .ad-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      margin-top: 20px;
+    }
+    .ad-card {
+      background: #1a1a2e;
+      border-radius: 16px;
+      padding: 24px;
+      text-align: left;
+      transition: all 0.3s;
+      display: flex;
+      flex-direction: column;
+    }
+    .ad-card:hover { transform: translateY(-8px); box-shadow: 0 0 25px rgba(0, 255, 157, 0.3); }
+    .ad-card h3 { margin: 0 0 8px 0; color: #00ff9d; font-size: 1.5em; }
+    .ad-card a { color: #00ccff; text-decoration: none; }
+    .ad-card a:hover { text-decoration: underline; }
+    .description { margin: 12px 0; font-size: 0.95em; color: #ddd; }
+    .meta { font-size: 0.9em; color: #777; margin-top: 12px; line-height: 1.4; flex-grow: 1; }
+
+    .boost-btn {
+      margin-top: 16px;
+      padding: 10px 16px;
+      background: #00ff9d;
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    .howto {
+      margin-top: 70px;
+      background: #111827;
+      padding: 30px;
+      border-radius: 16px;
+      text-align: left;
+      max-width: 780px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    code { background: #1a1a2e; padding: 6px 10px; border-radius: 6px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🌐 Sponsored Communities</h1>
+    <p class="subtitle">Boosted via Stellar (XLM) • $5 = 1 month visibility</p>
+
+    <div id="adGrid" class="ad-grid"></div>
+
+    <div class="howto">
+      <h2>How to Get Listed or Boost</h2>
+      <ol>
+        <li>Send any amount of <strong>XLM</strong> to our wallet below.</li>
+        <li>In the <strong>Memo</strong> field, put exactly:<br>
+          <code>#CommunityName:yourwebsite.com [Short description]</code></li>
+        <li>Example: <code>#dewrito:dewrito.net [Halo, WoW, Runescape and more]</code></li>
+      </ol>
+      <p><strong>Our Stellar Wallet:</strong><br>
+        <code id="xlmWallet" style="word-break:break-all; font-size:0.95em;"></code>
+      </p>
+      <p>💡 Multiple donations stack months.</p>
+    </div>
+  </div>
+
+  <script>
+    const XLM_WALLET = "GCCL23ZM4PLTMULZ2K5KQHBLK3WHSCXXLFCHOMDSLJFQ2UN532WN3HYR";
+
+    const BLOCKED_WORDS = ["scam", "hack", "porn", "xxx", "adult", "nsfw", "fuck", "shit", "hitler", "nazi", "racist", "terror", "illegal", "spam"];
+
+    function parseMemo(text) {
+      if (!text) return null;
+      const match = text.match(/#(\w+):(\S+)(?:\s*\[(.+?)\])?/i);
+      if (match) {
+        return {
+          name: match[1].trim(),
+          url: match[2].trim().replace(/^https?:\/\//i, ''),
+          description: match[3] ? match[3].trim() : ''
+        };
+      }
+      return null;
+    }
+
+    async function fetchXLMTransactions() {
+      const communityMap = new Map();
+
+      try {
+        // Fetching payments endpoint directly gives us access to transaction amounts and text memos at once
+        const res = await fetch(`https://horizon.stellar.org/accounts/${XLM_WALLET}/payments?limit=60&order=desc`);
+        const data = await res.json();
+
+        if (data._embedded && data._embedded.records) {
+          for (let payment of data._embedded.records) {
+            // Only capture inbound payments of native Lumens (XLM)
+            if (payment.type === "payment" && payment.to === XLM_WALLET && payment.asset_type === "native") {
+              const memoText = payment.transaction_memo || '';
+              const parsed = parseMemo(memoText);
+              if (!parsed) continue;
+
+              const nameKey = parsed.name.toLowerCase();
+              const xlmAmount = parseFloat(payment.amount) || 0;
+
+              if (BLOCKED_WORDS.some(w => nameKey.includes(w) || (parsed.description && parsed.description.toLowerCase().includes(w)))) continue;
+
+              if (!communityMap.has(nameKey)) {
+                communityMap.set(nameKey, {
+                  name: parsed.name,
+                  url: parsed.url,
+                  description: parsed.description,
+                  totalXlm: 0,
+                  boosts: []
+                });
+              }
+
+              const entry = communityMap.get(nameKey);
+              entry.totalXlm += xlmAmount;
+              entry.boosts.push({ time: new Date(payment.created_at) });
+            }
+          }
+        }
+      } catch (e) {
+        console.error("Stellar fetch error:", e);
+      }
+
+      // Convert accumulated XLM to visibility months (assuming roughly 25 XLM ≈ $5 depending on rates, modify math here if needed)
+      // For now, we'll retain your calculation layout where 5 XLM = 1 month
+      let ads = Array.from(communityMap.values()).map(com => ({
+        ...com,
+        months: Math.max(1, Math.floor(com.totalXlm / 5)),
+        lastBoost: com.boosts.length ? new Date(Math.max(...com.boosts.map(b => b.time))) : new Date()
+      }));
+
+      renderAds(ads);
+    }
+
+    function renderAds(ads) {
+      let html = '';
+
+      ads.forEach(ad => {
+        const boostMemo = `#${ad.name}:${ad.url} [${ad.description || 'Your description here'}]`;
+        const lastDate = ad.lastBoost.toLocaleDateString('en-US', {month:'short', year:'numeric'});
+
+        html += `
+          <div class="ad-card">
+            <h3>#${ad.name}</h3>
+            <p><a href="https://${ad.url}" target="_blank" rel="noopener">${ad.url}</a></p>
+            ${ad.description ? `<div class="description">${ad.description}</div>` : ''}
+            <div class="meta">
+              Boosted for <strong>${ad.months} month${ad.months > 1 ? 's' : ''}</strong><br>
+              Last boost: ${lastDate}
+            </div>
+            <button class="boost-btn" onclick="showBoostInfo('${boostMemo.replace(/'/g, "\\'")}')">Boost this Community</button>
+          </div>
+        `;
+      });
+
+      if (html === '') {
+        html = `
+          <div style="grid-column: 1 / -1; padding: 50px 30px; background: #1a1a2e; border-radius: 16px; text-align: center;">
+            <h3>No sponsored communities yet</h3>
+            <p>Be the first to boost your community!</p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 30px;">
+              <div class="ad-card" style="opacity:0.75;">
+                <h3>#dewrito</h3><p>dewrito.net</p>
+                <div class="description">Halo, WoW, Runescape and more</div>
+                <div class="meta">Boosted for 4 months</div>
+                <button class="boost-btn" onclick="showBoostInfo('#dewrito:dewrito.net [Halo, WoW, Runescape and more]')">Boost</button>
+              </div>
+              <div class="ad-card" style="opacity:0.75;">
+                <h3>#PixelGuild</h3><p>pixelguild.xyz</p>
+                <div class="description">Pixel art & indie game devs</div>
+                <div class="meta">Boosted for 2 months</div>
+                <button class="boost-btn" onclick="showBoostInfo('#PixelGuild:pixelguild.xyz [Pixel art & indie game devs]')">Boost</button>
+              </div>
+            </div>
+          </div>`;
+      }
+
+      document.getElementById('adGrid').innerHTML = html;
+    }
+
+    window.showBoostInfo = function(memo) {
+      alert(`📋 Copy this exact memo:\n\n${memo}\n\nSend any amount of XLM to:\n${XLM_WALLET}`);
+    };
+
+    // Initialize
+    document.getElementById('xlmWallet').textContent = XLM_WALLET;
+    fetchXLMTransactions();
+    setInterval(fetchXLMTransactions, 15000); // Check every 15 seconds
+  </script>
+</body>
+</html>
