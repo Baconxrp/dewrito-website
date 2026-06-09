@@ -61,6 +61,89 @@
       margin-right: auto;
     }
     code { background: #1a1a2e; padding: 6px 10px; border-radius: 6px; }
+
+    /* Custom In-App Modal Styles */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(5, 5, 10, 0.85);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .modal-content {
+      background: #111827;
+      border: 2px solid #00ff9d;
+      box-shadow: 0 0 30px rgba(0, 255, 157, 0.2);
+      border-radius: 16px;
+      padding: 30px;
+      max-width: 500px;
+      width: 90%;
+      position: relative;
+      text-align: left;
+      transform: translateY(-20px);
+      transition: transform 0.3s ease;
+    }
+    .modal-overlay.active .modal-content {
+      transform: translateY(0);
+    }
+    .modal-close {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      background: none;
+      border: none;
+      color: #888;
+      font-size: 24px;
+      cursor: pointer;
+      padding: 0;
+    }
+    .modal-close:hover { color: #fff; }
+    .modal-title { margin-top: 0; color: #00ff9d; font-size: 1.4em; }
+    
+    .memo-box-container {
+      background: #1a1a2e;
+      border: 1px solid #333;
+      border-radius: 8px;
+      padding: 12px;
+      margin: 16px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .memo-text {
+      font-family: monospace;
+      font-size: 0.95em;
+      color: #00ccff;
+      word-break: break-all;
+    }
+    .copy-action-btn {
+      background: #00ccff;
+      color: #000;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 14px;
+      font-weight: bold;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .copy-action-btn.copied {
+      background: #00ff9d;
+    }
   </style>
 </head>
 <body>
@@ -85,14 +168,31 @@
     </div>
   </div>
 
+  <div id="boostModal" class="modal-overlay" onclick="closeBoostModal()">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="closeBoostModal()">&times;</button>
+      <h3 class="modal-title">📋 Copy Transaction Memo</h3>
+      <p style="color: #bbb; font-size: 0.95em; margin-bottom: 8px;">Include this exact string in your transfer's memo field:</p>
+      
+      <div class="memo-box-container">
+        <div id="modalMemoText" class="memo-text"></div>
+        <button id="modalCopyBtn" class="copy-action-btn" onclick="copyMemoText()">Copy Memo</button>
+      </div>
+
+      <p style="font-size: 0.85em; color: #777; margin: 0;">Send any amount of XLM to our listed wallet address below. Note that $5 ≈ 1 additional month of visibility.</p>
+    </div>
+  </div>
+
   <script>
     const XLM_WALLET = "GCCL23ZM4PLTMULZ2K5KQHBLK3WHSCXXLFCHOMDSLJFQ2UN532WN3HYR";
 
     const BLOCKED_WORDS = ["scam", "hack", "porn", "xxx", "adult", "nsfw", "fuck", "shit", "hitler", "nazi", "racist", "terror", "illegal", "spam"];
+    let activeMemo = ""; 
 
     function parseMemo(text) {
       if (!text) return null;
-      const match = text.match(/#(\w+):(\S+)(?:\s*\[(.+?)\])?/i);
+      // Fixed: safely stops capturing URL characters right before an open bracket '['
+      const match = text.match(/#(\w+):([^\[\s]+)(?:\s*\[(.+?)\])?/i);
       if (match) {
         return {
           name: match[1].trim(),
@@ -107,13 +207,11 @@
       const communityMap = new Map();
 
       try {
-        // Fetching payments endpoint directly gives us access to transaction amounts and text memos at once
         const res = await fetch(`https://horizon.stellar.org/accounts/${XLM_WALLET}/payments?limit=60&order=desc`);
         const data = await res.json();
 
         if (data._embedded && data._embedded.records) {
           for (let payment of data._embedded.records) {
-            // Only capture inbound payments of native Lumens (XLM)
             if (payment.type === "payment" && payment.to === XLM_WALLET && payment.asset_type === "native") {
               const memoText = payment.transaction_memo || '';
               const parsed = parseMemo(memoText);
@@ -144,8 +242,6 @@
         console.error("Stellar fetch error:", e);
       }
 
-      // Convert accumulated XLM to visibility months (assuming roughly 25 XLM ≈ $5 depending on rates, modify math here if needed)
-      // For now, we'll retain your calculation layout where 5 XLM = 1 month
       let ads = Array.from(communityMap.values()).map(com => ({
         ...com,
         months: Math.max(1, Math.floor(com.totalXlm / 5)),
@@ -201,14 +297,42 @@
       document.getElementById('adGrid').innerHTML = html;
     }
 
+    // Custom Modal Display Mechanisms
     window.showBoostInfo = function(memo) {
-      alert(`📋 Copy this exact memo:\n\n${memo}\n\nSend any amount of XLM to:\n${XLM_WALLET}`);
+      activeMemo = memo;
+      document.getElementById('modalMemoText').textContent = memo;
+      
+      const copyBtn = document.getElementById('modalCopyBtn');
+      copyBtn.textContent = "Copy Memo";
+      copyBtn.classList.remove('copied');
+
+      document.getElementById('boostModal').classList.add('active');
+    };
+
+    window.closeBoostModal = function() {
+      document.getElementById('boostModal').classList.remove('active');
+    };
+
+    window.copyMemoText = function() {
+      navigator.clipboard.writeText(activeMemo).then(() => {
+        const copyBtn = document.getElementById('modalCopyBtn');
+        copyBtn.textContent = "✓ Copied!";
+        copyBtn.classList.add('copied');
+        
+        setTimeout(closeBoostModal, 3000);
+      }).catch(err => {
+        console.error('Failed to copy text: ', err);
+      });
     };
 
     // Initialize
     document.getElementById('xlmWallet').textContent = XLM_WALLET;
+    
+    // Immediately display placeholders while blockchain background fetch operates
+    renderAds([]);
+    
     fetchXLMTransactions();
-    setInterval(fetchXLMTransactions, 15000); // Check every 15 seconds
+    setInterval(fetchXLMTransactions, 15000); 
   </script>
 </body>
 </html>
