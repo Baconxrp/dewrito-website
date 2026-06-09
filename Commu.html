@@ -61,7 +61,7 @@
     }
     code { background: #1a1a2e; padding: 6px 10px; border-radius: 6px; }
 
-    /* Custom Inside-App Modal Styles */
+    /* Custom App Modal Window Styles */
     .modal-overlay {
       position: fixed;
       top: 0;
@@ -158,7 +158,7 @@
         <li>Send <strong>25 XLM or more</strong> to our wallet below.</li>
         <li>In the <strong>Memo</strong> field, use this simple format:<br>
           <code>#CommunityName:yourwebsite.com</code></li>
-        <li>Example: <code>#jbro:dewrito.net</code></li>
+        <li>Example: <code>#animerules:dewrito.net</code></li>
       </ol>
       <p><strong>Our Stellar Wallet:</strong><br>
         <code id="xlmWallet" style="word-break:break-all; font-size:0.95em;"></code>
@@ -167,6 +167,7 @@
     </div>
   </div>
 
+  <!-- Custom Popup Modal Window -->
   <div id="boostModal" class="modal-overlay" onclick="closeBoostModal()">
     <div class="modal-content" onclick="event.stopPropagation()">
       <button class="modal-close" onclick="closeBoostModal()">&times;</button>
@@ -188,8 +189,8 @@
 
     function parseMemo(text) {
       if (!text) return null;
-      // Simplest check: Starts with #, followed by a name, a colon, and a URL
-      const match = text.match(/#(\w+):(\S+)/i);
+      // Parses out the community title and website link cleanly
+      const match = text.match(/#?(\w+):(\S+)/i);
       if (match) {
         return {
           name: match[1].trim(),
@@ -203,20 +204,32 @@
       const communityMap = new Map();
 
       try {
-        const res = await fetch(`https://horizon.stellar.org/accounts/${XLM_WALLET}/payments?limit=60&order=desc`);
+        // We call the transactions route directly—this guarantees the 'memo' field is bundled inside the payload natively
+        const res = await fetch(`https://horizon.stellar.org/accounts/${XLM_WALLET}/transactions?limit=40&order=desc`);
         const data = await res.json();
 
         if (data._embedded && data._embedded.records) {
-          for (let payment of data._embedded.records) {
-            if (payment.type === "payment" && payment.to === XLM_WALLET && payment.asset_type === "native") {
-              
-              const xlmAmount = parseFloat(payment.amount) || 0;
-              // CRITICAL: Skip any payment that is less than 25 XLM
-              if (xlmAmount < 25) continue;
-
-              const memoText = payment.transaction_memo || '';
-              const parsed = parseMemo(memoText);
+          for (let tx of data._embedded.records) {
+            // Check if it has a valid text memo
+            if (tx.memo_type === "text" && tx.memo) {
+              const parsed = parseMemo(tx.memo);
               if (!parsed) continue;
+
+              // Now let's grab the actual payment operation from this transaction to check the amount
+              const opRes = await fetch(`https://horizon.stellar.org/transactions/${tx.hash}/operations?limit=10`);
+              const opData = await opRes.json();
+              
+              let xlmAmount = 0;
+              if (opData._embedded && opData._embedded.records) {
+                for (let op of opData._embedded.records) {
+                  if (op.type === "payment" && op.to === XLM_WALLET && op.asset_type === "native") {
+                    xlmAmount += parseFloat(op.amount);
+                  }
+                }
+              }
+
+              // Enforce your minimum requirement limit rule
+              if (xlmAmount < 25) continue;
 
               const nameKey = parsed.name.toLowerCase();
 
@@ -231,7 +244,7 @@
 
               const entry = communityMap.get(nameKey);
               entry.totalXlm += xlmAmount;
-              entry.boosts.push({ time: new Date(payment.created_at) });
+              entry.boosts.push({ time: new Date(tx.created_at) });
             }
           }
         }
@@ -239,7 +252,7 @@
         console.error("Stellar fetch error:", e);
       }
 
-      // 25 XLM = 1 Month visibility
+      // Convert accumulated currency pool into active months
       let ads = Array.from(communityMap.values()).map(com => ({
         ...com,
         months: Math.max(1, Math.floor(com.totalXlm / 25)),
@@ -276,9 +289,9 @@
             <p>Be the first to boost your community!</p>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 30px;">
               <div class="ad-card" style="opacity:0.75;">
-                <h3>#jbro</h3><p>dewrito.net</p>
+                <h3>#animerules</h3><p>dewrito.net</p>
                 <div class="meta">Boosted for 1 month</div>
-                <button class="boost-btn" onclick="showBoostInfo('#jbro:dewrito.net')">Boost</button>
+                <button class="boost-btn" onclick="showBoostInfo('#animerules:dewrito.net')">Boost</button>
               </div>
             </div>
           </div>`;
@@ -319,7 +332,7 @@
     
     renderAds([]);
     fetchXLMTransactions();
-    setInterval(fetchXLMTransactions, 15000); 
+    setInterval(fetchXLMTransactions, 20000); // Check every 20 seconds
   </script>
 </body>
 </html>
