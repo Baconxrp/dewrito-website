@@ -3,215 +3,486 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sponsored community listings and boost memos for Dewrito.">
   <title>Community Ads • dewrito.net</title>
+  <link href="img/favicon.ico" rel="shortcut icon"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/site.css">
+  <script src="https://www.google.com/recaptcha/enterprise.js" async defer></script>
   <style>
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      background: #0a0a14;
-      color: #fff;
-      text-align: center;
-      padding: 40px 20px;
-    }
-    .container { max-width: 1100px; margin: 0 auto; }
-    h1 { color: #00ff9d; }
-    .subtitle { color: #888; margin-bottom: 20px; }
-
-    .ad-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 24px;
-      margin-top: 20px;
-    }
-    .ad-card {
-      background: #1a1a2e;
-      border-radius: 16px;
-      padding: 24px;
-      text-align: left;
-      transition: all 0.3s;
-      display: flex;
-      flex-direction: column;
-    }
-    .ad-card:hover { transform: translateY(-8px); box-shadow: 0 0 25px rgba(0, 255, 157, 0.3); }
-    .ad-card h3 { margin: 0 0 8px 0; color: #00ff9d; font-size: 1.5em; }
-    .ad-card a { color: #00ccff; text-decoration: none; }
-    .ad-card a:hover { text-decoration: underline; }
-    .description { margin: 12px 0; font-size: 0.95em; color: #ddd; }
-    .meta { font-size: 0.9em; color: #777; margin-top: 12px; line-height: 1.4; flex-grow: 1; }
-
-    .boost-btn {
-      margin-top: 16px;
-      padding: 10px 16px;
-      background: #00ff9d;
-      color: #000;
-      border: none;
-      border-radius: 8px;
-      font-weight: bold;
-      cursor: pointer;
-      width: 100%;
-    }
-
-    .howto {
-      margin-top: 70px;
-      background: #111827;
-      padding: 30px;
-      border-radius: 16px;
-      text-align: left;
-      max-width: 780px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    code { background: #1a1a2e; padding: 6px 10px; border-radius: 6px; }
+    /* Page-specific adjustments that use design tokens from site.css */
+    .collapsible-wrapper { max-width: 760px; margin: 0 auto 28px; border-radius: 12px; overflow: hidden; }
+    .collapsible-summary { display:flex; justify-content:space-between; align-items:center; padding:16px 18px; cursor:pointer; background:var(--bg-card); color:var(--accent-cyan); font-weight:600; }
+    .collapsible-summary::after { content:'▼'; color:var(--text-muted); transition:transform .18s; }
+    .collapsible-wrapper[open] .collapsible-summary::after { transform:rotate(180deg); color:var(--accent-cyan); }
+    .submit-panel-content { padding:18px; border-top:1px solid var(--border-subtle); background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent); }
+    .form-group label { display:block; font-size:0.85rem; color:var(--text-muted); margin-bottom:6px; }
+    .url-splitter { display:flex; gap:10px; align-items:center; }
+    .url-splitter span { color:var(--text-muted); font-weight:700; }
+    .form-group input, .form-group textarea { width:100%; padding:10px; background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:8px; color:var(--text-primary); }
+    .form-group input:focus, .form-group textarea:focus { outline:none; border-color:var(--accent-cyan); }
+    .char-counter { text-align:right; color:var(--text-muted); font-size:0.8rem; }
+    .gen-btn { width:100%; padding:12px; border-radius:10px; border:none; background:var(--accent-cyan); color:#000; font-weight:700; cursor:pointer; }
+    .ad-list-container { margin-top:20px; border-radius:12px; overflow:hidden; border:1px solid var(--border-subtle); background:var(--bg-card); }
+    .ad-table { width:100%; border-collapse:collapse; }
+    .ad-table th { text-align:left; padding:12px 16px; background:rgba(255,255,255,0.02); color:var(--accent-cyan); font-size:0.85rem; text-transform:uppercase; }
+    .ad-row td { padding:14px 16px; vertical-align:middle; border-top:1px solid rgba(255,255,255,0.02); }
+    .col-url a { color:var(--accent-cyan); }
+    .col-desc { color:var(--text-secondary); }
+    .col-meta { color:var(--text-muted); font-size:0.9rem; }
+    .list-boost-btn { padding:8px 12px; border-radius:8px; background:var(--accent-cyan); border:none; font-weight:700; cursor:pointer; }
+    .modal-overlay { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(5,5,10,0.7); backdrop-filter:blur(6px); z-index:1000; opacity:0; pointer-events:none; transition:opacity .2s; }
+    .modal-overlay.active { opacity:1; pointer-events:auto; }
+    .modal-content { background:var(--bg-card); border:1px solid var(--accent-cyan); padding:22px; border-radius:12px; max-width:520px; width:92%; color:var(--text-primary); }
+    .page-header { display: flex; flex-direction: column; align-items: center; text-align: center; }
+    .page-header h1 { font-size: 1.6rem; font-weight: 600; margin-bottom: 6px; }
+    .subtitle { margin: 0; color: var(--text-secondary); margin-top: 4px; }
+    .memo-text { font-family:var(--font-mono); font-size:1.05rem; color:var(--accent-cyan); font-weight:700; }
+    .copy-action-btn { background:var(--accent-cyan); color:#000; border:none; padding:8px 12px; border-radius:8px; font-weight:700; }
   </style>
 </head>
 <body>
+
+<canvas id="starfield"></canvas>
+
+<!-- Navigation -->
+<nav class="navbar" id="navbar">
   <div class="container">
-    <h1>🌐 Sponsored Communities</h1>
-    <p class="subtitle">Boosted via Stellar (XLM) • $5 = 1 month visibility</p>
+    <a href="index.html" class="nav-logo"><img src="img/logo.png" alt="Dewrito"></a>
+    <ul class="nav-links">
+      <li><a href="index.html#features">Features</a></li>
+      <li><a href="index.html#community">Community</a></li>
+      <li><a href="register.html">Register</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-cta"><a href="register.html" class="btn-primary">Get Started</a></div>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation"><span></span><span></span><span></span></button>
+  </div>
+</nav>
 
-    <div id="adGrid" class="ad-grid"></div>
+<header class="page-header">
+  <h1>Sponsored Communities</h1>
+  <p class="subtitle">Boosted via Stellar (XLM) • 25 XLM = 1 Month Visibility</p>
+</header>
 
-    <div class="howto">
-      <h2>How to Get Listed or Boost</h2>
-      <ol>
-        <li>Send any amount of <strong>XLM</strong> to our wallet below.</li>
-        <li>In the <strong>Memo</strong> field, put exactly:<br>
-          <code>#CommunityName:yourwebsite.com [Short description]</code></li>
-        <li>Example: <code>#dewrito:dewrito.net [Halo, WoW, Runescape and more]</code></li>
-      </ol>
-      <p><strong>Our Stellar Wallet:</strong><br>
-        <code id="xlmWallet" style="word-break:break-all; font-size:0.95em;"></code>
-      </p>
-      <p>💡 Multiple donations stack months.</p>
+<section class="content-section">
+  <div class="container">
+    <details class="collapsible-wrapper">
+      <summary class="collapsible-summary">➕ Create Your Boost Memo</summary>
+      <div class="submit-panel-content">
+        <div class="form-group">
+          <label>Display Name</label>
+          <input type="text" id="formDisplayName" maxlength="30" placeholder="e.g. My Awesome Club">
+        </div>
+        <div class="form-group">
+          <label>Community Address Matrix Target</label>
+          <div class="url-splitter">
+            <input type="text" id="urlNamePart" placeholder="#lounge or !roomid">
+            <span>:</span>
+            <input type="text" id="urlHostPart" placeholder="homeserverurl.com">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Community Description (Max 90 chars)</label>
+          <textarea id="formDescription" maxlength="90" oninput="updateCharCount(this)" placeholder="Short intro summary..."></textarea>
+          <div class="char-counter"><span id="charCount">90</span> characters remaining</div>
+        </div>
+        <div class="captcha-container">
+          <div class="g-recaptcha" data-sitekey="6LdpRB8tAAAAAGiL_VVpdi8VZQyVmoCAmnz2GfB-" data-action="SUBMIT"></div>
+        </div>
+        <button class="btn-primary gen-btn" onclick="createNewAdProposal()">Generate Payment Memo</button>
+      </div>
+    </details>
+
+    <div class="ad-list-container">
+      <table class="ad-table">
+        <thead>
+          <tr>
+            <th>Community</th>
+            <th>Location Address</th>
+            <th>Description</th>
+            <th>Boost Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="adListBody"></tbody>
+      </table>
     </div>
   </div>
+</section>
 
-  <script>
-    const XLM_WALLET = "GCCL23ZM4PLTMULZ2K5KQHBLK3WHSCXXLFCHOMDSLJFQ2UN532WN3HYR";
+<div id="boostModal" class="modal-overlay" onclick="closeBoostModal()">
+  <div class="modal-content" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeBoostModal()">&times;</button>
+    <h3 class="modal-title">📋 Copy Transaction Memo</h3>
+    <p style="color: var(--text-secondary); font-size:0.95rem; margin-bottom:8px;">Send <strong>25 XLM or more</strong> to our wallet with this exact short memo:</p>
+    <div class="memo-box-container">
+      <div id="modalMemoText" class="memo-text"></div>
+      <button id="modalCopyBtn" class="copy-action-btn" onclick="copyMemoText()">Copy Memo</button>
+    </div>
+    <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:8px;"><strong>Our Stellar Address:</strong><br><span style="word-break:break-all; color:var(--text-secondary);">GCCL23ZM4PLTMULZ2K5KQHBLK3WHSCXXLFCHOMDSLJFQ2UN532WN3HYR</span></p>
+  </div>
+</div>
 
-    const BLOCKED_WORDS = ["scam", "hack", "porn", "xxx", "adult", "nsfw", "fuck", "shit", "hitler", "nazi", "racist", "terror", "illegal", "spam"];
+<footer class="footer">
+  <div class="container">
+    <p class="footer-text">&copy; <span id="year"></span> Dewrito.net — Community-run server infrastructure.</p>
+    <ul class="footer-links">
+      <li><a href="register.html">Register</a></li>
+      <li><a href="terms.html">Terms</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="donate.html">Support Us</a></li>
+    </ul>
+  </div>
+</footer>
 
-    function parseMemo(text) {
-      const match = text.match(/#(\w+):(\S+)(?:\s*\[(.+?)\])?/i);
-      if (match) {
-        return {
-          name: match[1].trim(),
-          url: match[2].trim().replace(/^https?:\/\//i, ''),
-          description: match[3] ? match[3].trim() : ''
-        };
-      }
-      return null;
+<script src="js/starfield.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+  const navbar = document.getElementById('navbar');
+  const navToggle = document.getElementById('navToggle');
+  navToggle.addEventListener('click', () => navbar.classList.toggle('mobile-open'));
+  document.querySelectorAll('.nav-links a').forEach(link => link.addEventListener('click', () => navbar.classList.remove('mobile-open')));
+
+  const XLM_WALLET = "GCCL23ZM4PLTMULZ2K5KQHBLK3WHSCXXLFCHOMDSLJFQ2UN532WN3HYR";
+  const SUPABASE_URL = "https://emdooqonibsgrazbcvzp.supabase.co"; 
+  const SUPABASE_ANON_KEY = "sb_publishable_r7eqc_NvhJI77DBNhvvQjA_ohkMfrKE";
+  const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+  let activeMemo = "";
+
+  function updateCharCount(textarea) { document.getElementById('charCount').textContent = 90 - textarea.value.length; }
+  function generateShortID() { return Math.random().toString(36).substring(2, 7).toUpperCase(); }
+
+  async function createNewAdProposal() {
+    if(!supabaseClient) { alert("Supabase initialization configuration failed."); return; }
+    const captchaResponse = window.grecaptcha ? window.grecaptcha.getResponse() : "";
+    if (!captchaResponse) { alert("Please complete the reCAPTCHA security check before continuing."); return; }
+    const displayName = document.getElementById('formDisplayName').value.trim();
+    const urlName = document.getElementById('urlNamePart').value.trim();
+    const urlHost = document.getElementById('urlHostPart').value.trim();
+    const description = document.getElementById('formDescription').value.trim();
+    if(!displayName || !urlName || !urlHost) { alert("Please fill out the Display Name and both halves of the Community Address."); return; }
+    if (!urlName.startsWith('#') && !urlName.startsWith('!')) { alert("Community Name segment target must begin with either a '#' or an '!' character."); return; }
+    const combinedUrl = `${urlName}:${urlHost}`;
+    const shortID = generateShortID();
+    const { error } = await supabaseClient.schema('public').from('community_ads').insert([{ id: shortID, name: displayName, url: combinedUrl, description: description }]);
+    if (error) { console.error("Database storage error:", error); alert("Something went wrong saving details to database."); }
+    else {
+      showBoostInfo(shortID);
+      document.getElementById('formDisplayName').value = '';
+      document.getElementById('urlNamePart').value = '';
+      document.getElementById('urlHostPart').value = '';
+      document.getElementById('formDescription').value = '';
+      document.getElementById('charCount').textContent = '90';
+      if(window.grecaptcha) window.grecaptcha.reset();
+      document.querySelector('.collapsible-wrapper').removeAttribute('open');
     }
+  }
 
-    async function fetchXLMTransactions() {
-      const communityMap = new Map();
-
-      try {
-        const res = await fetch(`https://horizon.stellar.org/accounts/${XLM_WALLET}/transactions?limit=60&order=desc`);
-        const data = await res.json();
-
-        if (data._embedded && data._embedded.records) {
-          for (let tx of data._embedded.records) {
-            if (tx.memo_type === "text" && tx.memo) {
-              const parsed = parseMemo(tx.memo);
-              if (!parsed) continue;
-
-              const nameKey = parsed.name.toLowerCase();
-              let xlmAmount = 0;
-
-              // Get payment amount if available
-              if (tx.operations && tx.operations.records) {
-                for (let op of tx.operations.records) {
-                  if (op.type === "payment" && op.to === XLM_WALLET) {
-                    xlmAmount += parseFloat(op.amount);
-                  }
-                }
+  async function fetchXLMTransactions() {
+    if(!supabaseClient) return renderAds([]);
+    const communityMap = new Map();
+    try {
+      const { data: dbRecords } = await supabaseClient.schema('public').from('community_ads').select('*');
+      const dbMap = new Map(dbRecords?.map(item => [item.id.toLowerCase(), item]));
+      const res = await fetch(`https://horizon.stellar.org/accounts/${XLM_WALLET}/transactions?limit=40&order=desc`);
+      const data = await res.json();
+      if (data._embedded && data._embedded.records) {
+        for (let tx of data._embedded.records) {
+          if (tx.memo_type === "text" && tx.memo) {
+            const memoKey = tx.memo.trim().toLowerCase();
+            if (!dbMap.has(memoKey)) continue;
+            const matchedData = dbMap.get(memoKey);
+            const opRes = await fetch(`https://horizon.stellar.org/transactions/${tx.hash}/operations?limit=5`);
+            const opData = await opRes.json();
+            let xlmAmount = 0;
+            if (opData._embedded && opData._embedded.records) {
+              for (let op of opData._embedded.records) {
+                if (op.type === "payment" && op.to === XLM_WALLET && op.asset_type === "native") xlmAmount += parseFloat(op.amount);
               }
-
-              if (BLOCKED_WORDS.some(w => nameKey.includes(w) || (parsed.description && parsed.description.toLowerCase().includes(w)))) continue;
-
-              if (!communityMap.has(nameKey)) {
-                communityMap.set(nameKey, {
-                  name: parsed.name,
-                  url: parsed.url,
-                  description: parsed.description,
-                  totalXlm: 0,
-                  boosts: []
-                });
-              }
-
-              const entry = communityMap.get(nameKey);
-              entry.totalXlm += xlmAmount || 5; // fallback
-              entry.boosts.push({ time: new Date(tx.created_at) });
             }
+            if (xlmAmount < 25) continue;
+            const uniqueKey = matchedData.url.toLowerCase();
+            if (!communityMap.has(uniqueKey)) communityMap.set(uniqueKey, { name: matchedData.name, url: matchedData.url, description: matchedData.description, totalXlm: 0, boosts: [], id: matchedData.id });
+            const entry = communityMap.get(uniqueKey);
+            entry.totalXlm += xlmAmount;
+            entry.boosts.push({ time: new Date(tx.created_at) });
           }
         }
-      } catch (e) {
-        console.error("Stellar fetch error:", e);
       }
+    } catch (e) { console.error("Stellar fetch processing error:", e); }
+    let ads = Array.from(communityMap.values()).map(com => ({ ...com, months: Math.max(1, Math.floor(com.totalXlm / 25)), lastBoost: com.boosts.length ? new Date(Math.max(...com.boosts.map(b => b.time))) : new Date() }));
+    renderAds(ads);
+  }
 
-      let ads = Array.from(communityMap.values()).map(com => ({
-        ...com,
-        months: Math.max(1, Math.floor(com.totalXlm / 5)),
-        lastBoost: com.boosts.length ? new Date(Math.max(...com.boosts.map(b => b.time))) : new Date()
-      }));
+  function renderAds(ads) {
+    let html = '';
+    ads.forEach(ad => {
+      const lastDate = ad.lastBoost.toLocaleDateString('en-US', {month:'short', year:'numeric'});
+      html += `
+        <tr class="ad-row">
+          <td class="col-name">${ad.name}</td>
+          <td class="col-url"><a href="https://matrix.to/#/${ad.url}" target="_blank" rel="noopener">${ad.url}</a></td>
+          <td class="col-desc">${ad.description ? ad.description : '<i>No description provided</i>'}</td>
+          <td class="col-meta"><strong>${ad.months} month${ad.months > 1 ? 's' : ''}</strong><br><span style="color:var(--text-muted); font-size:0.9em;">Last: ${lastDate}</span></td>
+          <td><button class="btn-primary list-boost-btn" onclick="showBoostInfo('${ad.id}')">Boost</button></td>
+        </tr>`;
+    });
+    if (html === '') html = `<tr><td colspan="5" style="padding: 40px; text-align: center; color: var(--text-muted);"><h3>No active community ads tracking</h3><p>Generate a memo code using the input panel form above to publish!</p></td></tr>`;
+    document.getElementById('adListBody').innerHTML = html;
+  }
 
-      renderAds(ads);
-    }
+  window.showBoostInfo = function(memo) { activeMemo = memo; document.getElementById('modalMemoText').textContent = memo; const copyBtn = document.getElementById('modalCopyBtn'); copyBtn.textContent = "Copy Memo"; copyBtn.classList.remove('copied'); document.getElementById('boostModal').classList.add('active'); };
+  window.closeBoostModal = function() { document.getElementById('boostModal').classList.remove('active'); };
+  window.copyMemoText = function() { navigator.clipboard.writeText(activeMemo).then(() => { const copyBtn = document.getElementById('modalCopyBtn'); copyBtn.textContent = "✓ Copied!"; copyBtn.classList.add('copied'); setTimeout(closeBoostModal, 3000); }); };
 
-    function renderAds(ads) {
-      let html = '';
+  fetchXLMTransactions();
+  setInterval(fetchXLMTransactions, 20000);
+</script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sponsored community listings and boost memos for Dewrito.">
+  <title>Community Ads • dewrito.net</title>
+  <link href="img/favicon.ico" rel="shortcut icon"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/site.css">
+  <script src="https://www.google.com/recaptcha/enterprise.js" async defer></script>
+  <style>
+    /* Page-specific adjustments that use design tokens from site.css */
+    .collapsible-wrapper { max-width: 760px; margin: 0 auto 28px; border-radius: 12px; overflow: hidden; }
+    .collapsible-summary { display:flex; justify-content:space-between; align-items:center; padding:16px 18px; cursor:pointer; background:var(--bg-card); color:var(--accent-cyan); font-weight:600; }
+    .collapsible-summary::after { content:'▼'; color:var(--text-muted); transition:transform .18s; }
+    .collapsible-wrapper[open] .collapsible-summary::after { transform:rotate(180deg); color:var(--accent-cyan); }
+    .submit-panel-content { padding:18px; border-top:1px solid var(--border-subtle); background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent); }
+    .form-group label { display:block; font-size:0.85rem; color:var(--text-muted); margin-bottom:6px; }
+    .url-splitter { display:flex; gap:10px; align-items:center; }
+    .url-splitter span { color:var(--text-muted); font-weight:700; }
+    .form-group input, .form-group textarea { width:100%; padding:10px; background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:8px; color:var(--text-primary); }
+    .form-group input:focus, .form-group textarea:focus { outline:none; border-color:var(--accent-cyan); }
+    .char-counter { text-align:right; color:var(--text-muted); font-size:0.8rem; }
+    .gen-btn { width:100%; padding:12px; border-radius:10px; border:none; background:var(--accent-cyan); color:#000; font-weight:700; cursor:pointer; }
+    .ad-list-container { margin-top:20px; border-radius:12px; overflow:hidden; border:1px solid var(--border-subtle); background:var(--bg-card); }
+    .ad-table { width:100%; border-collapse:collapse; }
+    .ad-table th { text-align:left; padding:12px 16px; background:rgba(255,255,255,0.02); color:var(--accent-cyan); font-size:0.85rem; text-transform:uppercase; }
+    .ad-row td { padding:14px 16px; vertical-align:middle; border-top:1px solid rgba(255,255,255,0.02); }
+    .col-url a { color:var(--accent-cyan); }
+    .col-desc { color:var(--text-secondary); }
+    .col-meta { color:var(--text-muted); font-size:0.9rem; }
+    .list-boost-btn { padding:8px 12px; border-radius:8px; background:var(--accent-cyan); border:none; font-weight:700; cursor:pointer; }
+    .modal-overlay { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(5,5,10,0.7); backdrop-filter:blur(6px); z-index:1000; opacity:0; pointer-events:none; transition:opacity .2s; }
+    .modal-overlay.active { opacity:1; pointer-events:auto; }
+    .modal-content { background:var(--bg-card); border:1px solid var(--accent-cyan); padding:22px; border-radius:12px; max-width:520px; width:92%; color:var(--text-primary); }
+    .page-header { display: flex; flex-direction: column; align-items: center; text-align: center; }
+    .page-header h1 { font-size: 1.6rem; font-weight: 600; margin-bottom: 6px; }
+    .subtitle { margin: 0; color: var(--text-secondary); margin-top: 4px; }
+    .memo-text { font-family:var(--font-mono); font-size:1.05rem; color:var(--accent-cyan); font-weight:700; }
+    .copy-action-btn { background:var(--accent-cyan); color:#000; border:none; padding:8px 12px; border-radius:8px; font-weight:700; }
+  </style>
+</head>
+<body>
 
-      ads.forEach(ad => {
-        const boostMemo = `#\( {ad.name}: \){ad.url} [${ad.description || 'Your description here'}]`;
-        const lastDate = ad.lastBoost.toLocaleDateString('en-US', {month:'short', year:'numeric'});
+<canvas id="starfield"></canvas>
 
-        html += `
-          <div class="ad-card">
-            <h3>#${ad.name}</h3>
-            <p><a href="https://\( {ad.url}" target="_blank" rel="noopener"> \){ad.url}</a></p>
-            \( {ad.description ? `<div class="description"> \){ad.description}</div>` : ''}
-            <div class="meta">
-              Boosted for <strong>\( {ad.months} month \){ad.months > 1 ? 's' : ''}</strong><br>
-              Last boost: ${lastDate}
-            </div>
-            <button class="boost-btn" onclick="showBoostInfo('${boostMemo.replace(/'/g, "\\'")}')">Boost this Community</button>
+<!-- Navigation -->
+<nav class="navbar" id="navbar">
+  <div class="container">
+    <a href="index.html" class="nav-logo"><img src="img/logo.png" alt="Dewrito"></a>
+    <ul class="nav-links">
+      <li><a href="index.html#features">Features</a></li>
+      <li><a href="index.html#community">Community</a></li>
+      <li><a href="register.html">Register</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-cta"><a href="register.html" class="btn-primary">Get Started</a></div>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<header class="page-header">
+  <h1>Sponsored Communities</h1>
+  <p class="subtitle">Boosted via Stellar (XLM) • 25 XLM = 1 Month Visibility</p>
+</header>
+
+<section class="content-section">
+  <div class="container">
+    <details class="collapsible-wrapper">
+      <summary class="collapsible-summary">➕ Create Your Boost Memo</summary>
+      <div class="submit-panel-content">
+        <div class="form-group">
+          <label>Display Name</label>
+          <input type="text" id="formDisplayName" maxlength="30" placeholder="e.g. My Awesome Club">
+        </div>
+        <div class="form-group">
+          <label>Community Address Matrix Target</label>
+          <div class="url-splitter">
+            <input type="text" id="urlNamePart" placeholder="#lounge or !roomid">
+            <span>:</span>
+            <input type="text" id="urlHostPart" placeholder="homeserverurl.com">
           </div>
-        `;
-      });
+        </div>
+        <div class="form-group">
+          <label>Community Description (Max 90 chars)</label>
+          <textarea id="formDescription" maxlength="90" oninput="updateCharCount(this)" placeholder="Short intro summary..."></textarea>
+          <div class="char-counter"><span id="charCount">90</span> characters remaining</div>
+        </div>
+        <div class="captcha-container">
+          <div class="g-recaptcha" data-sitekey="6LdpRB8tAAAAAGiL_VVpdi8VZQyVmoCAmnz2GfB-" data-action="SUBMIT"></div>
+        </div>
+        <button class="btn-primary gen-btn" onclick="createNewAdProposal()">Generate Payment Memo</button>
+      </div>
+    </details>
 
-      if (html === '') {
-        html = `
-          <div style="grid-column: 1 / -1; padding: 50px 30px; background: #1a1a2e; border-radius: 16px; text-align: center;">
-            <h3>No sponsored communities yet</h3>
-            <p>Be the first to boost your community!</p>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap: 20px; margin-top: 30px;">
-              <div class="ad-card" style="opacity:0.75;">
-                <h3>#dewrito</h3><p>dewrito.net</p>
-                <div class="description">Halo, WoW, Runescape and more</div>
-                <div class="meta">Boosted for 4 months</div>
-                <button class="boost-btn" onclick="showBoostInfo('#dewrito:dewrito.net [Halo, WoW, Runescape and more]')">Boost</button>
-              </div>
-              <div class="ad-card" style="opacity:0.75;">
-                <h3>#PixelGuild</h3><p>pixelguild.xyz</p>
-                <div class="description">Pixel art & indie game devs</div>
-                <div class="meta">Boosted for 2 months</div>
-                <button class="boost-btn" onclick="showBoostInfo('#PixelGuild:pixelguild.xyz [Pixel art & indie game devs]')">Boost</button>
-              </div>
-            </div>
-          </div>`;
-      }
+    <div class="ad-list-container">
+      <table class="ad-table">
+        <thead>
+          <tr>
+            <th>Community</th>
+            <th>Location Address</th>
+            <th>Description</th>
+            <th>Boost Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="adListBody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
 
-      document.getElementById('adGrid').innerHTML = html;
+<div id="boostModal" class="modal-overlay" onclick="closeBoostModal()">
+  <div class="modal-content" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeBoostModal()">&times;</button>
+    <h3 class="modal-title">📋 Copy Transaction Memo</h3>
+    <p style="color: var(--text-secondary); font-size:0.95rem; margin-bottom:8px;">Send <strong>25 XLM or more</strong> to our wallet with this exact short memo:</p>
+    <div class="memo-box-container">
+      <div id="modalMemoText" class="memo-text"></div>
+      <button id="modalCopyBtn" class="copy-action-btn" onclick="copyMemoText()">Copy Memo</button>
+    </div>
+    <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:8px;"><strong>Our Stellar Address:</strong><br><span style="word-break:break-all; color:var(--text-secondary);">GCCL23ZM4PLTMULZ2K5KQHBLK3WHSCXXLFCHOMDSLJFQ2UN532WN3HYR</span></p>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p class="footer-text">&copy; <span id="year"></span> Dewrito.net — Community-run server infrastructure.</p>
+    <ul class="footer-links">
+      <li><a href="register.html">Register</a></li>
+      <li><a href="terms.html">Terms</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="donate.html">Support Us</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script src="js/starfield.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+  const navbar = document.getElementById('navbar');
+  const navToggle = document.getElementById('navToggle');
+  navToggle.addEventListener('click', () => navbar.classList.toggle('mobile-open'));
+  document.querySelectorAll('.nav-links a').forEach(link => link.addEventListener('click', () => navbar.classList.remove('mobile-open')));
+
+  const XLM_WALLET = "GCCL23ZM4PLTMULZ2K5KQHBLK3WHSCXXLFCHOMDSLJFQ2UN532WN3HYR";
+  const SUPABASE_URL = "https://emdooqonibsgrazbcvzp.supabase.co"; 
+  const SUPABASE_ANON_KEY = "sb_publishable_r7eqc_NvhJI77DBNhvvQjA_ohkMfrKE";
+  const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+  let activeMemo = "";
+
+  function updateCharCount(textarea) { document.getElementById('charCount').textContent = 90 - textarea.value.length; }
+  function generateShortID() { return Math.random().toString(36).substring(2, 7).toUpperCase(); }
+
+  async function createNewAdProposal() {
+    if(!supabaseClient) { alert("Supabase initialization configuration failed."); return; }
+    const captchaResponse = window.grecaptcha ? window.grecaptcha.getResponse() : "";
+    if (!captchaResponse) { alert("Please complete the reCAPTCHA security check before continuing."); return; }
+    const displayName = document.getElementById('formDisplayName').value.trim();
+    const urlName = document.getElementById('urlNamePart').value.trim();
+    const urlHost = document.getElementById('urlHostPart').value.trim();
+    const description = document.getElementById('formDescription').value.trim();
+    if(!displayName || !urlName || !urlHost) { alert("Please fill out the Display Name and both halves of the Community Address."); return; }
+    if (!urlName.startsWith('#') && !urlName.startsWith('!')) { alert("Community Name segment target must begin with either a '#' or an '!' character."); return; }
+    const combinedUrl = `${urlName}:${urlHost}`;
+    const shortID = generateShortID();
+    const { error } = await supabaseClient.schema('public').from('community_ads').insert([{ id: shortID, name: displayName, url: combinedUrl, description: description }]);
+    if (error) { console.error("Database storage error:", error); alert("Something went wrong saving details to database."); }
+    else {
+      showBoostInfo(shortID);
+      document.getElementById('formDisplayName').value = '';
+      document.getElementById('urlNamePart').value = '';
+      document.getElementById('urlHostPart').value = '';
+      document.getElementById('formDescription').value = '';
+      document.getElementById('charCount').textContent = '90';
+      if(window.grecaptcha) window.grecaptcha.reset();
+      document.querySelector('.collapsible-wrapper').removeAttribute('open');
     }
+  }
 
-    window.showBoostInfo = function(memo) {
-      alert(`📋 Copy this exact memo:\n\n\( {memo}\n\nSend any amount of XLM to:\n \){XLM_WALLET}`);
-    };
+  async function fetchXLMTransactions() {
+    if(!supabaseClient) return renderAds([]);
+    const communityMap = new Map();
+    try {
+      const { data: dbRecords } = await supabaseClient.schema('public').from('community_ads').select('*');
+      const dbMap = new Map(dbRecords?.map(item => [item.id.toLowerCase(), item]));
+      const res = await fetch(`https://horizon.stellar.org/accounts/${XLM_WALLET}/transactions?limit=40&order=desc`);
+      const data = await res.json();
+      if (data._embedded && data._embedded.records) {
+        for (let tx of data._embedded.records) {
+          if (tx.memo_type === "text" && tx.memo) {
+            const memoKey = tx.memo.trim().toLowerCase();
+            if (!dbMap.has(memoKey)) continue;
+            const matchedData = dbMap.get(memoKey);
+            const opRes = await fetch(`https://horizon.stellar.org/transactions/${tx.hash}/operations?limit=5`);
+            const opData = await opRes.json();
+            let xlmAmount = 0;
+            if (opData._embedded && opData._embedded.records) {
+              for (let op of opData._embedded.records) {
+                if (op.type === "payment" && op.to === XLM_WALLET && op.asset_type === "native") xlmAmount += parseFloat(op.amount);
+              }
+            }
+            if (xlmAmount < 25) continue;
+            const uniqueKey = matchedData.url.toLowerCase();
+            if (!communityMap.has(uniqueKey)) communityMap.set(uniqueKey, { name: matchedData.name, url: matchedData.url, description: matchedData.description, totalXlm: 0, boosts: [], id: matchedData.id });
+            const entry = communityMap.get(uniqueKey);
+            entry.totalXlm += xlmAmount;
+            entry.boosts.push({ time: new Date(tx.created_at) });
+          }
+        }
+      }
+    } catch (e) { console.error("Stellar fetch processing error:", e); }
+    let ads = Array.from(communityMap.values()).map(com => ({ ...com, months: Math.max(1, Math.floor(com.totalXlm / 25)), lastBoost: com.boosts.length ? new Date(Math.max(...com.boosts.map(b => b.time))) : new Date() }));
+    renderAds(ads);
+  }
 
-    // Initialize
-    document.getElementById('xlmWallet').textContent = XLM_WALLET;
-    fetchXLMTransactions();
-    setInterval(fetchXLMTransactions, 15000); // Check every 15 seconds
-  </script>
+  function renderAds(ads) {
+    let html = '';
+    ads.forEach(ad => {
+      const lastDate = ad.lastBoost.toLocaleDateString('en-US', {month:'short', year:'numeric'});
+      html += `
+        <tr class="ad-row">
+          <td class="col-name">${ad.name}</td>
+          <td class="col-url"><a href="https://matrix.to/#/${ad.url}" target="_blank" rel="noopener">${ad.url}</a></td>
+          <td class="col-desc">${ad.description ? ad.description : '<i>No description provided</i>'}</td>
+          <td class="col-meta"><strong>${ad.months} month${ad.months > 1 ? 's' : ''}</strong><br><span style="color:var(--text-muted); font-size:0.9em;">Last: ${lastDate}</span></td>
+          <td><button class="btn-primary list-boost-btn" onclick="showBoostInfo('${ad.id}')">Boost</button></td>
+        </tr>`;
+    });
+    if (html === '') html = `<tr><td colspan="5" style="padding: 40px; text-align: center; color: var(--text-muted);"><h3>No active community ads tracking</h3><p>Generate a memo code using the input panel form above to publish!</p></td></tr>`;
+    document.getElementById('adListBody').innerHTML = html;
+  }
+
+  window.showBoostInfo = function(memo) { activeMemo = memo; document.getElementById('modalMemoText').textContent = memo; const copyBtn = document.getElementById('modalCopyBtn'); copyBtn.textContent = "Copy Memo"; copyBtn.classList.remove('copied'); document.getElementById('boostModal').classList.add('active'); };
+  window.closeBoostModal = function() { document.getElementById('boostModal').classList.remove('active'); };
+  window.copyMemoText = function() { navigator.clipboard.writeText(activeMemo).then(() => { const copyBtn = document.getElementById('modalCopyBtn'); copyBtn.textContent = "✓ Copied!"; copyBtn.classList.add('copied'); setTimeout(closeBoostModal, 3000); }); };
+
+  fetchXLMTransactions();
+  setInterval(fetchXLMTransactions, 20000);
+</script>
 </body>
 </html>
