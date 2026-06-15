@@ -8,7 +8,7 @@
   <link href="img/favicon.ico" rel="shortcut icon"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/site.css">
-  <script src="https://www.google.com/recaptcha/enterprise.js" async defer></script>
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   <style>
     /* Page-specific adjustments that use design tokens from site.css */
     .collapsible-wrapper { max-width: 760px; margin: 0 auto 28px; border-radius: 12px; overflow: hidden; }
@@ -27,25 +27,37 @@
     .ad-table { width:100%; border-collapse:collapse; }
     .ad-table th { text-align:left; padding:12px 16px; background:rgba(255,255,255,0.02); color:var(--accent-cyan); font-size:0.85rem; text-transform:uppercase; }
     .ad-row td { padding:14px 16px; vertical-align:middle; border-top:1px solid rgba(255,255,255,0.02); }
-    .col-url a { color:var(--accent-cyan); }
-    .col-desc { color:var(--text-secondary); }
-    .col-meta { color:var(--text-muted); font-size:0.9rem; }
-    .list-boost-btn { padding:8px 12px; border-radius:8px; background:var(--accent-cyan); border:none; font-weight:700; cursor:pointer; }
+    
+    /* Display Name Link Styling adjustments */
+    .col-name a { color: var(--text-primary); text-decoration: none; font-weight: 600; font-size: 1.05rem; }
+    .col-name a:hover { color: var(--accent-cyan); text-decoration: underline; }
+    
+    .col-desc { color:var(--text-secondary); line-height: 1.4; }
+    .col-meta { color:var(--text-muted); font-size:0.9rem; min-width: 130px; }
+    
+    /* Clean Circle layout styling wrapper around Rocket icons button flags */
+    .list-boost-btn { padding: 10px; border-radius: 50%; background: var(--accent-cyan); border: none; font-size: 1.1rem; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; width: 42px; height: 42px; transition: transform 0.2s, background 0.2s; }
+    .list-boost-btn:hover { transform: scale(1.1); background: #00ccff; }
+    
     .modal-overlay { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(5,5,10,0.7); backdrop-filter:blur(6px); z-index:1000; opacity:0; pointer-events:none; transition:opacity .2s; }
     .modal-overlay.active { opacity:1; pointer-events:auto; }
-    .modal-content { background:var(--bg-card); border:1px solid var(--accent-cyan); padding:22px; border-radius:12px; max-width:520px; width:92%; color:var(--text-primary); }
+    .modal-content { background:var(--bg-card); border:1px solid var(--accent-cyan); padding:22px; border-radius:12px; max-width:520px; width:92%; color:var(--text-primary); position: relative; }
+    
+    .modal-close { position: absolute; top: 12px; right: 16px; background: none; border: none; color: var(--text-muted); font-size: 22px; cursor: pointer; }
+    .modal-close:hover { color: var(--accent-cyan); }
+    
     .page-header { display: flex; flex-direction: column; align-items: center; text-align: center; }
     .page-header h1 { font-size: 1.6rem; font-weight: 600; margin-bottom: 6px; }
     .subtitle { margin: 0; color: var(--text-secondary); margin-top: 4px; }
     .memo-text { font-family:var(--font-mono); font-size:1.05rem; color:var(--accent-cyan); font-weight:700; }
-    .copy-action-btn { background:var(--accent-cyan); color:#000; border:none; padding:8px 12px; border-radius:8px; font-weight:700; }
+    .copy-action-btn { background:var(--accent-cyan); color:#000; border:none; padding:8px 12px; border-radius:8px; font-weight:700; cursor: pointer; }
+    .copy-action-btn.copied { background: #00ff9d; }
   </style>
 </head>
 <body>
 
 <canvas id="starfield"></canvas>
 
-<!-- Navigation -->
 <nav class="navbar" id="navbar">
   <div class="container">
     <a href="index.html" class="nav-logo"><img src="img/logo.png" alt="Dewrito"></a>
@@ -99,10 +111,9 @@
         <thead>
           <tr>
             <th>Community</th>
-            <th>Location Address</th>
             <th>Description</th>
             <th>Boost Status</th>
-            <th>Action</th>
+            <th style="text-align: center; width: 60px;">Boost</th>
           </tr>
         </thead>
         <tbody id="adListBody"></tbody>
@@ -116,7 +127,7 @@
     <button class="modal-close" onclick="closeBoostModal()">&times;</button>
     <h3 class="modal-title">📋 Copy Transaction Memo</h3>
     <p style="color: var(--text-secondary); font-size:0.95rem; margin-bottom:8px;">Send <strong>25 XLM or more</strong> to our wallet with this exact short memo:</p>
-    <div class="memo-box-container">
+    <div class="memo-box-container" style="display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 8px; margin: 14px 0;">
       <div id="modalMemoText" class="memo-text"></div>
       <button id="modalCopyBtn" class="copy-action-btn" onclick="copyMemoText()">Copy Memo</button>
     </div>
@@ -222,20 +233,27 @@
       const lastDate = ad.lastBoost.toLocaleDateString('en-US', {month:'short', year:'numeric'});
       html += `
         <tr class="ad-row">
-          <td class="col-name">${ad.name}</td>
-          <td class="col-url"><a href="https://matrix.to/#/${ad.url}" target="_blank" rel="noopener">${ad.url}</a></td>
+          <td class="col-name"><a href="https://matrix.to/#/${ad.url}" target="_blank" rel="noopener" title="Join ${ad.url}">${ad.name}</a></td>
           <td class="col-desc">${ad.description ? ad.description : '<i>No description provided</i>'}</td>
           <td class="col-meta"><strong>${ad.months} month${ad.months > 1 ? 's' : ''}</strong><br><span style="color:var(--text-muted); font-size:0.9em;">Last: ${lastDate}</span></td>
-          <td><button class="btn-primary list-boost-btn" onclick="showBoostInfo('${ad.id}')">Boost</button></td>
+          <td style="text-align: center;"><button class="list-boost-btn" onclick="showBoostInfo('${ad.id}')" title="Boost Community">🚀</button></td>
         </tr>`;
     });
-    if (html === '') html = `<tr><td colspan="5" style="padding: 40px; text-align: center; color: var(--text-muted);"><h3>No active community ads tracking</h3><p>Generate a memo code using the input panel form above to publish!</p></td></tr>`;
+    if (html === '') html = `<tr><td colspan="4" style="padding: 40px; text-align: center; color: var(--text-muted);"><h3>No active community ads tracking</h3><p>Generate a memo code using the input panel form above to publish!</p></td></tr>`;
     document.getElementById('adListBody').innerHTML = html;
   }
 
   window.showBoostInfo = function(memo) { activeMemo = memo; document.getElementById('modalMemoText').textContent = memo; const copyBtn = document.getElementById('modalCopyBtn'); copyBtn.textContent = "Copy Memo"; copyBtn.classList.remove('copied'); document.getElementById('boostModal').classList.add('active'); };
   window.closeBoostModal = function() { document.getElementById('boostModal').classList.remove('active'); };
-  window.copyMemoText = function() { navigator.clipboard.writeText(activeMemo).then(() => { const copyBtn = document.getElementById('modalCopyBtn'); copyBtn.textContent = "✓ Copied!"; copyBtn.classList.add('copied'); setTimeout(closeBoostModal, 3000); }); };
+  
+  window.copyMemoText = function() { 
+    navigator.clipboard.writeText(activeMemo).then(() => { 
+      const copyBtn = document.getElementById('modalCopyBtn'); 
+      copyBtn.textContent = "✓ Copied!"; 
+      copyBtn.classList.add('copied'); 
+      // Removed setTimeout close line block here to ensure the modal window persists on screen
+    }); 
+  };
 
   fetchXLMTransactions();
   setInterval(fetchXLMTransactions, 20000);
