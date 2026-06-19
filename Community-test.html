@@ -178,8 +178,10 @@
       </div>
     </details>
 
+    <!-- Category Filter Horizontal Bubble Navigation -->
     <div class="filter-container" id="categoryFilters"></div>
 
+    <!-- Secondary Multiaxial Dropdowns Panel Row -->
     <div class="filter-wrapper">
       <div class="filter-row">
         <div class="filter-select-group">
@@ -223,6 +225,7 @@
   </div>
 </section>
 
+<!-- System Interface Modals -->
 <div id="boostModal" class="modal-overlay" onclick="closeBoostModal()">
   <div class="modal-content" onclick="event.stopPropagation()">
     <button class="modal-close" onclick="closeBoostModal()">&times;</button>
@@ -236,6 +239,7 @@
   </div>
 </div>
 
+<!-- Age Gate Overlay Modal Structure -->
 <div id="ageGateModal" class="modal-overlay">
   <div class="modal-content nsfw-modal-content">
     <h2 style="color: #ff4d4d; font-size: 1.5rem; margin-bottom: 12px;">🔞 Age Verification Required</h2>
@@ -415,7 +419,7 @@
     
     try {
       const { data: dbRecords } = await supabaseClient.schema('public').from('community_ads').select('*');
-      const cleanDbRecords = (dbRecords || []).filter(item => parseInt(item.is_banned) !== 1);
+      const cleanDbRecords = (dbRecords || []).filter(item => item && parseInt(item.is_banned) !== 1);
       const dbMap = new Map(cleanDbRecords.map(item => [item.id.toLowerCase(), item]));
       
       let url = `https://horizon.stellar.org/accounts/${XLM_WALLET}/transactions?limit=200&order=desc`;
@@ -434,6 +438,13 @@
             if (!dbMap.has(memoKey)) continue;
             
             const matchedData = dbMap.get(memoKey);
+            
+            // Safe string-forcing extractions to completely protect against schema changes/empty anomalies
+            const rawCategory = matchedData.category ? String(matchedData.category).trim() : 'Other';
+            const cleanCategory = rawCategory === 'Music' ? 'Art and Music' : rawCategory;
+            const cleanLanguage = matchedData.language ? String(matchedData.language).trim() : 'English';
+            const cleanRating = matchedData.content_rating ? String(matchedData.content_rating).trim() : 'SFW';
+
             const opRes = await fetch(`https://horizon.stellar.org/transactions/${tx.hash}/operations?limit=5`);
             const opData = await opRes.json();
             let xlmAmount = 0;
@@ -451,9 +462,9 @@
                 name: matchedData.name, 
                 url: matchedData.url, 
                 description: matchedData.description, 
-                category: matchedData.category === 'Music' ? 'Art and Music' : (matchedData.category || 'Other'),
-                language: matchedData.language || 'English',
-                contentRating: matchedData.content_rating || 'SFW',
+                category: cleanCategory,
+                language: cleanLanguage,
+                contentRating: cleanRating,
                 isPermanent: parseInt(matchedData.is_permanent) === 1,
                 totalXlm: 0, 
                 boosts: [], 
@@ -473,16 +484,20 @@
         }
       }
 
+      // Safe processing loop for pinned fallback entries
       cleanDbRecords.forEach(item => {
         const uniqueKey = item.url.toLowerCase();
         if (parseInt(item.is_permanent) === 1 && !communityMap.has(uniqueKey)) {
+          const rawCategory = item.category ? String(item.category).trim() : 'Other';
+          const cleanCategory = rawCategory === 'Music' ? 'Art and Music' : rawCategory;
+          
           communityMap.set(uniqueKey, {
             name: item.name,
             url: item.url,
             description: item.description,
-            category: item.category === 'Music' ? 'Art and Music' : (item.category || 'Other'),
-            language: item.language || 'English',
-            contentRating: item.content_rating || 'SFW',
+            category: cleanCategory,
+            language: item.language ? String(item.language).trim() : 'English',
+            contentRating: item.content_rating ? String(item.content_rating).trim() : 'SFW',
             isPermanent: true,
             totalXlm: 0,
             boosts: [],
