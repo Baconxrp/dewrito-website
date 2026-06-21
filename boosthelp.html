@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Dewrito | Community Boost Guide</title>
+  <meta charset="UTF-8">
+  <meta name="description" content="How to boost your Matrix room or Fluxer community on Dewrito.net.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="img/favicon.ico" rel="shortcut icon"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/site.css">
+  <style>
+    .step-card {
+      background: rgba(255, 255, 255, 0.01);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .step-number {
+      font-family: var(--font-mono);
+      color: var(--accent-cyan);
+      font-weight: 700;
+      font-size: 1.1rem;
+      display: block;
+      margin-bottom: 8px;
+    }
+    .wallet-box {
+      background: var(--bg-card);
+      border: 1px solid rgba(255,255,255,0.05);
+      padding: 12px;
+      border-radius: 6px;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      word-break: break-all;
+      color: var(--text-primary);
+      margin: 10px 0;
+    }
+    .note-box {
+      border-left: 3px solid var(--accent-cyan);
+      background: rgba(0, 204, 255, 0.03);
+      padding: 12px 16px;
+      margin: 15px 0;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="starfield"></canvas>
+
+<nav class="navbar" id="navbar">
+  <div class="container">
+    <a href="index.html" class="nav-logo"><img src="img/logo.png" alt="Dewrito"></a>
+    <ul class="nav-links">
+      <li><a href="index.html#features">Features</a></li>
+      <li><a href="index.html#community">Community</a></li>
+      <li><a href="register.html">Register</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-cta"><a href="index.html" class="btn-secondary">Back Home</a></div>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<header class="page-header">
+  <h1>How to Boost Your Community</h1>
+  <p style="margin: 0 auto; max-width: 600px;">Get your Matrix room or Fluxer server featured on the Dewrito homepage slider and community directory using decentralized ledger rewards.</p>
+</header>
+
+<section class="content-section">
+  <p>Our promotional showcase operates completely on chain. By sending a qualifying transaction over the Stellar network, our automated daemon tracks metrics and pushes your listing directly into our high-visibility rotation slider.</p>
+
+  <div class="step-card">
+    <span class="step-number">Step 1: Obtain Your Memo Key</span>
+    <p>Every community registered in our database is assigned a unique tracking token identifier key.</p>
+    <ul>
+      <li>Navigate to the main <strong>Explore Communities</strong> portal page.</li>
+      <li>Locate your specific room or server card block details.</li>
+      <li>Copy the exact text string shown under the <strong>"Promo/Memo Key"</strong> label.</li>
+    </ul>
+    <div class="note-box">
+      <strong>Important Configuration Note:</strong> You must provide this precise key string in your transaction's memo parameter block, otherwise our tracking daemon will drop the entry processing logic.
+    </div>
+  </div>
+
+  <div class="step-card">
+    <span class="step-number">Step 2: Submit Ledger Boost Transaction</span>
+    <p>Each individual slot boost transaction tier adds 30 days of active visibility validation status.</p>
+    <ul>
+      <li><strong>Base Tier Rate:</strong> 25 XLM balances exactly 1 full promotion month cycle.</li>
+      <li>Issue the transaction from your preferred asset wallet to our infrastructure hub node address:</li>
+    </ul>
+    <div class="wallet-box">GCCL23ZM4PLTMULZ2K5KQHBLK3WHSCXXLFCHOMDSLJFQ2UN532WN3HYR</div>
+    <ul>
+      <li>Ensure your wallet interface transaction <strong>Memo Type</strong> is set explicitly to <code>Text</code>.</li>
+      <li>Paste your copied structural identification key string directly into the <code>Memo</code> input field line.</li>
+    </ul>
+  </div>
+
+  <div class="step-card">
+    <span class="step-number">Step 3: Verification and Live Sync Loop</span>
+    <p>Once network blocks reach completion consensus (typically within 3 to 5 seconds):</p>
+    <ul>
+      <li>Our verification pipeline records the balance updates instantly.</li>
+      <li>Your community expiration window calculation dynamically updates on the backend.</li>
+      <li>The top 3 highest tier boosted active communities automatically populate the main page <strong>⚡ Active Boosts</strong> rotation array module slots.</li>
+    </ul>
+  </div>
+
+  <h2>Content Guidelines & Restrictions</h2>
+  <p>To keep the platform safe and functional for everyone, listings matching flagged profanity filter arrays or possessing explicit content classifications are stripped during database processing blocks and will be restricted from displaying publicly inside the landing index sliders. Keep titles, names, and summaries fully clean to ensure continuous visibility cycle rotation.</p>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <p class="footer-text">&copy; <span id="year"></span> Dewrito.net — Community-run server infrastructure.</p>
+    <ul class="footer-links">
+      <li><a href="register.html">Register</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="donate.html">Support Us</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script src="js/starfield.js"></script>
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+  const navbar = document.getElementById('navbar');
+  const navToggle = document.getElementById('navToggle');
+  navToggle.addEventListener('click', () => navbar.classList.toggle('mobile-open'));
+  document.querySelectorAll('.nav-links a').forEach(link => link.addEventListener('click', () => navbar.classList.remove('mobile-open')));
+</script>
+</body>
+</html>
