@@ -6,16 +6,35 @@
   <meta name="description" content="Dewrito — Community-run server infrastructure for the Dewrito community. Matrix chat, Fluxer client, and open collaboration.">
   <title>Dewrito — Community Infrastructure</title>
   <link href="img/favicon.ico" rel="shortcut icon"/>
-  <!-- Google Fonts: Inter + JetBrains Mono -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/site.css">
+  <style>
+    /* Dynamic Mini Slider Modules */
+    .boost-showcase-box { margin-top: 40px; padding: 20px; background: rgba(255, 255, 255, 0.01); border: 1px solid var(--border-subtle); border-radius: 12px; text-align: left; width: 100%; box-sizing: border-box; }
+    .boost-slider-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+    .boost-slider-title { font-size: 0.85rem; font-family: var(--font-mono); color: var(--accent-cyan); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
+    .boost-slider-timer { font-size: 0.75rem; color: var(--text-muted); }
+    .boost-cards-stack { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; margin-bottom: 20px; min-height: 76px; }
+    
+    .mini-boost-card { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: var(--bg-card); border: 1px solid rgba(255,255,255,0.03); border-radius: 8px; transition: border-color 0.2s; text-decoration: none !important; }
+    .mini-boost-card:hover { border-color: rgba(0, 204, 255, 0.3); }
+    .mini-card-left { display: flex; flex-direction: column; gap: 4px; max-width: 80%; }
+    .mini-card-title { font-size: 0.95rem; font-weight: 600; color: var(--text-primary); }
+    .mini-card-desc { font-size: 0.82rem; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    
+    .mini-card-labels { display: flex; gap: 6px; align-items: center; }
+    .mini-tag { font-size: 0.68rem; padding: 1px 6px; border-radius: 4px; font-weight: 500; background: rgba(255,255,255,0.05); color: var(--text-muted); }
+    .mini-tag-matrix { background: rgba(0, 255, 157, 0.1) !important; color: #00ff9d !important; border: 1px solid rgba(0, 255, 157, 0.15); }
+    .mini-tag-fluxer { background: rgba(0, 204, 255, 0.1) !important; color: var(--accent-cyan) !important; border: 1px solid rgba(0, 204, 255, 0.15); }
+    
+    .btn-view-all { display: inline-flex; width: 100%; justify-content: center; align-items: center; padding: 12px; font-size: 0.88rem; font-weight: 600; border-radius: 8px; background: rgba(0, 204, 255, 0.08); color: var(--accent-cyan); border: 1px solid rgba(0, 204, 255, 0.15); transition: all 0.18s; text-decoration: none; }
+    .btn-view-all:hover { background: var(--accent-cyan); color: #000; }
+  </style>
 </head>
 <body>
 
-<!-- Starfield Background -->
 <canvas id="starfield"></canvas>
 
-<!-- Navigation -->
 <nav class="navbar" id="navbar">
   <div class="container">
     <a href="index.html" class="nav-logo">
@@ -36,7 +55,6 @@
   </div>
 </nav>
 
-<!-- Hero Section -->
 <section class="hero">
   <div class="hero-content">
     <span class="mono-label section-label">Community Infrastructure</span>
@@ -47,12 +65,10 @@
     </p>
     <div class="hero-actions">
       <a href="register.html" class="btn-primary">
-        <!-- SVG: User Plus -->
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
         Register
       </a>
       <a href="#community" class="btn-secondary">
-        <!-- SVG: Message Circle -->
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
         Join the Community
       </a>
@@ -60,37 +76,30 @@
   </div>
 </section>
 
-<!-- Features Section -->
 <section class="section" id="features">
   <div class="container">
     <span class="mono-label section-label">What We Offer</span>
     <h2>Built by the community, for the community.</h2>
     
     <div class="features-grid">
-      <!-- Matrix Card -->
       <div class="feature-card">
         <div class="feature-icon matrix">
-          <!-- SVG: Shield (Matrix/Security) -->
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
         </div>
         <h3>Matrix Chat</h3>
         <p>Host your own chat server on the open Matrix protocol. Full control, full privacy, no vendor lock-in.</p>
       </div>
 
-      <!-- Fluxer Card -->
       <div class="feature-card">
         <div class="feature-icon fluxer">
-          <!-- SVG: Zap (Fluxer/Speed) -->
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
         </div>
         <h3>Fluxer Client</h3>
         <p>Real-time chat, voice calls, and screen sharing — all self-hosted. The privacy-first alternative to Discord.</p>
       </div>
 
-      <!-- Community Card -->
       <div class="feature-card">
         <div class="feature-icon community">
-          <!-- SVG: Users (Community) -->
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         </div>
         <h3>Open Community</h3>
@@ -100,7 +109,6 @@
   </div>
 </section>
 
-<!-- Matrix Community Section -->
 <section class="section matrix-section" id="community">
   <div class="container">
     <div class="matrix-grid">
@@ -115,23 +123,31 @@
       </div>
 
       <div class="matrix-links">
-        <!-- Sable Matrix Client -->
         <a href="https://matrix.to/#/#dewrito:dewrito.net" target="_blank" rel="noopener" class="matrix-link-item">
           <span class="matrix-link-label">Open Matrix (Sable)</span>
           <span class="matrix-link-desc">#dewrito:dewrito.net →</span>
         </a>
 
-        <!-- Fluxer -->
         <a href="https://fluxer.dewrito.net/invite/BQVNmkEW" target="_blank" rel="noopener" class="matrix-link-item">
           <span class="matrix-link-label">Open Fluxer</span>
           <span class="matrix-link-desc">Launch →</span>
         </a>
       </div>
     </div>
+
+    <div class="boost-showcase-box">
+      <div class="boost-slider-header">
+        <span class="boost-slider-title" id="sliderCategoryHeader">⚡ Top Boosted Communities</span>
+        <span class="boost-slider-timer" id="sliderTimerCountdown">15s</span>
+      </div>
+      <div class="boost-cards-stack" id="sliderItemsStack">
+        <div style="text-align: center; grid-column: 1 / -1; color: var(--text-muted); padding: 20px; font-size: 0.9rem;">Syncing distributed ledger metrics...</div>
+      </div>
+      <a href="community.html" class="btn-view-all">Explore All Boosted Communities ↗</a>
+    </div>
   </div>
 </section>
 
-<!-- Support Section -->
 <section class="section support-section" id="support">
   <div class="container">
     <span class="mono-label section-label">Sustain the Infrastructure</span>
@@ -144,7 +160,6 @@
         and all services online for everyone.
       </p>
       <a href="donate.html" class="btn-primary">
-        <!-- SVG: Heart -->
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
         Support Us
       </a>
@@ -152,7 +167,6 @@
   </div>
 </section>
 
-<!-- Footer -->
 <footer class="footer">
   <div class="container">
     <p class="footer-text">&copy; <span id="year"></span> Dewrito.net — Community-run server infrastructure.</p>
@@ -165,8 +179,8 @@
   </div>
 </footer>
 
-<!-- Scripts -->
 <script src="js/starfield.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   // Update copyright year
   document.getElementById('year').textContent = new Date().getFullYear();
@@ -185,6 +199,155 @@
       navbar.classList.remove('mobile-open');
     });
   });
+
+  // --- Dynamic Slider Sync Script Section ---
+  const XLM_WALLET = "GCCL23ZM4PLTMULZ2K5KQHBLK3WHSCXXLFCHOMDSLJFQ2UN532WN3HYR";
+  const SUPABASE_URL = "https://emdooqonibsgrazbcvzp.supabase.co"; 
+  const SUPABASE_ANON_KEY = "sb_publishable_r7eqc_NvhJI77DBNhvvQjA_ohkMfrKE";
+  const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+
+  // The specific blocked federated/community domains to filter out
+  const BLOCKED_DOMAINS = [
+    "cutefunny.art", 
+    "midov.pl", 
+    "dropnet.ch", 
+    "nicheart.online", 
+    "lolisho.chat", 
+    "cuteness-overdose.com", 
+    "capybara.pictures", 
+    "nerdsin.space"
+  ];
+
+  // Base text patterns for quick string matching validation rules
+  const BAD_WORDS = ["nsfw", "porn", "lewd", "gore", "scam", "crypto-scam", "loli, "lolicon", "cp", "child", "toddler", "shota", "nigga", "nigger", "fag", "faggot", "fuck", "shit", "bitch", "tranny"];
+
+  let processedAds = [];
+  let rotationSchedule = ["All"];
+  let currentScheduleIndex = 0;
+  let countdownSeconds = 15;
+  let tickerTimerInstance = null;
+
+  function passesWordFilter(text) {
+    if (!text) return true;
+    const cleanText = text.toLowerCase();
+    return !BAD_WORDS.some(word => cleanText.includes(word));
+  }
+
+  async function fetchAndProcessSliderData() {
+    if (!supabaseClient) return;
+    try {
+      const { data: dbRecords } = await supabaseClient.from('community_ads').select('*');
+      const dbMap = new Map((dbRecords || []).map(item => [item.id.toLowerCase(), item]));
+      
+      let res = await fetch(`https://horizon.stellar.org/accounts/${XLM_WALLET}/transactions?limit=200&order=desc`);
+      let data = await res.json();
+      
+      const communityMap = new Map();
+      for (let tx of (data._embedded?.records || [])) {
+        if (tx.memo_type === "text" && tx.memo) {
+          const memoKey = tx.memo.trim().toLowerCase();
+          if (dbMap.has(memoKey)) {
+            const matched = dbMap.get(memoKey);
+            const key = matched.url.toLowerCase();
+            if (!communityMap.has(key)) {
+              communityMap.set(key, { ...matched, platform: matched.platform || (matched.url.startsWith('http') ? 'Fluxer' : 'Matrix'), totalXlm: 0, boosts: [] });
+            }
+            const entry = communityMap.get(key);
+            entry.boosts.push(new Date(tx.created_at));
+            entry.totalXlm += 25; 
+          }
+        }
+      }
+
+      dbRecords.forEach(item => {
+        if (parseInt(item.is_permanent) === 1 && !communityMap.has(item.url.toLowerCase())) {
+          communityMap.set(item.url.toLowerCase(), { ...item, platform: item.platform || (item.url.startsWith('http') ? 'Fluxer' : 'Matrix'), boosts: [new Date()], totalXlm: 100 });
+        }
+      });
+
+      processedAds = Array.from(communityMap.values())
+        .map(com => {
+          const isPermanent = parseInt(com.is_permanent) === 1;
+          const totalMonthsPaid = Math.max(1, Math.floor(com.totalXlm / 25));
+          return { 
+            ...com, 
+            months: totalMonthsPaid, 
+            isExpired: !isPermanent && (new Date() - new Date(Math.max(...com.boosts))) > (totalMonthsPaid * 2592000000) 
+          };
+        })
+        .filter(ad => {
+          if (ad.isExpired) return false;
+          if (ad.content_rating === "NSFW") return false;
+
+          // Strip out the blocked domain nodes from showing up on the homepage slider
+          const cleanUrl = ad.url.toLowerCase().trim();
+          const matchesBlockedNode = BLOCKED_DOMAINS.some(domain => cleanUrl.includes(domain));
+          if (matchesBlockedNode) return false;
+
+          // Enforce string content rules
+          if (!passesWordFilter(ad.name) || !passesWordFilter(ad.description)) return false;
+
+          return true;
+        });
+
+      const uniqueCats = Array.from(new Set(processedAds.map(a => a.category))).filter(Boolean);
+      rotationSchedule = ["All", ...uniqueCats];
+      
+      renderActiveSlide();
+      startTickerLoop();
+    } catch(e) { console.error("Slider initialization failure:", e); }
+  }
+
+  function renderActiveSlide() {
+    const activeScope = rotationSchedule[currentScheduleIndex];
+    document.getElementById('sliderCategoryHeader').textContent = activeScope === "All" ? "⚡ Top Boosted Communities" : `📂 Top ${activeScope} Communities`;
+    
+    let scopedAds = activeScope === "All" ? processedAds : processedAds.filter(a => a.category === activeScope);
+    scopedAds.sort((a, b) => b.months - a.months);
+    
+    const top3 = scopedAds.slice(0, 3);
+    const stackElement = document.getElementById('sliderItemsStack');
+    
+    if (top3.length === 0) {
+      stackElement.innerHTML = `<div style="text-align: center; grid-column: 1 / -1; color: var(--text-muted); padding: 20px; font-size: 0.85rem;">No active listings in this category.</div>`;
+      return;
+    }
+
+    stackElement.innerHTML = top3.map(ad => {
+      const cleanHref = ad.platform === "Fluxer" ? ad.url : `https://matrix.to/#/${ad.url}`;
+      const netTagClass = ad.platform === "Fluxer" ? "mini-tag-fluxer" : "mini-tag-matrix";
+      return `
+        <a href="${cleanHref}" target="_blank" rel="noopener" class="mini-boost-card">
+          <div class="mini-card-left">
+            <span class="mini-card-title">${ad.name}</span>
+            <span class="mini-card-desc">${ad.description || 'No summary text provided'}</span>
+          </div>
+          <div class="mini-card-labels">
+            <span class="mini-tag ${netTagClass}">${ad.platform}</span>
+          </div>
+        </a>
+      `;
+    }).join('');
+  }
+
+  function startTickerLoop() {
+    if (tickerTimerInstance) clearInterval(tickerTimerInstance);
+    countdownSeconds = 15;
+    document.getElementById('sliderTimerCountdown').textContent = `${countdownSeconds}s`;
+
+    tickerTimerInstance = setInterval(() => {
+      countdownSeconds--;
+      document.getElementById('sliderTimerCountdown').textContent = `${countdownSeconds}s`;
+
+      if (countdownSeconds <= 0) {
+        countdownSeconds = 15;
+        currentScheduleIndex = (currentScheduleIndex + 1) % rotationSchedule.length;
+        renderActiveSlide();
+      }
+    }, 1000);
+  }
+
+  fetchAndProcessSliderData();
 </script>
 </body>
 </html>
