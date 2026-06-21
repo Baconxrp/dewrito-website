@@ -10,13 +10,13 @@
   <link rel="stylesheet" href="css/site.css">
   <style>
     /* Dynamic Mini Slider Modules */
-    .boost-showcase-box { margin-top: 16px; padding: 16px; background: rgba(255, 255, 255, 0.01); border: 1px solid var(--border-subtle); border-radius: 12px; text-align: left; }
-    .boost-slider-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .boost-showcase-box { margin-top: 40px; padding: 20px; background: rgba(255, 255, 255, 0.01); border: 1px solid var(--border-subtle); border-radius: 12px; text-align: left; width: 100%; box-sizing: border-box; }
+    .boost-slider-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
     .boost-slider-title { font-size: 0.85rem; font-family: var(--font-mono); color: var(--accent-cyan); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
     .boost-slider-timer { font-size: 0.75rem; color: var(--text-muted); }
-    .boost-cards-stack { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; min-height: 180px; }
+    .boost-cards-stack { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; margin-bottom: 20px; min-height: 76px; }
     
-    .mini-boost-card { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: var(--bg-card); border: 1px solid rgba(255,255,255,0.03); border-radius: 8px; transition: border-color 0.2s; text-decoration: none !important; }
+    .mini-boost-card { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: var(--bg-card); border: 1px solid rgba(255,255,255,0.03); border-radius: 8px; transition: border-color 0.2s; text-decoration: none !important; }
     .mini-boost-card:hover { border-color: rgba(0, 204, 255, 0.3); }
     .mini-card-left { display: flex; flex-direction: column; gap: 4px; max-width: 80%; }
     .mini-card-title { font-size: 0.95rem; font-weight: 600; color: var(--text-primary); }
@@ -27,7 +27,7 @@
     .mini-tag-matrix { background: rgba(0, 255, 157, 0.1) !important; color: #00ff9d !important; border: 1px solid rgba(0, 255, 157, 0.15); }
     .mini-tag-fluxer { background: rgba(0, 204, 255, 0.1) !important; color: var(--accent-cyan) !important; border: 1px solid rgba(0, 204, 255, 0.15); }
     
-    .btn-view-all { display: inline-flex; width: 100%; justify-content: center; align-items: center; padding: 10px; font-size: 0.88rem; font-weight: 600; border-radius: 8px; background: rgba(0, 204, 255, 0.08); color: var(--accent-cyan); border: 1px solid rgba(0, 204, 255, 0.15); transition: all 0.18s; text-decoration: none; }
+    .btn-view-all { display: inline-flex; width: 100%; justify-content: center; align-items: center; padding: 12px; font-size: 0.88rem; font-weight: 600; border-radius: 8px; background: rgba(0, 204, 255, 0.08); color: var(--accent-cyan); border: 1px solid rgba(0, 204, 255, 0.15); transition: all 0.18s; text-decoration: none; }
     .btn-view-all:hover { background: var(--accent-cyan); color: #000; }
   </style>
 </head>
@@ -132,18 +132,18 @@
           <span class="matrix-link-label">Open Fluxer</span>
           <span class="matrix-link-desc">Launch →</span>
         </a>
-
-        <div class="boost-showcase-box">
-          <div class="boost-slider-header">
-            <span class="boost-slider-title" id="sliderCategoryHeader">⚡ Active Boosts</span>
-            <span class="boost-slider-timer" id="sliderTimerCountdown">30s</span>
-          </div>
-          <div class="boost-cards-stack" id="sliderItemsStack">
-            <div style="text-align: center; color: var(--text-muted); padding-top: 40px; font-size: 0.9rem;">Syncing distributed ledger metrics...</div>
-          </div>
-          <a href="community.html" class="btn-view-all">Explore All Boosted Communities ↗</a>
-        </div>
       </div>
+    </div>
+
+    <div class="boost-showcase-box">
+      <div class="boost-slider-header">
+        <span class="boost-slider-title" id="sliderCategoryHeader">⚡ Active Boosts</span>
+        <span class="boost-slider-timer" id="sliderTimerCountdown">30s</span>
+      </div>
+      <div class="boost-cards-stack" id="sliderItemsStack">
+        <div style="text-align: center; color: var(--text-muted); padding-top: 24px; font-size: 0.9rem;">Syncing distributed ledger metrics...</div>
+      </div>
+      <a href="community.html" class="btn-view-all">Explore All Boosted Communities ↗</a>
     </div>
   </div>
 </section>
@@ -244,7 +244,6 @@
         }
       });
 
-      // Filter down to valid unexpired entries and calculate months boosted
       processedAds = Array.from(communityMap.values()).map(com => {
         const isPermanent = parseInt(com.is_permanent) === 1;
         const totalMonthsPaid = Math.max(1, Math.floor(com.totalXlm / 25));
@@ -253,9 +252,8 @@
           months: totalMonthsPaid, 
           isExpired: !isPermanent && (new Date() - new Date(Math.max(...com.boosts))) > (totalMonthsPaid * 2592000000) 
         };
-      }).filter(ad => !ad.isExpired && ad.content_rating !== "NSFW"); // Enforce clean index view targets
+      }).filter(ad => !ad.isExpired && ad.content_rating !== "NSFW");
 
-      // Generate context categories based on available active data maps
       const uniqueCats = Array.from(new Set(processedAds.map(a => a.category))).filter(Boolean);
       rotationSchedule = ["All", ...uniqueCats];
       
@@ -266,9 +264,8 @@
 
   function renderActiveSlide() {
     const activeScope = rotationSchedule[currentScheduleIndex];
-    document.getElementById('sliderCategoryHeader').textContent = activeScope === "All" ? "⚡ Top Boosted" : `📂 ${activeScope}`;
+    document.getElementById('sliderCategoryHeader').textContent = activeScope === "All" ? "⚡ Top Boosted Communities" : `📂 Top ${activeScope} Communities`;
     
-    // Sort logic targeting highest months parameter tier counts
     let scopedAds = activeScope === "All" ? processedAds : processedAds.filter(a => a.category === activeScope);
     scopedAds.sort((a, b) => b.months - a.months);
     
@@ -276,7 +273,7 @@
     const stackElement = document.getElementById('sliderItemsStack');
     
     if (top3.length === 0) {
-      stackElement.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding-top: 40px; font-size: 0.85rem;">No active listings in this category.</div>`;
+      stackElement.innerHTML = `<div style="text-align: center; grid-column: 1 / -1; color: var(--text-muted); padding: 20px; font-size: 0.85rem;">No active listings in this category.</div>`;
       return;
     }
 
@@ -314,7 +311,6 @@
     }, 1000);
   }
 
-  // Engage procedures on document lifecycle visibility hook
   fetchAndProcessSliderData();
 </script>
 </body>
