@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sponsored community listings and boost memos for Dewrito.">
+  <title>Community Ads • dewrito.net</title>
+  <link href="img/favicon.ico" rel="shortcut icon"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/site.css">
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+  <style>
+    .collapsible-wrapper { max-width: 760px; margin: 0 auto 28px; border-radius: 12px; overflow: hidden; }
+    .collapsible-summary { display:flex; justify-content:space-between; align-items:center; padding:16px 18px; cursor:pointer; background:var(--bg-card); color:var(--accent-cyan); font-weight:600; }
+    .collapsible-summary::after { content:'▼'; color:var(--text-muted); transition:transform .18s; }
+    .collapsible-wrapper[open] .collapsible-summary::after { transform:rotate(180deg); color:var(--accent-cyan); }
+    .submit-panel-content { padding:18px; border-top:1px solid var(--border-subtle); background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent); }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display:block; font-size:0.85rem; color:var(--text-muted); margin-bottom:6px; }
+    .url-splitter { display:flex; gap:10px; align-items:center; }
+    .url-splitter span { color:var(--text-muted); font-weight:700; }
+    .form-group input, .form-group textarea, .form-group select { width:100%; padding:10px; background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:8px; color:var(--text-primary); font-family: inherit; box-sizing: border-box; }
+    .form-group select option { background: #121214; color: var(--text-primary); }
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline:none; border-color:var(--accent-cyan); }
+    .char-counter { text-align:right; color:var(--text-muted); font-size:0.8rem; }
+    .gen-btn { width:100%; padding:12px; border-radius:10px; border:none; background:var(--accent-cyan); color:#000; font-weight:700; cursor:pointer; }
+    
+    .filter-container { max-width: 1000px; margin: 24px auto 14px; display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .filter-chip { padding: 6px 14px; border-radius: 20px; background: rgba(255,255,255,0.03); border: 1px solid var(--border-subtle); color: var(--text-secondary); font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: all 0.15s ease; }
+    .filter-chip:hover { color: var(--text-primary); border-color: var(--text-muted); }
+    .filter-chip.active { background: var(--accent-cyan); color: #000; border-color: var(--accent-cyan); font-weight: 600; }
+
+    .filter-wrapper { max-width: 1000px; margin: 0 auto 16px; display: flex; justify-content: center; }
+    .filter-row { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; align-items: center; background: var(--bg-card); padding: 10px 20px; border-radius: 10px; border: 1px solid var(--border-subtle); }
+    .filter-select-group { display: flex; align-items: center; gap: 8px; min-width: 190px; }
+    .filter-select-group label { font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; white-space: nowrap; }
+    .filter-select-group select { width: 100%; padding: 6px 10px; background: rgba(0,0,0,0.2); border: 1px solid var(--border-subtle); border-radius: 6px; color: var(--text-primary); font-size: 0.85rem; cursor: pointer; }
+    .filter-select-group select:focus { outline: none; border-color: var(--accent-cyan); }
+
+    .ad-list-container { margin-top:10px; border-radius:12px; overflow:hidden; border:1px solid var(--border-subtle); background:var(--bg-card); }
+    .ad-table { width:100%; border-collapse:collapse; }
+    .ad-table th { text-align:left; padding:12px 16px; background:rgba(255,255,255,0.02); color:var(--accent-cyan); font-size:0.85rem; text-transform:uppercase; }
+    .ad-row td { padding:14px 16px; vertical-align:middle; border-top:1px solid rgba(255,255,255,0.02); }
+    
+    .col-name a { color: var(--text-primary); text-decoration: none; font-weight: 600; font-size: 1.05rem; }
+    .col-name a:hover { color: var(--accent-cyan); text-decoration: underline; }
+    .col-desc { color:var(--text-secondary); line-height: 1.4; }
+    .col-meta { color:var(--text-primary); font-size:0.9rem; min-width: 130px; }
+    .meta-labels-container { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+    .cat-label { display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 0.72rem; background: rgba(255,255,255,0.05); color: var(--text-muted); font-weight: 500; }
+    .net-tag-matrix { background: rgba(0, 255, 157, 0.08); color: #00ff9d; border: 1px solid rgba(0, 255, 157, 0.15); }
+    .net-tag-fluxer { background: rgba(234, 0, 255, 0.08); color: #ea00ff; border: 1px solid rgba(234, 0, 255, 0.15); }
+    .nsfw-tag { background: rgba(255, 77, 77, 0.15); color: #ff4d4d; border: 1px solid rgba(255, 77, 77, 0.2); }
+    
+    .list-boost-btn { padding: 10px; border-radius: 50%; background: var(--accent-cyan); border: none; font-size: 1.1rem; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; width: 42px; height: 42px; transition: transform 0.2s, background 0.2s; }
+    .list-boost-btn:hover { transform: scale(1.1); background: #00ccff; }
+    
+    .ad-row.legacy-expired { opacity: 0.55; background: rgba(0, 0, 0, 0.15); font-size: 0.95rem; transition: opacity 0.2s; }
+    .ad-row.legacy-expired:hover { opacity: 0.85; }
+    .ad-row.legacy-expired .col-name a { font-size: 0.95rem; color: var(--text-secondary); }
+    .ad-row.legacy-expired .col-desc { color: var(--text-muted); font-size: 0.9rem; }
+    .ad-row.legacy-expired .col-meta { color: var(--text-muted); font-size: 0.85rem; }
+    .legacy-sep-header { background: rgba(0, 0, 0, 0.3) !important; color: var(--text-muted) !important; font-size: 0.75rem !important; letter-spacing: 1px; }
+
+    .modal-overlay { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(5,5,10,0.7); backdrop-filter:blur(6px); z-index:1000; opacity:0; pointer-events:none; transition:opacity .2s; }
+    .modal-overlay.active { opacity:1; pointer-events:auto; }
+    .modal-content { background:var(--bg-card); border:1px solid var(--accent-cyan); padding:22px; border-radius:12px; max-width:520px; width:92%; color:var(--text-primary); position: relative; }
+    .modal-close { position: absolute; top: 12px; right: 16px; background: none; border: none; color: var(--text-muted); font-size: 22px; cursor: pointer; }
+    .modal-close:hover { color: var(--accent-cyan); }
+    
+    .nsfw-modal-content { border-color: #ff4d4d; text-align: center; padding: 30px; }
+    .nsfw-btn-container { display: flex; gap: 12px; justify-content: center; margin-top: 20px; }
+    .nsfw-confirm-btn { background: #ff4d4d; color: #fff; border: none; padding: 10px 24px; border-radius: 8px; font-weight: 700; cursor: pointer; }
+    .nsfw-cancel-btn { background: rgba(255,255,255,0.05); color: var(--text-secondary); border: 1px solid var(--border-subtle); padding: 10px 24px; border-radius: 8px; font-weight: 600; cursor: pointer; }
+    .nsfw-confirm-btn:hover { background: #ff3333; }
+    .nsfw-cancel-btn:hover { color: var(--text-primary); background: rgba(255,255,255,0.1); }
+
+    .page-header { display: flex; flex-direction: column; align-items: center; text-align: center; }
+    .page-header h1 { font-size: 1.6rem; font-weight: 600; margin-bottom: 6px; }
+    .subtitle { margin: 0; color: var(--text-secondary); margin-top: 4px; }
+    .memo-text { font-family:var(--font-mono); font-size:1.05rem; color:var(--accent-cyan); font-weight:700; }
+    .copy-action-btn { background:var(--accent-cyan); color:#000; border:none; padding:8px 12px; border-radius:8px; font-weight:700; cursor: pointer; }
+    .copy-action-btn.copied { background: #00ff9d; }
+  </style>
+</head>
+<body>
+
+<canvas id="starfield"></canvas>
+
+<nav class="navbar" id="navbar">
+  <div class="container">
+    <a href="index.html" class="nav-logo"><img src="img/logo.png" alt="Dewrito"></a>
+    <ul class="nav-links">
+      <li><a href="index.html#features">Features</a></li>
+      <li><a href="index.html#community">Community</a></li>
+      <li><a href="register.html">Register</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-cta"><a href="register.html" class="btn-primary">Get Started</a></div>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<header class="page-header">
+  <h1>Sponsored Communities</h1>
+  <p class="subtitle">Boosted via Stellar (XLM) • 25 XLM = 1 Month Visibility</p>
+</header>
+
+<section class="content-section">
+  <div class="container">
+    <details class="collapsible-wrapper">
+      <summary class="collapsible-summary">➕ Create Your Boost Memo</summary>
+      <div class="submit-panel-content">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+          <div class="form-group">
+            <label>Display Name</label>
+            <input type="text" id="formDisplayName" maxlength="30" placeholder="e.g. My Awesome Club">
+          </div>
+          <div class="form-group">
+            <label>Platform / Network Type</label>
+            <select id="formPlatform" onchange="toggleUrlInputs()">
+              <option value="Matrix" selected>Matrix Protocol</option>
+              <option value="Fluxer">Fluxer Link</option>
+            </select>
+          </div>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+          <div class="form-group">
+            <label>Community Category</label>
+            <select id="formCategory">
+              <option value="Gaming">Gaming</option>
+              <option value="Politics & Opinion">Politics & Opinion</option>
+              <option value="Art & Music">Art & Music</option>
+              <option value="Entertainment">Entertainment</option>
+              <option value="Education">Education</option>
+              <option value="Science & Technology">Science & Technology</option>
+              <option value="Content Creator">Content Creator</option>
+              <option value="Anime & Manga">Anime & Manga</option>
+              <option value="Movies & TV">Movies & TV</option>
+              <option value="Furry">Furry</option>
+              <option value="LGBT+">LGBT+</option>
+              <option value="Other" selected>Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Primary Language</label>
+            <select id="formLanguage">
+              <option value="English" selected>English</option>
+              <option value="Russian">Russian</option>
+              <option value="Spanish">Spanish</option>
+              <option value="German">German</option>
+              <option value="French">French</option>
+              <option value="Chinese">Chinese</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Content Rating</label>
+            <select id="formRating">
+              <option value="SFW" selected>SFW (Safe for Work)</option>
+              <option value="NSFW">NSFW (18+ Restrictive)</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="form-group" id="matrixUrlContainer">
+          <label>Community Address Matrix Target</label>
+          <div class="url-splitter">
+            <input type="text" id="urlNamePart" placeholder="#lounge or !roomid">
+            <span>:</span>
+            <input type="text" id="urlHostPart" placeholder="homeserverurl.com">
+          </div>
+        </div>
+
+        <div class="form-group" id="fluxerUrlContainer" style="display: none;">
+          <label>Fluxer Invitation URL Target</label>
+          <input type="url" id="fluxerUrlInput" placeholder="https://fluxer.dewrito.net/invite/...">
+        </div>
+
+        <div class="form-group">
+          <label>Community Description (Max 90 chars)</label>
+          <textarea id="formDescription" maxlength="90" oninput="updateCharCount(this)" placeholder="Short intro summary..."></textarea>
+          <div class="char-counter"><span id="charCount">90</span> characters remaining</div>
+        </div>
+        <div class="captcha-container">
+          <div class="g-recaptcha" data-sitekey="6LegL-ssAAAAAGzOKLtLIdLKzk4gVYnPrYVDNpFt" data-action="SUBMIT"></div>
+        </div>
+        <button class="btn-primary gen-btn" onclick="createNewAdProposal()">Generate Payment Memo</button>
+      </div>
+    </details>
+
+    <div class="filter-container" id="categoryFilters"></div>
+
+    <div class="filter-wrapper">
+      <div class="filter-row">
+        <div class="filter-select-group">
+          <label>Platform:</label>
+          <select id="filterPlatform" onchange="handleFilterChange('platform')">
+            <option value="All">All Platforms</option>
+            <option value="Matrix">Matrix Only</option>
+            <option value="Fluxer">Fluxer Only</option>
+          </select>
+        </div>
+
+        <div class="filter-select-group">
+          <label>Language:</label>
+          <select id="filterLanguage" onchange="handleFilterChange('language')">
+            <option value="All">All Languages</option>
+            <option value="English">English</option>
+            <option value="Russian">Russian</option>
+            <option value="Spanish">Spanish</option>
+            <option value="German">German</option>
+            <option value="French">French</option>
+            <option value="Chinese">Chinese</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <div class="filter-select-group">
+          <label>Safety:</label>
+          <select id="filterRating" onchange="handleFilterChange('rating')">
+            <option value="SFW">SFW Only</option>
+            <option value="All">Show All (Include NSFW)</option>
+            <option value="NSFW">NSFW Only</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="ad-list-container">
+      <table class="ad-table">
+        <thead>
+          <tr>
+            <th>Community</th>
+            <th>Description</th>
+            <th>Boost Status</th>
+            <th style="text-align: center; width: 60px;">Boost</th>
+          </tr>
+        </thead>
+        <tbody id="adListBody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<div id="boostModal" class="modal-overlay" onclick="closeBoostModal()">
+  <div class="modal-content" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeBoostModal()">&times;</button>
+    <h3 class="modal-title" id="modalTitleText">📋 Copy Transaction Memo</h3>
+    <p id="modalBodyMessage" style="color: var(--text-secondary); font-size:0.95rem; margin-bottom:8px;">Send <strong>25 XLM or more</strong> to our wallet with this exact short memo:</p>
+    <div class="memo-box-container" style="display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 8px; margin: 14px 0;">
+      <div id="modalMemoText" class="memo-text"></div>
+      <button id="modalCopyBtn" class="copy-action-btn" onclick="copyMemoText()">Copy Memo</button>
+    </div>
+    <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:8px;"><strong>Our Stellar Address:</strong><br><span style="word-break:break-all; color:var(--text-secondary);">GCCL23ZM4PLTMULZ2K5KQHBLK3WHSCXXLFCHOMDSLJFQ2UN532WN3HYR</span></p>
+  </div>
+</div>
+
+<div id="ageGateModal" class="modal-overlay">
+  <div class="modal-content nsfw-modal-content">
+    <h2 style="color: #ff4d4d; font-size: 1.5rem; margin-bottom: 12px;">🔞 Age Verification Required</h2>
+    <p style="color: var(--text-secondary); line-height: 1.5; font-size: 0.95rem;">You are attempting to filter or access restrictive adult content listings (NSFW). Please confirm that you are at least 18 years old or the legal age of majority in your jurisdiction to continue.</p>
+    <div class="nsfw-btn-container">
+      <button class="nsfw-confirm-btn" onclick="confirmAgeGate(true)">I am 18 or older</button>
+      <button class="nsfw-cancel-btn" onclick="confirmAgeGate(false)">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p class="footer-text">&copy; <span id="year"></span> Dewrito.net — Community-run server infrastructure.</p>
+    <ul class="footer-links">
+      <li><a href="register.html">Register</a></li>
+      <li><a href="terms.html">Terms</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="donate.html">Support Us</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script src="js/starfield.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+  const navbar = document.getElementById('navbar');
+  const navToggle = document.getElementById('navToggle');
+  navToggle.addEventListener('click', () => navbar.classList.toggle('mobile-open'));
+  document.querySelectorAll('.nav-links a').forEach(link => link.addEventListener('click', () => navbar.classList.remove('mobile-open')));
+
+  const XLM_WALLET = "GCCL23ZM4PLTMULZ2K5KQHBLK3WHSCXXLFCHOMDSLJFQ2UN532WN3HYR";
+  const SUPABASE_URL = "https://emdooqonibsgrazbcvzp.supabase.co"; 
+  const SUPABASE_ANON_KEY = "sb_publishable_r7eqc_NvhJI77DBNhvvQjA_ohkMfrKE";
+  const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+  
+  let activeMemo = "";
+  let globalAdsCache = []; 
+  
+  let filterState = { category: "All", platform: "All", language: "All", rating: "SFW" };
+  let isAdultVerified = false;
+  let previousRatingSelection = "SFW";
+
+  const CATEGORIES = ["All", "Gaming", "Politics & Opinion", "Art & Music", "Entertainment", "Education", "Science & Technology", "Content Creator", "Anime & Manga", "Movies & TV", "Furry", "LGBT+", "Other"];
+  const FORBIDDEN_WORDS = ["scamcoin", "freemoney", " TelegramSpam ", "offendingexample", "anotherbadword"];
+  
+  const BLOCKED_HOMESERVERS = [
+    "cutefunny.art", "midov.pl", "dropnet.ch", "nicheart.online", "lolisho.chat", "cuteness-overdose.com", "capybara.pictures", "nerdsin.space"
+  ];
+
+  function updateCharCount(textarea) { document.getElementById('charCount').textContent = 90 - textarea.value.length; }
+  function generateShortID() { return Math.random().toString(36).substring(2, 7).toUpperCase(); }
+  
+  function containsForbiddenWords(text) {
+    if (!text) return false;
+    const cleanText = text.toLowerCase();
+    return FORBIDDEN_WORDS.some(word => cleanText.includes(word.toLowerCase()));
+  }
+
+  function isBlockedHomeserver(urlStr) {
+    if (!urlStr) return false;
+    const cleanUrl = urlStr.toLowerCase();
+    return BLOCKED_HOMESERVERS.some(domain => cleanUrl.includes(domain.toLowerCase()));
+  }
+
+  function toggleUrlInputs() {
+    const platform = document.getElementById('formPlatform').value;
+    const matrixBox = document.getElementById('matrixUrlContainer');
+    const fluxerBox = document.getElementById('fluxerUrlContainer');
+    
+    if (platform === "Fluxer") {
+      matrixBox.style.display = "none";
+      fluxerBox.style.display = "block";
+    } else {
+      matrixBox.style.display = "block";
+      fluxerBox.style.display = "none";
+    }
+  }
+
+  function setupCategoryFilters() {
+    const container = document.getElementById('categoryFilters');
+    container.innerHTML = CATEGORIES.map(cat => `
+      <button class="filter-chip ${cat === filterState.category ? 'active' : ''}" onclick="setCategoryBubble('${cat}')">${cat}</button>
+    `).join('');
+  }
+
+  function setCategoryBubble(category) {
+    filterState.category = category;
+    setupCategoryFilters();
+    renderAds(globalAdsCache);
+  }
+
+  function handleFilterChange(axis) {
+    const ratingSelect = document.getElementById('filterRating');
+    const targetValue = ratingSelect.value;
+
+    if (axis === 'rating' && (targetValue === 'NSFW' || targetValue === 'All') && !isAdultVerified) {
+      document.getElementById('ageGateModal').classList.add('active');
+      return;
+    }
+
+    filterState.platform = document.getElementById('filterPlatform').value;
+    filterState.language = document.getElementById('filterLanguage').value;
+    filterState.rating = ratingSelect.value;
+    
+    if (axis === 'rating') { previousRatingSelection = filterState.rating; }
+    renderAds(globalAdsCache);
+  }
+
+  function confirmAgeGate(isApproved) {
+    const modal = document.getElementById('ageGateModal');
+    const ratingSelect = document.getElementById('filterRating');
+    modal.classList.remove('active');
+
+    if (isApproved) {
+      isAdultVerified = true;
+      filterState.platform = document.getElementById('filterPlatform').value;
+      filterState.language = document.getElementById('filterLanguage').value;
+      filterState.rating = ratingSelect.value;
+      previousRatingSelection = filterState.rating;
+      renderAds(globalAdsCache);
+    } else {
+      ratingSelect.value = previousRatingSelection;
+    }
+  }
+
+  async function createNewAdProposal() {
+    if(!supabaseClient) { alert("Supabase initialization configuration failed."); return; }
+    const captchaResponse = window.grecaptcha ? window.grecaptcha.getResponse() : "";
+    if (!captchaResponse) { alert("Please complete the reCAPTCHA security check before continuing."); return; }
+    
+    const displayName = document.getElementById('formDisplayName').value.trim();
+    const selectedPlatform = document.getElementById('formPlatform').value;
+    const selectedCategory = document.getElementById('formCategory').value;
+    const selectedLanguage = document.getElementById('formLanguage').value;
+    const selectedRating = document.getElementById('formRating').value;
+    const description = document.getElementById('formDescription').value.trim();
+    
+    if(!displayName) { alert("Please fill out the Display Name."); return; }
+
+    let combinedUrl = "";
+    if (selectedPlatform === "Matrix") {
+      const urlName = document.getElementById('urlNamePart').value.trim();
+      const urlHost = document.getElementById('urlHostPart').value.trim();
+      if(!urlName || !urlHost) { alert("Please complete both segments of the Matrix community target address."); return; }
+      if (!urlName.startsWith('#') && !urlName.startsWith('!')) { alert("Matrix name identifier must begin with '#' or '!'."); return; }
+      combinedUrl = `${urlName}:${urlHost}`;
+    } else {
+      combinedUrl = document.getElementById('fluxerUrlInput').value.trim();
+      if(!combinedUrl) { alert("Please provide your destination Fluxer URL invitation link."); return; }
+    }
+
+    if (isBlockedHomeserver(combinedUrl)) {
+      alert("Registration failed: This target node contains domain roots blocked by this index platform.");
+      clearForm();
+      return;
+    }
+
+    try {
+      const { data: existingRecords, error: fetchErr } = await supabaseClient
+        .schema('public')
+        .from('community_ads')
+        .select('id, name')
+        .eq('url', combinedUrl);
+
+      if (fetchErr) throw fetchErr;
+
+      if (existingRecords && existingRecords.length > 0) {
+        showBoostInfo(existingRecords[0].id, true); 
+        clearForm();
+        return;
+      }
+
+      const shortID = generateShortID();
+      const { error: insertErr } = await supabaseClient
+        .schema('public')
+        .from('community_ads')
+        .insert([{ 
+          id: shortID, 
+          name: displayName, 
+          url: combinedUrl, 
+          description: description, 
+          category: selectedCategory, 
+          language: selectedLanguage, 
+          content_rating: selectedRating, 
+          is_permanent: 0, 
+          is_banned: 0,
+          platform: selectedPlatform // Assumes schema supports custom platform tags natively
+        }]);
+      
+      if (insertErr) throw insertErr;
+
+      showBoostInfo(shortID, false);
+      clearForm();
+    } catch (err) {
+      console.error("Database process error:", err);
+      alert("Something went wrong handling the database request.");
+    }
+  }
+
+  function clearForm() {
+    document.getElementById('formDisplayName').value = '';
+    document.getElementById('urlNamePart').value = '';
+    document.getElementById('urlHostPart').value = '';
+    document.getElementById('fluxerUrlInput').value = '';
+    document.getElementById('formDescription').value = '';
+    document.getElementById('formCategory').value = 'Other';
+    document.getElementById('formLanguage').value = 'English';
+    document.getElementById('formRating').value = 'SFW';
+    document.getElementById('formPlatform').value = 'Matrix';
+    document.getElementById('charCount').textContent = '90';
+    if(window.grecaptcha) window.grecaptcha.reset();
+    toggleUrlInputs();
+    document.querySelector('.collapsible-wrapper').removeAttribute('open');
+  }
+
+  async function fetchXLMTransactions() {
+    if(!supabaseClient) return renderAds([]);
+    const communityMap = new Map();
+    
+    try {
+      const { data: dbRecords } = await supabaseClient.schema('public').from('community_ads').select('*');
+      const cleanDbRecords = (dbRecords || []).filter(item => item && parseInt(item.is_banned) !== 1);
+      const dbMap = new Map(cleanDbRecords.map(item => [item.id.toLowerCase(), item]));
+      
+      let url = `https://horizon.stellar.org/accounts/${XLM_WALLET}/transactions?limit=200&order=desc`;
+      let pagesFetched = 0;
+      const MAX_PAGES = 3;
+
+      while (url && pagesFetched < MAX_PAGES) {
+        const res = await fetch(url);
+        const data = await res.json();
+        
+        if (!data._embedded || !data._embedded.records || data._embedded.records.length === 0) break;
+
+        for (let tx of data._embedded.records) {
+          if (tx.memo_type === "text" && tx.memo) {
+            const memoKey = tx.memo.trim().toLowerCase();
+            if (!dbMap.has(memoKey)) continue;
+            
+            const matchedData = dbMap.get(memoKey);
+            
+            const rawCategory = matchedData.category ? String(matchedData.category).trim() : 'Other';
+            let cleanCategory = rawCategory === 'Music' ? 'Art & Music' : rawCategory;
+            if (cleanCategory === 'Art and Music') cleanCategory = 'Art & Music';
+            
+            const cleanLanguage = matchedData.language ? String(matchedData.language).trim() : 'English';
+            const cleanRating = matchedData.content_rating ? String(matchedData.content_rating).trim() : 'SFW';
+            
+            // Deduce platform fallback signatures natively if explicitly absent inside historical schema rows
+            const cleanPlatform = matchedData.platform ? String(matchedData.platform).trim() : (matchedData.url.startsWith('http') ? 'Fluxer' : 'Matrix');
+
+            const opRes = await fetch(`https://horizon.stellar.org/transactions/${tx.hash}/operations?limit=5`);
+            const opData = await opRes.json();
+            let xlmAmount = 0;
+            if (opData._embedded && opData._embedded.records) {
+              for (let op of opData._embedded.records) {
+                if (op.type === "payment" && op.to === XLM_WALLET && op.asset_type === "native") {
+                  xlmAmount += parseFloat(op.amount);
+                }
+              }
+            }
+            
+            const uniqueKey = matchedData.url.toLowerCase();
+            if (!communityMap.has(uniqueKey)) {
+              communityMap.set(uniqueKey, { 
+                name: matchedData.name, 
+                url: matchedData.url, 
+                description: matchedData.description, 
+                category: cleanCategory,
+                language: cleanLanguage,
+                contentRating: cleanRating,
+                platform: cleanPlatform,
+                isPermanent: parseInt(matchedData.is_permanent) === 1,
+                totalXlm: 0, 
+                boosts: [], 
+                id: matchedData.id 
+              });
+            }
+            const entry = communityMap.get(uniqueKey);
+            entry.totalXlm += xlmAmount;
+            entry.boosts.push({ time: new Date(tx.created_at) });
+          }
+        }
+        if (data._links && data._links.next) {
+          url = data._links.next.href;
+          pagesFetched++;
+        } else {
+          url = null;
+        }
+      }
+
+      cleanDbRecords.forEach(item => {
+        const uniqueKey = item.url.toLowerCase();
+        if (parseInt(item.is_permanent) === 1 && !communityMap.has(uniqueKey)) {
+          const rawCategory = item.category ? String(item.category).trim() : 'Other';
+          let cleanCategory = rawCategory === 'Music' ? 'Art & Music' : rawCategory;
+          if (cleanCategory === 'Art and Music') cleanCategory = 'Art & Music';
+          const cleanPlatform = item.platform ? String(item.platform).trim() : (item.url.startsWith('http') ? 'Fluxer' : 'Matrix');
+          
+          communityMap.set(uniqueKey, {
+            name: item.name,
+            url: item.url,
+            description: item.description,
+            category: cleanCategory,
+            language: item.language ? String(item.language).trim() : 'English',
+            contentRating: item.content_rating ? String(item.content_rating).trim() : 'SFW',
+            platform: cleanPlatform,
+            isPermanent: true,
+            totalXlm: 0,
+            boosts: [],
+            id: item.id
+          });
+        }
+      });
+    } catch (e) { console.error("Stellar loop runtime error tracking listings:", e); }
+    
+    let now = new Date();
+    globalAdsCache = Array.from(communityMap.values()).map(com => {
+      if (com.isPermanent) return { ...com, months: 9999, lastBoost: new Date(), isExpired: false };
+      const totalMonthsPaid = Math.max(1, Math.floor(com.totalXlm / 25));
+      const latestBoostDate = com.boosts.length ? new Date(Math.max(...com.boosts.map(b => b.time))) : new Date();
+      const expirationThreshold = new Date(latestBoostDate.getTime());
+      expirationThreshold.setDate(expirationThreshold.getDate() + (totalMonthsPaid * 30));
+      
+      return { ...com, months: totalMonthsPaid, lastBoost: latestBoostDate, isExpired: now > expirationThreshold };
+    });
+    
+    renderAds(globalAdsCache);
+  }
+
+  function renderAds(ads) {
+    const filteredAds = ads.filter(ad => {
+      const matchesCategory = (filterState.category === "All" || ad.category === filterState.category);
+      const matchesPlatform = (filterState.platform === "All" || ad.platform === filterState.platform);
+      const matchesLanguage = (filterState.language === "All" || ad.language === filterState.language);
+      
+      let matchesRating = false;
+      if (filterState.rating === "SFW") matchesRating = (ad.contentRating === "SFW");
+      else if (filterState.rating === "NSFW") matchesRating = (ad.contentRating === "NSFW");
+      else if (filterState.rating === "All") matchesRating = true;
+
+      const isCleanName = !containsForbiddenWords(ad.name);
+      const isCleanDesc = !containsForbiddenWords(ad.description);
+      const isSafeServer = !isBlockedHomeserver(ad.url); 
+      
+      return matchesCategory && matchesPlatform && matchesLanguage && matchesRating && isCleanName && isCleanDesc && isSafeServer;
+    });
+    
+    const activeAds = filteredAds.filter(a => !a.isExpired).sort((a,b) => b.lastBoost - a.lastBoost);
+    const expiredAds = filteredAds.filter(a => a.isExpired).sort((a,b) => b.lastBoost - a.lastBoost);
+    
+    let html = '';
+    
+    activeAds.forEach(ad => {
+      const lastDate = ad.lastBoost.toLocaleDateString('en-US', {month:'short', year:'numeric'});
+      const statusText = ad.isPermanent ? `<strong>Infinity</strong><br><span style="color:var(--accent-cyan); font-size:0.9em;">📌 Pin</span>` : `<strong>${ad.months} month${ad.months > 1 ? 's' : ''}</strong><br><span style="color:var(--text-muted); font-size:0.9em;">Last: ${lastDate}</span>`;
+      const ratingLabel = ad.contentRating === 'NSFW' ? `<span class="cat-label nsfw-tag">NSFW</span>` : '';
+      
+      // Dynamic out-of-band anchor injection based on deduced platform category variables
+      const cleanHref = ad.platform === "Fluxer" ? ad.url : `https://matrix.to/#/${ad.url}`;
+      const platformLabel = ad.platform === "Fluxer" ? `<span class="cat-label net-tag-fluxer">Fluxer</span>` : `<span class="cat-label net-tag-matrix">Matrix</span>`;
+      
+      html += `
+        <tr class="ad-row">
+          <td class="col-name">
+            <a href="${cleanHref}" target="_blank" rel="noopener" title="Join Link">${ad.name}</a><br>
+            <div class="meta-labels-container">
+              ${platformLabel}
+              <span class="cat-label">${ad.category}</span>
+              <span class="cat-label">${ad.language}</span>
+              ${ratingLabel}
+            </div>
+          </td>
+          <td class="col-desc">${ad.description ? ad.description : '<i>No description provided</i>'}</td>
+          <td class="col-meta">${statusText}</td>
+          <td style="text-align: center;"><button class="list-boost-btn" onclick="showBoostInfo('${ad.id}', false)" title="Boost Community">🚀</button></td>
+        </tr>`;
+    });
+    
+    if (expiredAds.length > 0) {
+      html += `<tr><td colspan="4" class="legacy-sep-header" style="padding: 8px 16px; font-weight: 700; text-transform: uppercase;">💎 Legacy Backers (Window Concluded)</td></tr>`;
+      expiredAds.forEach(ad => {
+        const lastDate = ad.lastBoost.toLocaleDateString('en-US', {month:'short', year:'numeric'});
+        const ratingLabel = ad.contentRating === 'NSFW' ? `<span class="cat-label nsfw-tag">NSFW</span>` : '';
+        const cleanHref = ad.platform === "Fluxer" ? ad.url : `https://matrix.to/#/${ad.url}`;
+        const platformLabel = ad.platform === "Fluxer" ? `<span class="cat-label net-tag-fluxer">Fluxer</span>` : `<span class="cat-label net-tag-matrix">Matrix</span>`;
+        
+        html += `
+          <tr class="ad-row legacy-expired">
+            <td class="col-name">
+              <a href="${cleanHref}" target="_blank" rel="noopener" title="Join Link">${ad.name}</a><br>
+              <div class="meta-labels-container">
+                ${platformLabel}
+                <span class="cat-label">${ad.category}</span>
+                <span class="cat-label">${ad.language}</span>
+                ${ratingLabel}
+              </div>
+            </td>
+            <td class="col-desc">${ad.description ? ad.description : '<i>No description provided</i>'}</td>
+            <td class="col-meta">Past Supporter<br><span style="font-size:0.9em;">Seen: ${lastDate}</span></td>
+            <td style="text-align: center;"><button class="list-boost-btn" onclick="showBoostInfo('${ad.id}', false)" title="Renew Boost Campaign">🚀</button></td>
+          </tr>`;
+      });
+    }
+    
+    if (html === '') {
+      html = `<tr><td colspan="4" style="padding: 40px; text-align: center; color: var(--text-muted);"><h3>No active communities match these selections</h3><p>Be the first to occupy this segment by launching a boost campaign above!</p></td></tr>`;
+    }
+    document.getElementById('adListBody').innerHTML = html;
+  }
+
+  window.showBoostInfo = function(memo, isExistingRetrieval = false) { 
+    activeMemo = memo; 
+    document.getElementById('modalMemoText').textContent = memo; 
+    const titleNode = document.getElementById('modalTitleText');
+    const bodyNode = document.getElementById('modalBodyMessage');
+    const copyBtn = document.getElementById('modalCopyBtn'); 
+    
+    if (isExistingRetrieval) {
+      titleNode.textContent = "ℹ️ Community Code Already Exists";
+      bodyNode.innerHTML = "This room layout configuration was already added to our tracker. Use its existing active assigned code to send additional boosts:";
+    } else {
+      titleNode.textContent = "📋 Copy Transaction Memo";
+      bodyNode.innerHTML = "Send <strong>25 XLM or more</strong> to our wallet with this exact short memo:";
+    }
+    copyBtn.textContent = "Copy Memo"; 
+    copyBtn.classList.remove('copied'); 
+    document.getElementById('boostModal').classList.add('active'); 
+  };
+  
+  window.closeBoostModal = function() { document.getElementById('boostModal').classList.remove('active'); };
+  
+  window.copyMemoText = function() { 
+    navigator.clipboard.writeText(activeMemo).then(() => { 
+      const copyBtn = document.getElementById('modalCopyBtn'); 
+      copyBtn.textContent = "✓ Copied!"; 
+      copyBtn.classList.add('copied'); 
+    }); 
+  };
+
+  setupCategoryFilters();
+  fetchXLMTransactions();
+  setInterval(fetchXLMTransactions, 20000);
+</script>
+</body>
+</html>
