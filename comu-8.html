@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Boosted community listings and payment verification details for Dewrito.">
-  <title>Community Ads • dewrito.net</title>
+  <title>Dewrito | Boosted Communities</title>
   <link href="img/favicon.ico" rel="shortcut icon"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/site.css">
@@ -31,6 +31,12 @@
     .char-counter { text-align:right; color:var(--text-muted); font-size:0.8rem; }
     .gen-btn { width:100%; padding:12px; border-radius:10px; border:none; background:var(--accent-cyan); color:#000; font-weight:700; cursor:pointer; }
     
+    /* Captcha & Help Desk Flex Splitter */
+    .captcha-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 18px; }
+    .help-link-container { text-align: right; }
+    .help-link-container a { color: var(--accent-cyan); font-size: 0.9rem; font-weight: 600; text-decoration: none; border-bottom: 1px dashed rgba(0, 204, 255, 0.4); padding-bottom: 2px; transition: color 0.15s; }
+    .help-link-container a:hover { color: #00ccff; border-color: #00ccff; }
+
     .filter-container { max-width: 1000px; margin: 24px auto 14px; display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
     .filter-chip { padding: 6px 14px; border-radius: 20px; background: rgba(255,255,255,0.03); border: 1px solid var(--border-subtle); color: var(--text-secondary); font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: all 0.15s ease; }
     .filter-chip.active { background: var(--accent-cyan); color: #000; border-color: var(--accent-cyan); font-weight: 600; }
@@ -48,7 +54,14 @@
     
     .col-name a { color: var(--text-primary); text-decoration: none; font-weight: 600; font-size: 1.05rem; }
     .col-name a:hover { color: var(--accent-cyan); text-decoration: underline; }
-    .col-desc { color:var(--text-secondary); line-height: 1.4; }
+    
+    /* Responsive descriptions preventing long words/URLs from breaking mobile viewports */
+    .col-desc { 
+      color:var(--text-secondary); 
+      line-height: 1.4; 
+      word-break: break-word;
+      overflow-wrap: break-word;
+    }
     
     /* Network Specific & Safety Tags with !important overrides */
     .net-tag-matrix { background: rgba(0, 255, 157, 0.1) !important; color: #00ff9d !important; border: 1px solid rgba(0, 255, 157, 0.15) !important; }
@@ -96,6 +109,15 @@
 
     /* Experimental Badge Styling */
     .exp-badge { display: inline-block; font-size: 0.65rem; vertical-align: middle; padding: 2px 6px; border-radius: 4px; background: rgba(0, 204, 255, 0.1); color: var(--accent-cyan); border: 1px solid rgba(0, 204, 255, 0.3); letter-spacing: 0.5px; font-weight: 700; margin-left: 8px; text-transform: uppercase; }
+
+    /* Mobile view structural insurance rules */
+    @media (max-width: 768px) {
+      .ad-list-container {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+    }
   </style>
 </head>
 <body>
@@ -198,9 +220,16 @@
           <textarea id="formDescription" maxlength="90" oninput="updateCharCount(this)" placeholder="Short intro summary..."></textarea>
           <div class="char-counter"><span id="charCount">90</span> characters remaining</div>
         </div>
-        <div class="captcha-container">
-          <div class="g-recaptcha" data-sitekey="6LegL-ssAAAAAGzOKLtLIdLKzk4gVYnPrYVDNpFt" data-action="SUBMIT"></div>
+
+        <div class="captcha-row">
+          <div class="captcha-container">
+            <div class="g-recaptcha" data-sitekey="6LegL-ssAAAAAGzOKLtLIdLKzk4gVYnPrYVDNpFt" data-action="SUBMIT"></div>
+          </div>
+          <div class="help-link-container">
+            <a href="boosthelp.html" target="_blank">Need Help Boosting? ↗</a>
+          </div>
         </div>
+
         <button class="btn-primary gen-btn" onclick="openReviewModal()">Generate Payment Memo</button>
       </div>
     </details>
@@ -323,6 +352,9 @@
 
   const CATEGORIES = ["All", "Gaming", "Politics & Opinion", "Art & Music", "Entertainment", "Education", "Science & Technology", "Content Creator", "Anime & Manga", "Movies & TV", "Furry", "LGBT+", "Other"];
   const BLOCKED_DOMAINS = ["cutefunny.art", "midov.pl", "dropnet.ch", "nicheart.online", "lolisho.chat", "cuteness-overdose.com", "capybara.pictures", "nerdsin.space"];
+  
+  // Local text filter configuration definitions
+  const BANNED_KEYWORDS = ["fuck", "scam", "crypto-pump", "gore", "lewd-content"];
 
   function toggleUrlInputs() {
     const platform = document.getElementById('formPlatform').value;
@@ -399,6 +431,12 @@
 
     if (BLOCKED_DOMAINS.some(d => url.toLowerCase().includes(d))) return alert("Domain Blocked.");
     if (!displayName) return alert("Please specify a display name.");
+    
+    // Safety check block validation verification runs over values before modal summary loads
+    const combinedContent = `${displayName} ${description}`.toLowerCase();
+    if (BANNED_KEYWORDS.some(keyword => combinedContent.includes(keyword))) {
+      return alert("Submission contains flagged terms. Please adjust your text.");
+    }
 
     // Inject parameters into text review summary layout box
     document.getElementById('reviewDetailsSummary').innerHTML = `
@@ -506,7 +544,12 @@
       const netMatch = filterState.platform === "All" || ad.platform === filterState.platform;
       const langMatch = filterState.language === "All" || ad.language === filterState.language;
       const safeMatch = filterState.rating === "All" || ad.content_rating === filterState.rating;
-      return catMatch && netMatch && langMatch && safeMatch;
+      
+      // Filter matching text strings out of layout parsing loops entirely
+      const combinedLower = `${ad.name || ''} ${ad.description || ''}`.toLowerCase();
+      const contentIsSafe = !BANNED_KEYWORDS.some(keyword => combinedLower.includes(keyword));
+      
+      return catMatch && netMatch && langMatch && safeMatch && contentIsSafe;
     });
 
     const activeAds = filtered.filter(a => !a.isExpired);
