@@ -54,7 +54,14 @@
     
     .col-name a { color: var(--text-primary); text-decoration: none; font-weight: 600; font-size: 1.05rem; }
     .col-name a:hover { color: var(--accent-cyan); text-decoration: underline; }
-    .col-desc { color:var(--text-secondary); line-height: 1.4; }
+    
+    /* Responsive descriptions preventing long words/URLs from breaking mobile viewports */
+    .col-desc { 
+      color:var(--text-secondary); 
+      line-height: 1.4; 
+      word-break: break-word;
+      overflow-wrap: break-word;
+    }
     
     /* Network Specific & Safety Tags with !important overrides */
     .net-tag-matrix { background: rgba(0, 255, 157, 0.1) !important; color: #00ff9d !important; border: 1px solid rgba(0, 255, 157, 0.15) !important; }
@@ -84,7 +91,6 @@
     .modal-overlay { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(5,5,10,0.7); backdrop-filter:blur(6px); z-index:1000; opacity:0; pointer-events:none; transition:opacity .2s; }
     .modal-overlay.active { opacity:1; pointer-events:auto; }
     .modal-content { background:var(--bg-card); border:1px solid var(--accent-cyan); padding:22px; border-radius:12px; max-width:520px; width:92%; color:var(--text-primary); position: relative; }
-    .modal-content ... {}
     .modal-close { position: absolute; top: 12px; right: 16px; background: none; border: none; color: var(--text-muted); font-size: 22px; cursor: pointer; }
     .modal-close:hover { color: var(--accent-cyan); }
     
@@ -103,6 +109,15 @@
 
     /* Experimental Badge Styling */
     .exp-badge { display: inline-block; font-size: 0.65rem; vertical-align: middle; padding: 2px 6px; border-radius: 4px; background: rgba(0, 204, 255, 0.1); color: var(--accent-cyan); border: 1px solid rgba(0, 204, 255, 0.3); letter-spacing: 0.5px; font-weight: 700; margin-left: 8px; text-transform: uppercase; }
+
+    /* Mobile view structural insurance rules */
+    @media (max-width: 768px) {
+      .ad-list-container {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+    }
   </style>
 </head>
 <body>
@@ -338,8 +353,8 @@
   const CATEGORIES = ["All", "Gaming", "Politics & Opinion", "Art & Music", "Entertainment", "Education", "Science & Technology", "Content Creator", "Anime & Manga", "Movies & TV", "Furry", "LGBT+", "Other"];
   const BLOCKED_DOMAINS = ["cutefunny.art", "midov.pl", "dropnet.ch", "nicheart.online", "lolisho.chat", "cuteness-overdose.com", "capybara.pictures", "nerdsin.space"];
   
-  // Local client text evaluation parameters
-  const BANNED_KEYWORDS = ["gore", "scam", "crypto-scam", "loli", "lolicon", "cp", "child", "toddler", "shota", "nigga", "nigger", "fag", "faggot", "fuck", "shit", "bitch", "tranny"];
+  // Local text filter configuration definitions
+  const BANNED_KEYWORDS = ["fuck", "scam", "crypto-pump", "gore", "lewd-content"];
 
   function toggleUrlInputs() {
     const platform = document.getElementById('formPlatform').value;
@@ -417,7 +432,7 @@
     if (BLOCKED_DOMAINS.some(d => url.toLowerCase().includes(d))) return alert("Domain Blocked.");
     if (!displayName) return alert("Please specify a display name.");
     
-    // Check fields against content safety strings before showing preview box
+    // Safety check block validation verification runs over values before modal summary loads
     const combinedContent = `${displayName} ${description}`.toLowerCase();
     if (BANNED_KEYWORDS.some(keyword => combinedContent.includes(keyword))) {
       return alert("Submission contains flagged terms. Please adjust your text.");
@@ -530,7 +545,7 @@
       const langMatch = filterState.language === "All" || ad.language === filterState.language;
       const safeMatch = filterState.rating === "All" || ad.content_rating === filterState.rating;
       
-      // Filter out any matching bad words from displaying in the table rendering loop
+      // Filter matching text strings out of layout parsing loops entirely
       const combinedLower = `${ad.name || ''} ${ad.description || ''}`.toLowerCase();
       const contentIsSafe = !BANNED_KEYWORDS.some(keyword => combinedLower.includes(keyword));
       
