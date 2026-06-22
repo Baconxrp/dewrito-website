@@ -47,10 +47,11 @@
     .filter-select-group { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 160px; }
     .filter-select-group label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; }
 
-    .ad-list-container { margin-top:10px; border-radius:12px; overflow:hidden; border:1px solid var(--border-subtle); background:var(--bg-card); }
-    .ad-table { width:100%; border-collapse:collapse; }
-    .ad-table th { text-align:left; padding:12px 16px; background:rgba(255,255,255,0.02); color:var(--accent-cyan); font-size:0.85rem; text-transform:uppercase; }
-    .ad-row td { padding:14px 16px; vertical-align:middle; border-top:1px solid rgba(255,255,255,0.02); }
+    /* Anti-Adblock Class Refactoring applied to layout structures */
+    .promo-list-container { margin-top:10px; border-radius:12px; overflow:hidden; border:1px solid var(--border-subtle); background:var(--bg-card); }
+    .promo-table { width:100%; border-collapse:collapse; }
+    .promo-table th { text-align:left; padding:12px 16px; background:rgba(255,255,255,0.02); color:var(--accent-cyan); font-size:0.85rem; text-transform:uppercase; }
+    .promo-row td { padding:14px 16px; vertical-align:middle; border-top:1px solid rgba(255,255,255,0.02); }
     
     .col-name a { color: var(--text-primary); text-decoration: none; font-weight: 600; font-size: 1.05rem; }
     .col-name a:hover { color: var(--accent-cyan); text-decoration: underline; }
@@ -77,6 +78,7 @@
     .cat-tech { background: rgba(0, 255, 221, 0.1); color: #00ffdd; border: 1px solid rgba(0, 255, 221, 0.15); }
     .cat-creator { background: rgba(162, 0, 255, 0.1); color: #a200ff; border: 1px solid rgba(162, 0, 255, 0.15); }
     .cat-anime { background: rgba(255, 0, 110, 0.1); color: #ff006e; border: 1px solid rgba(255, 0, 110, 0.15); }
+    .cat-vtuber { background: rgba(0, 234, 255, 0.1); color: #00eaff; border: 1px solid rgba(0, 234, 255, 0.15); }
     .cat-furry { background: rgba(58, 125, 68, 0.1); color: #4ade80; border: 1px solid rgba(58, 125, 68, 0.15); }
     .lang-ru { background: rgba(0, 132, 255, 0.1); color: #0084ff; border: 1px solid rgba(0, 132, 255, 0.15); }
     .lang-es { background: rgba(234, 179, 8, 0.1); color: #eab308; border: 1px solid rgba(234, 179, 8, 0.15); }
@@ -84,8 +86,8 @@
     .list-boost-btn { padding: 10px; border-radius: 50%; background: var(--accent-cyan); border: none; font-size: 1.1rem; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; width: 42px; height: 42px; transition: transform 0.2s, background 0.2s; }
     .list-boost-btn:hover { transform: scale(1.1); background: #00ccff; }
     
-    .ad-row.legacy-expired { opacity: 0.55; background: rgba(0, 0, 0, 0.15); font-size: 0.95rem; transition: opacity 0.2s; }
-    .ad-row.legacy-expired:hover { opacity: 0.85; }
+    .promo-row.legacy-expired { opacity: 0.55; background: rgba(0, 0, 0, 0.15); font-size: 0.95rem; transition: opacity 0.2s; }
+    .promo-row.legacy-expired:hover { opacity: 0.85; }
     .legacy-sep-header { background: rgba(0, 0, 0, 0.3) !important; color: var(--text-muted) !important; font-size: 0.75rem !important; letter-spacing: 1px; }
 
     .modal-overlay { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(5,5,10,0.7); backdrop-filter:blur(6px); z-index:1000; opacity:0; pointer-events:none; transition:opacity .2s; }
@@ -112,7 +114,7 @@
 
     /* Mobile view structural insurance rules */
     @media (max-width: 768px) {
-      .ad-list-container {
+      .promo-list-container {
         width: 100%;
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
@@ -175,6 +177,7 @@
               <option value="Content Creator">Content Creator</option>
               <option value="Anime & Manga">Anime & Manga</option>
               <option value="Movies & TV">Movies & TV</option>
+              <option value="Vtuber">Vtuber</option>
               <option value="Furry">Furry</option>
               <option value="LGBT+">LGBT+</option>
               <option value="Other" selected>Other</option>
@@ -272,8 +275,8 @@
       </div>
     </div>
 
-    <div class="ad-list-container">
-      <table class="ad-table">
+    <div class="promo-list-container">
+      <table class="promo-table">
         <thead>
           <tr>
             <th style="width: 35%;">Community</th>
@@ -281,7 +284,7 @@
             <th style="text-align: center; width: 10%;">Boost</th>
           </tr>
         </thead>
-        <tbody id="adListBody"></tbody>
+        <tbody id="promoListBody"></tbody>
       </table>
     </div>
   </div>
@@ -347,10 +350,10 @@
   
   let filterState = { category: "All", platform: "All", language: "All", rating: "SFW" };
   let isAdultVerified = false;
-  let globalAdsCache = [];
+  let globalPromoCache = [];
   let activeMemo = "";
 
-  const CATEGORIES = ["All", "Gaming", "Politics & Opinion", "Art & Music", "Entertainment", "Education", "Science & Technology", "Content Creator", "Anime & Manga", "Movies & TV", "Furry", "LGBT+", "Other"];
+  const CATEGORIES = ["All", "Gaming", "Politics & Opinion", "Art & Music", "Entertainment", "Education", "Science & Technology", "Content Creator", "Anime & Manga", "Movies & TV", "Vtuber", "Furry", "LGBT+", "Other"];
   const BLOCKED_DOMAINS = ["cutefunny.art", "midov.pl", "dropnet.ch", "nicheart.online", "lolisho.chat", "cuteness-overdose.com", "capybara.pictures", "nerdsin.space"];
   
   // Local text filter configuration definitions
@@ -381,7 +384,7 @@
   function setCategoryBubble(category) {
     filterState.category = category;
     setupCategoryFilters();
-    renderAds(globalAdsCache);
+    renderPromos(globalPromoCache);
   }
 
   function handleFilterChange(axis) {
@@ -393,7 +396,7 @@
     filterState.platform = document.getElementById('filterPlatform').value;
     filterState.language = document.getElementById('filterLanguage').value;
     filterState.rating = ratingSelect.value;
-    renderAds(globalAdsCache);
+    renderPromos(globalPromoCache);
   }
 
   function confirmAgeGate(isApproved) {
@@ -471,6 +474,7 @@
     }
 
     const shortID = generateShortID();
+    // Keeping the original database table identifier 'community_ads' as requested
     const { error } = await supabaseClient.from('community_ads').insert([{
       id: shortID, name: displayName, url: url, description: description,
       category: category, language: language, content_rating: rating, platform: platform
@@ -529,17 +533,17 @@
         }
       });
 
-      globalAdsCache = Array.from(communityMap.values()).map(com => {
+      globalPromoCache = Array.from(communityMap.values()).map(com => {
         const isPermanent = parseInt(com.is_permanent) === 1;
         const totalMonthsPaid = Math.max(1, Math.floor(com.totalXlm / 25));
         return { ...com, months: totalMonthsPaid, isExpired: !isPermanent && (new Date() - new Date(Math.max(...com.boosts))) > (totalMonthsPaid * 2592000000) };
       });
-      renderAds(globalAdsCache);
+      renderPromos(globalPromoCache);
     } catch(e) { console.error(e); }
   }
 
-  function renderAds(ads) {
-    const filtered = ads.filter(ad => {
+  function renderPromos(promos) {
+    const filtered = promos.filter(ad => {
       const catMatch = filterState.category === "All" || ad.category === filterState.category;
       const netMatch = filterState.platform === "All" || ad.platform === filterState.platform;
       const langMatch = filterState.language === "All" || ad.language === filterState.language;
@@ -552,8 +556,8 @@
       return catMatch && netMatch && langMatch && safeMatch && contentIsSafe;
     });
 
-    const activeAds = filtered.filter(a => !a.isExpired);
-    const expiredAds = filtered.filter(a => a.isExpired);
+    const activePromos = filtered.filter(a => !a.isExpired);
+    const expiredPromos = filtered.filter(a => a.isExpired);
 
     let html = '';
     
@@ -571,13 +575,14 @@
                        ad.category === "Science & Technology" ? "cat-tech" :
                        ad.category === "Content Creator" ? "cat-creator" :
                        ad.category === "Anime & Manga" ? "cat-anime" :
+                       ad.category === "Vtuber" ? "cat-vtuber" :
                        ad.category === "Furry" ? "cat-furry" : "";
 
       const langClass = ad.language === "Russian" ? "lang-ru" : 
                         ad.language === "Spanish" ? "lang-es" : "";
 
       return `
-        <tr class="ad-row ${ad.isExpired ? 'legacy-expired' : ''}">
+        <tr class="promo-row ${ad.isExpired ? 'legacy-expired' : ''}">
           <td class="col-name" style="width: 35%;">
             <a href="${cleanHref}" target="_blank" rel="noopener">${ad.name}</a><br>
             <div class="meta-labels-container">
@@ -593,14 +598,14 @@
         </tr>`;
     };
 
-    activeAds.forEach(ad => html += appendRow(ad));
+    activePromos.forEach(ad => html += appendRow(ad));
     
-    if (expiredAds.length > 0) {
+    if (expiredPromos.length > 0) {
       html += `<tr><td colspan="3" class="legacy-sep-header" style="padding: 8px 16px; font-weight: 700; text-transform: uppercase;">💎 Legacy Backers (Window Concluded)</td></tr>`;
-      expiredAds.forEach(ad => html += appendRow(ad));
+      expiredPromos.forEach(ad => html += appendRow(ad));
     }
 
-    document.getElementById('adListBody').innerHTML = html || '<tr><td colspan="3" style="text-align:center; padding:20px;">No communities found.</td></tr>';
+    document.getElementById('promoListBody').innerHTML = html || '<tr><td colspan="3" style="text-align:center; padding:20px;">No communities found.</td></tr>';
   }
 
   function showBoostInfo(memo) {
