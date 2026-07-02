@@ -9,26 +9,74 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/site.css">
   <style>
-    /* Dynamic Mini Slider Modules */
-    .boost-showcase-box { margin-top: 40px; padding: 20px; background: rgba(255, 255, 255, 0.01); border: 1px solid var(--border-subtle); border-radius: 12px; text-align: left; width: 100%; box-sizing: border-box; }
-    .boost-slider-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
-    .boost-slider-title { font-size: 0.85rem; font-family: var(--font-mono); color: var(--accent-cyan); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
-    .boost-slider-timer { font-size: 0.75rem; color: var(--text-muted); }
-    .boost-cards-stack { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; margin-bottom: 20px; min-height: 76px; }
-    
-    .mini-boost-card { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: var(--bg-card); border: 1px solid rgba(255,255,255,0.03); border-radius: 8px; transition: border-color 0.2s; text-decoration: none !important; }
-    .mini-boost-card:hover { border-color: rgba(0, 204, 255, 0.3); }
-    .mini-card-left { display: flex; flex-direction: column; gap: 4px; max-width: 80%; }
-    .mini-card-title { font-size: 0.95rem; font-weight: 600; color: var(--text-primary); }
-    .mini-card-desc { font-size: 0.82rem; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    
-    .mini-card-labels { display: flex; gap: 6px; align-items: center; }
-    .mini-tag { font-size: 0.68rem; padding: 1px 6px; border-radius: 4px; font-weight: 500; background: rgba(255,255,255,0.05); color: var(--text-muted); }
+    /* --- Boosted Communities Bar (fixed top, below navbar) --- */
+    .boost-bar { position: fixed; top: 64px; left: 0; right: 0; z-index: 9998; background: rgba(5,5,16,0.8); border-bottom: 1px solid var(--border-subtle); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); }
+    .boost-bar-inner { display: flex; align-items: center; gap: 10px; height: 36px; padding: 0 20px; margin: 0 auto; max-width: 1200px; overflow-x: auto; scrollbar-width: none; }
+    .boost-bar-inner::-webkit-scrollbar { display: none; }
+    .boost-bar-header { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+    .boost-bar-label { font-size: 0.65rem; font-family: var(--font-mono); color: var(--accent-cyan); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; white-space: nowrap; }
+    .boost-bar-scope { font-size: 0.62rem; font-family: var(--font-mono); color: var(--text-primary); white-space: nowrap; }
+    .boost-bar-timer { font-size: 0.62rem; font-family: var(--font-mono); color: var(--text-muted); flex-shrink: 0; }
+    .boost-chips-track { display: flex; align-items: center; gap: 8px; flex: 1; overflow-x: auto; scrollbar-width: none; min-width: 0; }
+    .boost-chips-track::-webkit-scrollbar { display: none; }
+    .boost-chip-link { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 6px; background: var(--bg-card); border: 1px solid rgba(255,255,255,0.04); text-decoration: none !important; white-space: nowrap; transition: all 0.2s; font-size: 0.78rem; color: var(--text-primary) !important; }
+    .boost-chip-link:hover { border-color: rgba(0, 204, 255, 0.3); background: rgba(0, 204, 255, 0.06); }
+    .boost-chip-name { font-weight: 600; max-width: 120px; overflow: hidden; text-overflow: ellipsis; }
+    .mini-tag { font-size: 0.6rem; padding: 1px 5px; border-radius: 3px; font-weight: 600; flex-shrink: 0; }
     .mini-tag-matrix { background: rgba(0, 255, 157, 0.1) !important; color: #00ff9d !important; border: 1px solid rgba(0, 255, 157, 0.15); }
     .mini-tag-fluxer { background: rgba(0, 204, 255, 0.1) !important; color: var(--accent-cyan) !important; border: 1px solid rgba(0, 204, 255, 0.15); }
-    
-    .btn-view-all { display: inline-flex; width: 100%; justify-content: center; align-items: center; padding: 12px; font-size: 0.88rem; font-weight: 600; border-radius: 8px; background: rgba(0, 204, 255, 0.08); color: var(--accent-cyan); border: 1px solid rgba(0, 204, 255, 0.15); transition: all 0.18s; text-decoration: none; }
-    .btn-view-all:hover { background: var(--accent-cyan); color: #000; }
+    .boost-bar-viewall { font-size: 0.68rem; padding: 3px 10px; border-radius: 6px; background: rgba(0, 204, 255, 0.08); color: var(--accent-cyan) !important; border: 1px solid rgba(0, 204, 255, 0.15); text-decoration: none !important; font-weight: 600; white-space: nowrap; flex-shrink: 0; transition: all 0.18s; }
+    .boost-bar-viewall:hover { background: var(--accent-cyan) !important; color: #000 !important; }
+
+    /* Help button + tooltip */
+    .boost-bar-actions { display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0; }
+    .boost-bar-help { position: relative; display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; border-radius: 50%; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); color: var(--text-muted); font-size: 0.6rem; font-weight: 700; cursor: pointer; flex-shrink: 0; transition: all 0.2s; user-select: none; line-height: 1; padding: 0; }
+    .boost-bar-help:hover { background: rgba(0, 204, 255, 0.1); border-color: rgba(0, 204, 255, 0.3); color: var(--accent-cyan); }
+    .boost-bar-tooltip { position: fixed; top: 0; right: 0; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 6px 10px; font-size: 0.7rem; color: var(--text-secondary); white-space: nowrap; opacity: 0; visibility: hidden; transform: translateY(-2px); transition: all 0.15s ease; pointer-events: none; z-index: 10000; box-shadow: 0 4px 16px rgba(0,0,0,0.3); }
+    .boost-bar-tooltip::after { content: ''; position: absolute; bottom: 100%; right: 8px; border: 4px solid transparent; border-bottom-color: var(--border-subtle); }
+    .boost-bar-tooltip.active { opacity: 1; visibility: visible; transform: translateY(0); pointer-events: auto; }
+
+    /* --- Server Status Strip (fixed bottom bar) --- */
+    @keyframes statusPulse { 0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(62,207,142,0.5)} 50%{opacity:0.7;box-shadow:0 0 0 6px rgba(62,207,142,0)} }
+    .status-strip { position: fixed; bottom: 0; left: 0; right: 0; z-index: 9999; background: rgba(5,5,16,0.8); border-top: 1px solid var(--border-subtle); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); }
+    body { padding-bottom: 32px; padding-top: 80px; }
+    .status-strip-inner { display: flex; align-items: center; gap: 12px; height: 26px; padding: 0 20px; margin: 0 auto; max-width: 1200px; }
+    .status-strip-label { font-size: 0.65rem; font-family: var(--font-mono); color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; flex-shrink: 0; }
+    .status-strip-services { display: flex; align-items: center; gap: 10px; flex: 1; justify-content: center; }
+    .status-chip { display: inline-flex; align-items: center; gap: 5px; font-size: 0.72rem; white-space: nowrap; }
+    .status-dot-sm { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; position: relative; }
+    .status-dot-sm::after { content:''; position:absolute; inset:-3px; border-radius:50%; animation: statusPulse 2s ease-in-out infinite; }
+    .status-up .status-dot-sm { background: var(--accent-green); }
+    .status-degraded .status-dot-sm { background: #ffaa00; }
+    .status-down .status-dot-sm { background: #ff4d4d; animation:none; }
+    .status-down .status-dot-sm::after { display:none; }
+    .status-checking .status-dot-sm { background: var(--text-muted); animation-duration: 1s; }
+    .status-chip-name { color: var(--text-secondary); font-weight: 500; }
+    .status-chip-badge { font-size: 0.68rem; padding: 1px 6px; border-radius: 4px; font-weight: 600; }
+    .status-up .status-chip-badge { background: rgba(62,207,142,0.1); color: var(--accent-green); }
+    .status-degraded .status-chip-badge { background: rgba(255,170,0,0.1); color: #ffaa00; }
+    .status-down .status-chip-badge { background: rgba(255,77,77,0.1); color: #ff4d4d; }
+    .status-checking .status-chip-badge { color: var(--text-muted); }
+    .status-chip-ms { font-family: var(--font-mono); color: var(--text-muted); font-size: 0.65rem; }
+    .status-strip-overall { display: inline-flex; align-items: center; gap: 5px; font-size: 0.72rem; color: var(--accent-green); font-weight: 500; flex-shrink: 0; }
+
+    @media (max-width: 768px) {
+      .status-strip-inner { gap: 8px; height: 28px; overflow-x: auto; scrollbar-width: none; }
+      .status-strip-inner::-webkit-scrollbar { display: none; }
+      .status-strip-label { font-size: 0.55rem; }
+      .status-chip-ms { display: none; }
+      .boost-bar-inner { gap: 6px; padding: 0 10px; height: auto; min-height: 32px; flex-wrap: wrap; align-items: center; }
+      .boost-bar-header { gap: 4px; }
+      .boost-bar-label { font-size: 0.58rem; letter-spacing: 0.5px; }
+      .boost-bar-scope { font-size: 0.55rem; }
+      .boost-bar-timer { display: none; }
+      .boost-chips-track { flex-basis: 100%; order: 3; gap: 6px; padding-top: 4px; border-top: 1px solid rgba(255,255,255,0.03); margin-top: 2px; }
+      .boost-bar-actions { order: 2; margin-left: auto; }
+      .boost-chip-link { padding: 2px 8px; font-size: 0.7rem; }
+      .boost-chip-name { max-width: 80px; }
+      .boost-bar-viewall { font-size: 0.6rem; padding: 2px 8px; }
+      body { padding-top: 108px; }
+    }
   </style>
 </head>
 <body>
@@ -54,6 +102,49 @@
     </button>
   </div>
 </nav>
+
+<!-- Boosted Communities Bar (fixed top) -->
+<div class="boost-bar">
+  <div class="boost-bar-inner">
+    <div class="boost-bar-header">
+      <span class="boost-bar-label">&#9889; Boosted Communities:</span>
+      <span class="boost-bar-scope" id="sliderCategoryHeader">All</span>
+      <span class="boost-bar-timer" id="sliderTimerCountdown">15s</span>
+    </div>
+    <div class="boost-chips-track" id="sliderItemsStack">
+      <span style="color:var(--text-muted);font-size:0.72rem;">Syncing...</span>
+    </div>
+    <div class="boost-bar-actions">
+      <a href="community.html" class="boost-bar-viewall">View All &#8599;</a>
+      <button class="boost-bar-help" id="boostHelpBtn" aria-label="What is Boosted?" onclick="toggleBoostTooltip(event)">?</button>
+    </div>
+  </div>
+</div>
+
+<!-- Tooltip (outside boost bar so overflow doesn't clip it) -->
+<div class="boost-bar-tooltip" id="boostTooltip">Boosted via Stellar (XLM) &bull; 25 XLM = 1 Month Visibility</div>
+
+<!-- Status Strip (fixed bottom bar) -->
+<div class="status-strip">
+  <div class="status-strip-inner">
+    <span class="status-strip-label">STATUS</span>
+    <div class="status-strip-services">
+      <span class="status-chip" id="rowMatrix">
+        <span class="status-dot-sm status-checking"></span>
+        <span class="status-chip-name">Matrix</span>
+        <span class="status-chip-badge" id="badgeMatrix">Checking</span>
+        <span class="status-chip-ms" id="latencyMatrix">&#8212; ms</span>
+      </span>
+      <span class="status-chip" id="rowFluxer">
+        <span class="status-dot-sm status-checking"></span>
+        <span class="status-chip-name">Fluxer</span>
+        <span class="status-chip-badge" id="badgeFluxer">Checking</span>
+        <span class="status-chip-ms" id="latencyFluxer">&#8212; ms</span>
+      </span>
+    </div>
+    <span class="status-strip-overall status-checking" id="statusOverallBadge"><span class="status-dot-sm"></span> Checking...</span>
+  </div>
+</div>
 
 <section class="hero">
   <div class="hero-content">
@@ -133,17 +224,6 @@
           <span class="matrix-link-desc">Launch →</span>
         </a>
       </div>
-    </div>
-
-    <div class="boost-showcase-box">
-      <div class="boost-slider-header">
-        <span class="boost-slider-title" id="sliderCategoryHeader">⚡ Top Boosted Communities</span>
-        <span class="boost-slider-timer" id="sliderTimerCountdown">15s</span>
-      </div>
-      <div class="boost-cards-stack" id="sliderItemsStack">
-        <div style="text-align: center; grid-column: 1 / -1; color: var(--text-muted); padding: 20px; font-size: 0.9rem;">Syncing distributed ledger metrics...</div>
-      </div>
-      <a href="community.html" class="btn-view-all">Explore All Boosted Communities ↗</a>
     </div>
   </div>
 </section>
@@ -300,33 +380,23 @@
 
   function renderActiveSlide() {
     const activeScope = rotationSchedule[currentScheduleIndex];
-    document.getElementById('sliderCategoryHeader').textContent = activeScope === "All" ? "⚡ Top Boosted Communities" : `📂 Top ${activeScope} Communities`;
-    
+    document.getElementById('sliderCategoryHeader').textContent = activeScope === "All" ? "All" : `\ud83d\udcc2 ${activeScope}`;
+
     let scopedAds = activeScope === "All" ? processedAds : processedAds.filter(a => a.category === activeScope);
     scopedAds.sort((a, b) => b.months - a.months);
-    
+
     const top3 = scopedAds.slice(0, 3);
     const stackElement = document.getElementById('sliderItemsStack');
-    
+
     if (top3.length === 0) {
-      stackElement.innerHTML = `<div style="text-align: center; grid-column: 1 / -1; color: var(--text-muted); padding: 20px; font-size: 0.85rem;">No active listings in this category.</div>`;
+      stackElement.innerHTML = `<span style="color:var(--text-muted);font-size:0.72rem;">No active listings</span>`;
       return;
     }
 
     stackElement.innerHTML = top3.map(ad => {
       const cleanHref = ad.platform === "Fluxer" ? ad.url : `https://matrix.to/#/${ad.url}`;
       const netTagClass = ad.platform === "Fluxer" ? "mini-tag-fluxer" : "mini-tag-matrix";
-      return `
-        <a href="${cleanHref}" target="_blank" rel="noopener" class="mini-boost-card">
-          <div class="mini-card-left">
-            <span class="mini-card-title">${ad.name}</span>
-            <span class="mini-card-desc">${ad.description || 'No summary text provided'}</span>
-          </div>
-          <div class="mini-card-labels">
-            <span class="mini-tag ${netTagClass}">${ad.platform}</span>
-          </div>
-        </a>
-      `;
+      return `<a href="${cleanHref}" target="_blank" rel="noopener" class="boost-chip-link" title="${ad.description || ''}"><span class="boost-chip-name">${ad.name}</span><span class="mini-tag ${netTagClass}">${ad.platform}</span></a>`;
     }).join('');
   }
 
@@ -348,6 +418,116 @@
   }
 
   fetchAndProcessSliderData();
+
+  // --- Boost tooltip: toggle + close on outside click ---
+  const boostHelpBtn = document.getElementById('boostHelpBtn');
+  const boostTooltip = document.getElementById('boostTooltip');
+  function toggleBoostTooltip(e) {
+    e.stopPropagation();
+    if (boostTooltip.classList.contains('active')) {
+      boostTooltip.classList.remove('active');
+      return;
+    }
+    const rect = boostHelpBtn.getBoundingClientRect();
+    boostTooltip.style.top = (rect.bottom + 2) + 'px';
+    boostTooltip.style.right = (window.innerWidth - rect.right) + 'px';
+    boostTooltip.classList.add('active');
+  }
+  document.addEventListener('click', function(e) {
+    if (!boostHelpBtn.contains(e.target)) {
+      boostTooltip.classList.remove('active');
+    }
+  });
+  document.addEventListener('touchstart', function(e) {
+    if (!boostHelpBtn.contains(e.target)) {
+      boostTooltip.classList.remove('active');
+    }
+  }, { passive: true });
+
+  // --- Server Status Health Checks ---
+  const STATUS_SERVICES = [
+    { id: 'Matrix', url: 'https://matrix.dewrito.net/.well-known/matrix/server', rowId: 'rowMatrix', badgeId: 'badgeMatrix', latencyId: 'latencyMatrix' },
+    { id: 'Fluxer', url: 'https://fluxer.dewrito.net/', rowId: 'rowFluxer', badgeId: 'badgeFluxer', latencyId: 'latencyFluxer' }
+  ];
+
+  function updateStatusRow(service, status, latencyMs) {
+    const row = document.getElementById(service.rowId);
+    const badge = document.getElementById(service.badgeId);
+    const latencyEl = document.getElementById(service.latencyId);
+    if (!row || !badge || !latencyEl) return;
+
+    row.classList.remove('status-up', 'status-degraded', 'status-down', 'status-checking');
+    row.classList.add(`status-${status}`);
+
+    badge.textContent = status === 'up' ? 'Operational' : status === 'degraded' ? 'Degraded' : status === 'down' ? 'Down' : 'Checking';
+    latencyEl.textContent = status !== 'checking' ? `${latencyMs} ms` : '\u2014 ms';
+  }
+
+  function updateOverallStatus(results) {
+    const overall = document.getElementById('statusOverallBadge');
+    if (!overall) return;
+
+    const allUp = results.every(r => r.status === 'up');
+    const anyDown = results.some(r => r.status === 'down');
+    const anyDegraded = results.some(r => r.status === 'degraded');
+
+    let dotClass = 'status-checking';
+    let label = 'Checking...';
+    if (allUp) {
+      dotClass = 'status-up';
+      label = 'All Operational';
+      overall.style.color = 'var(--accent-green)';
+    } else if (anyDown) {
+      dotClass = 'status-down';
+      label = 'Outage';
+      overall.style.color = '#ff4d4d';
+    } else if (anyDegraded) {
+      dotClass = 'status-degraded';
+      label = 'Degraded';
+      overall.style.color = '#ffaa00';
+    } else {
+      overall.style.color = 'var(--text-muted)';
+    }
+
+    // Put status class on the parent so CSS descendant selectors (.status-up .status-dot-sm) work
+    overall.classList.remove('status-up', 'status-degraded', 'status-down', 'status-checking');
+    overall.classList.add(dotClass);
+    overall.innerHTML = `<span class="status-dot-sm"></span> ${label}`;
+  }
+
+  async function checkServiceHealth() {
+    const results = [];
+    await Promise.all(STATUS_SERVICES.map(async (svc) => {
+      const start = performance.now();
+      let status = 'down';
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 8000);
+        // Use no-cors mode: Fluxer doesn't send access-control-allow-origin, so a normal fetch is blocked by CORS.
+        // With no-cors we get an opaque response \u2014 if it resolves the server is up, if it throws the server is down.
+        const res = await fetch(svc.url, { method: 'GET', signal: controller.signal, mode: 'no-cors' });
+        clearTimeout(timeoutId);
+        const latency = Math.round(performance.now() - start);
+        // Opaque response (status=0) means the request succeeded but we can't read headers \u2014 server is up.
+        if (res.ok || res.type === 'opaque') {
+          status = latency > 2000 ? 'degraded' : 'up';
+        } else if (res.status < 500) {
+          status = 'degraded';
+        }
+        updateStatusRow(svc, status, latency);
+        results.push({ id: svc.id, status });
+      } catch (e) {
+        const latency = Math.round(performance.now() - start);
+        updateStatusRow(svc, 'down', 0);
+        results.push({ id: svc.id, status: 'down' });
+      }
+    }));
+    updateOverallStatus(results);
+  }
+
+  // Initial check + auto-refresh every 30s
+  checkServiceHealth();
+  setInterval(checkServiceHealth, 30000);
 </script>
 </body>
 </html>
