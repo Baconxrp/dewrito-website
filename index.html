@@ -61,20 +61,22 @@
     .status-strip-overall { display: inline-flex; align-items: center; gap: 5px; font-size: 0.72rem; color: var(--accent-green); font-weight: 500; flex-shrink: 0; }
 
     @media (max-width: 768px) {
-      .status-strip-inner { gap: 8px; height: 28px; overflow-x: auto; scrollbar-width: none; }
-      .status-strip-inner::-webkit-scrollbar { display: none; }
-      .status-strip-label { font-size: 0.55rem; }
+      .status-strip-inner { gap: 8px; height: 28px; overflow-x: hidden; }
+      .status-strip-label { display: none; }
       .status-chip-ms { display: none; }
-      .boost-bar-inner { gap: 6px; padding: 0 10px; height: auto; min-height: 32px; flex-wrap: wrap; align-items: center; }
+      .status-chip-badge { display: none; }
+      .status-strip-overall { display: none; }
+      .boost-bar-inner { gap: 6px; padding: 0 10px; height: auto; min-height: 32px; flex-wrap: wrap; align-items: center; overflow-x: hidden; }
       .boost-bar-header { gap: 4px; }
       .boost-bar-label { font-size: 0.58rem; letter-spacing: 0.5px; }
       .boost-bar-scope { font-size: 0.55rem; }
       .boost-bar-timer { display: none; }
-      .boost-chips-track { flex-basis: 100%; order: 3; gap: 6px; padding-top: 4px; border-top: 1px solid rgba(255,255,255,0.03); margin-top: 2px; }
+      .boost-chips-track { flex-basis: 100%; order: 3; gap: 4px; padding-top: 4px; border-top: 1px solid rgba(255,255,255,0.03); margin-top: 2px; }
       .boost-bar-actions { order: 2; margin-left: auto; }
-      .boost-chip-link { padding: 2px 8px; font-size: 0.7rem; }
-      .boost-chip-name { max-width: 80px; }
-      .boost-bar-viewall { font-size: 0.6rem; padding: 2px 8px; }
+      .boost-chip-link { padding: 2px 6px; font-size: 0.65rem; gap: 3px; }
+      .boost-chip-name { max-width: 70px; font-size: 0.65rem; }
+      .mini-tag { font-size: 0.55rem; padding: 1px 4px; }
+      .boost-bar-viewall { font-size: 0.58rem; padding: 2px 6px; }
       body { padding-top: 108px; }
     }
   </style>
