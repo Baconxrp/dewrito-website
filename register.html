@@ -9,9 +9,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/site.css">
   <style>
-    /* Whitelist two-column layout (responsive) */
-    .whitelist-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-    .whitelist-grid ul { margin: 6px 0 12px 18px; padding: 0; }
+    /* Whitelist two-column compact layout (responsive, no bullets) */
+    .whitelist-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .whitelist-grid > div { padding-right: 8px; }
+    .whitelist-grid ul { margin: 6px 0 0 0; padding: 0; list-style: none; }
+    .whitelist-grid li { margin: 4px 0; font-size: 0.88rem; color: var(--text-secondary); line-height: 1.25; }
+    .whitelist-grid strong { display: block; margin-bottom: 6px; color: var(--text-primary); font-size: 0.95rem; }
     @media (max-width: 760px) { .whitelist-grid { grid-template-columns: 1fr; } }
   </style>
 </head>
