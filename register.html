@@ -8,6 +8,12 @@
   <link href="img/favicon.ico" rel="shortcut icon"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/site.css">
+  <style>
+    /* Whitelist two-column layout (responsive) */
+    .whitelist-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .whitelist-grid ul { margin: 6px 0 12px 18px; padding: 0; }
+    @media (max-width: 760px) { .whitelist-grid { grid-template-columns: 1fr; } }
+  </style>
 </head>
 <body>
 
@@ -42,8 +48,10 @@
   <details class="collapsible-wrapper" style="margin: 0.75rem auto 0; max-width: 900px;">
     <summary class="collapsible-summary">Allowed email providers (click to expand)</summary>
     <div class="submit-panel-content" style="font-size: 0.95rem; color: var(--text-secondary);">
-      <strong>Mainstream</strong>
-      <ul>
+      <div class="whitelist-grid">
+        <div>
+          <strong>Mainstream</strong>
+          <ul>
         <li>gmail.com</li>
         <li>googlemail.com</li>
         <li>outlook.com</li>
@@ -72,10 +80,12 @@
         <li>freenetname.co.uk</li>
         <li>mmail.com</li>
         <li>ownmail.net</li>
-      </ul>
+          </ul>
+        </div>
 
-      <strong>Privacy</strong>
-      <ul>
+        <div>
+          <strong>Privacy</strong>
+          <ul>
         <li>proton.me</li>
         <li>protonmail.com</li>
         <li>protonmail.ch</li>
@@ -105,10 +115,12 @@
         <li>runbox.eu</li>
         <li>skiff.com</li>
         <li>42l.fr</li>
-      </ul>
+          </ul>
+        </div>
 
-      <strong>United States</strong>
-      <ul>
+        <div>
+          <strong>United States</strong>
+          <ul>
         <li>comcast.net</li>
         <li>verizon.net</li>
         <li>att.net</li>
@@ -128,10 +140,12 @@
         <li>suddenlink.net</li>
         <li>netzero.net</li>
         <li>juno.com</li>
-      </ul>
+          </ul>
+        </div>
 
-      <strong>Germany</strong>
-      <ul>
+        <div>
+          <strong>Germany</strong>
+          <ul>
         <li>gmx.de</li>
         <li>gmx.net</li>
         <li>gmx.com</li>
@@ -145,10 +159,12 @@
         <li>outlook.de</li>
         <li>hotmail.de</li>
         <li>live.de</li>
-      </ul>
+          </ul>
+        </div>
 
-      <strong>France</strong>
-      <ul>
+        <div>
+          <strong>France</strong>
+          <ul>
         <li>orange.fr</li>
         <li>laposte.net</li>
         <li>sfr.fr</li>
@@ -162,10 +178,12 @@
         <li>outlook.fr</li>
         <li>hotmail.fr</li>
         <li>live.fr</li>
-      </ul>
+          </ul>
+        </div>
 
-      <strong>United Kingdom</strong>
-      <ul>
+        <div>
+          <strong>United Kingdom</strong>
+          <ul>
         <li>btinternet.com</li>
         <li>blueyonder.co.uk</li>
         <li>virginmedia.com</li>
@@ -178,10 +196,12 @@
         <li>outlook.co.uk</li>
         <li>hotmail.co.uk</li>
         <li>live.co.uk</li>
-      </ul>
+          </ul>
+        </div>
 
-      <strong>Netherlands / Belgium / Switzerland</strong>
-      <ul>
+        <div>
+          <strong>Netherlands / Belgium / Switzerland</strong>
+          <ul>
         <li>zonnet.nl</li>
         <li>planet.nl</li>
         <li>chello.nl</li>
@@ -199,10 +219,12 @@
         <li>switzerlandmail.ch</li>
         <li>groupoffice.ch</li>
         <li>live.ch</li>
-      </ul>
+          </ul>
+        </div>
 
-      <strong>Czech Republic / Poland</strong>
-      <ul>
+        <div>
+          <strong>Czech Republic / Poland</strong>
+          <ul>
         <li>seznam.cz</li>
         <li>centrum.cz</li>
         <li>onet.pl</li>
@@ -210,10 +232,12 @@
         <li>interia.pl</li>
         <li>o2.pl</li>
         <li>yahoo.pl</li>
-      </ul>
+          </ul>
+        </div>
 
-      <strong>Italy</strong>
-      <ul>
+        <div>
+          <strong>Italy</strong>
+          <ul>
         <li>libero.it</li>
         <li>virgilio.it</li>
         <li>tin.it</li>
@@ -223,10 +247,12 @@
         <li>outlook.it</li>
         <li>hotmail.it</li>
         <li>live.it</li>
-      </ul>
+          </ul>
+        </div>
 
-      <strong>Russia-sphere</strong>
-      <ul>
+        <div>
+          <strong>Russia-sphere</strong>
+          <ul>
         <li>mail.ru</li>
         <li>bk.ru</li>
         <li>inbox.ru</li>
@@ -238,10 +264,12 @@
         <li>internet.ru</li>
         <li>yahoo.ua</li>
         <li>live.ru</li>
-      </ul>
+          </ul>
+        </div>
 
-      <strong>India</strong>
-      <ul>
+        <div>
+          <strong>India</strong>
+          <ul>
         <li>rediffmail.com</li>
         <li>jio.com</li>
         <li>bsnl.co.in</li>
@@ -252,10 +280,12 @@
         <li>yahoo.in</li>
         <li>yahoo.co.in</li>
         <li>hotmail.co.in</li>
-      </ul>
+          </ul>
+        </div>
 
-      <strong>Middle East</strong>
-      <ul>
+        <div>
+          <strong>Middle East</strong>
+          <ul>
         <li>gawab.com</li>
         <li>maktoob.com</li>
         <li>etisalat.ae</li>
@@ -271,10 +301,12 @@
         <li>netvision.net.il</li>
         <li>omanpost.om</li>
         <li>yahoo.com.tr</li>
-      </ul>
+          </ul>
+        </div>
 
-      <strong>Africa</strong>
-      <ul>
+        <div>
+          <strong>Africa</strong>
+          <ul>
         <li>mweb.co.za</li>
         <li>telkomsa.net</li>
         <li>vodamail.co.za</li>
@@ -286,10 +318,12 @@
         <li>teledata.mz</li>
         <li>eircom.net</li>
         <li>yahoo.co.za</li>
-      </ul>
+          </ul>
+        </div>
 
-      <strong>China</strong>
-      <ul>
+        <div>
+          <strong>China</strong>
+          <ul>
         <li>qq.com</li>
         <li>163.com</li>
         <li>126.com</li>
@@ -299,10 +333,12 @@
         <li>aliyun.com</li>
         <li>yahoo.com.cn</li>
         <li>yahoo.cn</li>
-      </ul>
+          </ul>
+        </div>
 
-      <strong>Japan</strong>
-      <ul>
+        <div>
+          <strong>Japan</strong>
+          <ul>
         <li>yahoo.co.jp</li>
         <li>docomo.ne.jp</li>
         <li>ezweb.ne.jp</li>
@@ -313,27 +349,33 @@
         <li>live.jp</li>
         <li>jcom.home.ne.jp</li>
         <li>hotmail.co.jp</li>
-      </ul>
+          </ul>
+        </div>
 
-      <strong>Korea</strong>
-      <ul>
+        <div>
+          <strong>Korea</strong>
+          <ul>
         <li>naver.com</li>
         <li>daum.net</li>
         <li>hanmail.net</li>
         <li>i-cloud.com</li>
         <li>yahoo.co.kr</li>
-      </ul>
+          </ul>
+        </div>
 
-      <strong>Vietnam</strong>
-      <ul>
+        <div>
+          <strong>Vietnam</strong>
+          <ul>
         <li>vnn.vn</li>
         <li>fpt.vn</li>
         <li>hcm.vnn.vn</li>
         <li>yahoo.com.vn</li>
-      </ul>
+          </ul>
+        </div>
 
-      <strong>Southeast Asia &amp; Oceania</strong>
-      <ul>
+        <div>
+          <strong>Southeast Asia &amp; Oceania</strong>
+          <ul>
         <li>yahoo.com.ph</li>
         <li>yahoo.com.sg</li>
         <li>yahoo.com.my</li>
@@ -342,10 +384,12 @@
         <li>live.com.ph</li>
         <li>live.com.sg</li>
         <li>live.com.my</li>
-      </ul>
+          </ul>
+        </div>
 
-      <strong>Latin America</strong>
-      <ul>
+        <div>
+          <strong>Latin America</strong>
+          <ul>
         <li>uol.com.br</li>
         <li>bol.com.br</li>
         <li>terra.com.br</li>
@@ -360,10 +404,12 @@
         <li>live.com.ar</li>
         <li>live.cl</li>
         <li>live.com.mx</li>
-      </ul>
+          </ul>
+        </div>
 
-      <strong>Canada</strong>
-      <ul>
+        <div>
+          <strong>Canada</strong>
+          <ul>
         <li>shaw.ca</li>
         <li>rogers.com</li>
         <li>sympatico.ca</li>
@@ -372,10 +418,12 @@
         <li>videotron.ca</li>
         <li>yahoo.ca</li>
         <li>live.ca</li>
-      </ul>
+          </ul>
+        </div>
 
-      <strong>Australia &amp; New Zealand</strong>
-      <ul>
+        <div>
+          <strong>Australia &amp; New Zealand</strong>
+          <ul>
         <li>bigpond.com</li>
         <li>bigpond.net.au</li>
         <li>optusnet.com.au</li>
@@ -388,10 +436,12 @@
         <li>outlook.com.au</li>
         <li>hotmail.com.au</li>
         <li>live.com.au</li>
-      </ul>
+          </ul>
+        </div>
 
-      <strong>Obscure / Oddballs</strong>
-      <ul>
+        <div>
+          <strong>Obscure / Oddballs</strong>
+          <ul>
         <li>420blaze.it</li>
         <li>aaathats3as.com</li>
         <li>airmail.cc</li>
@@ -429,7 +479,9 @@
         <li>outlook.office.com</li>
         <li>inbox.lv</li>
         <li>inbox.lt</li>
-      </ul>
+          </ul>
+        </div>
+      </div>
     </div>
   </details>
 </header>
