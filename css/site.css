@@ -330,19 +330,19 @@ a:hover {
 
 /* ---- Hero Section ---- */
 .hero {
-  min-height: 100vh;
+  min-height: 90vh;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding-top: 64px;
   position: relative;
+  margin-top: auto;
 }
 
 .hero-content {
   max-width: 800px;
   margin: 0 auto;
-  padding: var(--space-2xl) var(--space-xl);
+  padding: var(--space-lg) var(--space-xl);
 }
 
 .hero h1 {
@@ -698,7 +698,7 @@ a:hover {
 
   .hero {
     min-height: auto;
-    padding-top: calc(64px + var(--space-2xl));
+    padding-top: var(--space-xl);
     padding-bottom: var(--space-2xl);
   }
 
