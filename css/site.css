@@ -258,6 +258,27 @@ a:hover {
   .kofi-float { right: 12px; bottom: 12px; padding: 8px 10px; }
 }
 
+/* Non-JS Ko-fi fallback badge (visible if overlay fails) */
+.kofi-fallback {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 99990;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: linear-gradient(135deg,#6b3e26,#b67b4b);
+  color: #fff;
+  border-radius: var(--radius-pill);
+  text-decoration: none;
+  font-weight: 600;
+  border: 1px solid rgba(255,255,255,0.04);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
+.kofi-fallback svg { width: 16px; height: 16px; }
+.kofi-fallback:focus { outline: 2px solid rgba(255,255,255,0.06); }
+
 /* ---- Container ---- */
 .container {
   max-width: 1200px;

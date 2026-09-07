@@ -570,7 +570,10 @@
       try {
         if (window.kofiWidgetOverlay && typeof kofiWidgetOverlay.draw === 'function') {
           clearInterval(iv);
-          try { kofiWidgetOverlay.draw('dewrito', { type: 'floating', float: 'right', zindex: 99999 }); } catch(e) { console.warn('Ko-fi draw error', e); }
+          try {
+            kofiWidgetOverlay.draw('dewrito', { type: 'floating', float: 'right', zindex: 99999 });
+            var fb = document.getElementById('kofi-fallback'); if (fb) fb.remove();
+          } catch(e) { console.warn('Ko-fi draw error', e); }
           return;
         }
       } catch(e) {
@@ -585,5 +588,12 @@
 })();
 </script>
 <noscript><a href="https://ko-fi.com/dewrito" target="_blank" rel="noopener">Support us on Ko-fi</a></noscript>
+</body>
+<!-- Non-JS fallback badge: visible link when overlay doesn't load -->
+<a id="kofi-fallback" class="kofi-fallback" href="https://ko-fi.com/dewrito" target="_blank" rel="noopener noreferrer" aria-label="Support us on Ko-fi">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h11v6a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7z"></path><path d="M16 8h1a3 3 0 0 1 0 6h-1"></path></svg>
+  <span>Support on Ko‑fi</span>
+</a>
+</html>
 </body>
 </html>
