@@ -216,20 +216,9 @@ a:hover {
 
 /* ---- Ko-fi / Coffee-themed button ---- */
 .btn-kofi {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-sm);
-  padding: 12px 22px;
-  font-family: var(--font-main);
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: #fff;
   background: linear-gradient(135deg, #6b3e26, #b67b4b);
-  border: 1px solid rgba(255,255,255,0.04);
-  border-radius: var(--radius-pill);
-  cursor: pointer;
-  transition: all 0.18s ease;
-  text-decoration: none;
+  color: #fff;
+  border-color: rgba(255,255,255,0.04);
 }
 
 .btn-kofi svg {
@@ -238,9 +227,35 @@ a:hover {
 }
 
 .btn-kofi:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 18px rgba(182,123,75,0.12);
   filter: brightness(1.06);
+  box-shadow: 0 6px 20px rgba(182,123,75,0.12);
+}
+
+/* Floating Ko-fi widget for homepage */
+.kofi-float {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 99999;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: linear-gradient(135deg,#6b3e26,#b67b4b);
+  color: #fff;
+  border-radius: var(--radius-pill);
+  box-shadow: 0 8px 30px rgba(182,123,75,0.18);
+  text-decoration: none;
+  font-weight: 600;
+  border: 1px solid rgba(255,255,255,0.04);
+}
+
+.kofi-float svg { width: 18px; height: 18px; }
+
+.kofi-float:hover { transform: translateY(-3px); filter: brightness(1.06); }
+
+@media (max-width: 480px) {
+  .kofi-float { right: 12px; bottom: 12px; padding: 8px 10px; }
 }
 
 /* ---- Container ---- */
