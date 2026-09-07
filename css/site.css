@@ -214,6 +214,35 @@ a:hover {
   background: rgba(255, 255, 255, 0.04);
 }
 
+/* ---- Ko-fi / Coffee-themed button ---- */
+.btn-kofi {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 12px 22px;
+  font-family: var(--font-main);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(135deg, #6b3e26, #b67b4b);
+  border: 1px solid rgba(255,255,255,0.04);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: all 0.18s ease;
+  text-decoration: none;
+}
+
+.btn-kofi svg {
+  color: #fff;
+  opacity: 0.95;
+}
+
+.btn-kofi:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(182,123,75,0.12);
+  filter: brightness(1.06);
+}
+
 /* ---- Container ---- */
 .container {
   max-width: 1200px;
