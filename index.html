@@ -537,23 +537,51 @@
 <!-- Resilient Ko-fi loader: inject script and call draw() only after it loads -->
 <script>
 (function loadKoFi(){
-  if (window.kofiWidgetOverlay) {
-    try { kofiWidgetOverlay.draw('dewrito', { type: 'floating', float: 'right', zindex: 99999 }); } catch(e) { console.warn('Ko-fi init failed', e); }
-    return;
+  try {
+    if (window.kofiWidgetOverlay) {
+      try { kofiWidgetOverlay.draw('dewrito', { type: 'floating', float: 'right', zindex: 99999 }); } catch(e) { console.warn('Ko-fi init failed', e); }
+      return;
+    }
+
+    // Avoid injecting the script multiple times
+    if (document.querySelector('script[data-kofi-loader]')) {
+      startKoFiPoll();
+      return;
+    }
+
+    var s = document.createElement('script');
+    s.src = 'https://storage.ko-fi.com/cdn/scripts/overlay-widget.js';
+    s.async = true;
+    s.defer = true;
+    s.setAttribute('data-kofi-loader', '1');
+    s.onload = startKoFiPoll;
+    s.onerror = function () { console.warn('Failed to load Ko-fi script'); };
+    document.body.appendChild(s);
+  } catch (err) {
+    console.warn('Ko-fi loader unexpected error', err);
   }
-  var s = document.createElement('script');
-  s.src = 'https://storage.ko-fi.com/cdn/scripts/overlay-widget.js';
-  s.async = true;
-  s.defer = true;
-  s.onload = function () {
-    try {
-      if (window.kofiWidgetOverlay && typeof kofiWidgetOverlay.draw === 'function') {
-        kofiWidgetOverlay.draw('dewrito', { type: 'floating', float: 'right', zindex: 99999 });
+
+  function startKoFiPoll() {
+    var attempts = 0;
+    var maxAttempts = 12;
+    var intervalMs = 500;
+    var iv = setInterval(function(){
+      attempts++;
+      try {
+        if (window.kofiWidgetOverlay && typeof kofiWidgetOverlay.draw === 'function') {
+          clearInterval(iv);
+          try { kofiWidgetOverlay.draw('dewrito', { type: 'floating', float: 'right', zindex: 99999 }); } catch(e) { console.warn('Ko-fi draw error', e); }
+          return;
+        }
+      } catch(e) {
+        console.warn('Ko-fi poll error', e);
       }
-    } catch (err) { console.warn('Ko-fi draw error', err); }
-  };
-  s.onerror = function () { console.warn('Failed to load Ko-fi script'); };
-  document.body.appendChild(s);
+      if (attempts >= maxAttempts) {
+        clearInterval(iv);
+        console.warn('Ko-fi widget did not become available after retries');
+      }
+    }, intervalMs);
+  }
 })();
 </script>
 <noscript><a href="https://ko-fi.com/dewrito" target="_blank" rel="noopener">Support us on Ko-fi</a></noscript>
