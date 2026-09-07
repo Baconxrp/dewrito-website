@@ -235,7 +235,7 @@ a:hover {
 .kofi-float {
   position: fixed;
   right: 24px;
-  bottom: 24px;
+  bottom: 64px;
   z-index: 99999;
   display: inline-flex;
   align-items: center;
@@ -255,14 +255,20 @@ a:hover {
 .kofi-float:hover { transform: translateY(-3px); filter: brightness(1.06); }
 
 @media (max-width: 480px) {
-  .kofi-float { right: 12px; bottom: 12px; padding: 8px 10px; }
+  .kofi-float { right: 12px; bottom: 64px; padding: 8px 10px; }
+  /* On very small screens show icon-only compact badge to avoid covering content */
+  .kofi-fallback { right: 12px; bottom: 64px; padding: 6px 8px; font-size: 0.85rem; }
+  .kofi-fallback span,
+  .kofi-float span { display: none; }
+  .kofi-fallback svg,
+  .kofi-float svg { width: 18px; height: 18px; }
 }
 
 /* Non-JS Ko-fi fallback badge (visible if overlay fails) */
 .kofi-fallback {
   position: fixed;
   right: 20px;
-  bottom: 20px;
+  bottom: 64px;
   z-index: 99990;
   display: inline-flex;
   align-items: center;
