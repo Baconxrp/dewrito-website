@@ -15,6 +15,7 @@
   <link href="img/favicon.ico" rel="shortcut icon"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/site.css">
+  <script src="js/analytics.js" defer></script>
   <style>
     /* Whitelist two-column compact layout (responsive, no bullets) */
     .whitelist-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -23,6 +24,16 @@
     .whitelist-grid li { margin: 4px 0; font-size: 0.88rem; color: var(--text-secondary); line-height: 1.25; }
     .whitelist-grid strong { display: block; margin-bottom: 6px; color: var(--text-primary); font-size: 0.95rem; }
     @media (max-width: 760px) { .whitelist-grid { grid-template-columns: 1fr; } }
+
+    /* Email provider checker */
+    .email-check { max-width: 520px; margin: var(--space-lg) auto 0; text-align: left; }
+    .email-check label { display: block; margin-bottom: 8px; }
+    .email-check input { width: 100%; padding: 12px 14px; background: var(--bg-card); border: 1px solid var(--border-default); border-radius: var(--radius-md); color: var(--text-primary); font-family: inherit; font-size: 1rem; box-sizing: border-box; }
+    .email-check input:focus { outline: none; border-color: var(--accent-cyan); box-shadow: 0 0 0 3px var(--accent-cyan-dim); }
+    .email-check-result { min-height: 1.6em; margin: 10px 0 0; font-size: 0.9rem; text-align: left; }
+    .email-check-result.ok { color: var(--accent-green); }
+    .email-check-result.no { color: #ffaa00; }
+    .email-check-result a { color: var(--accent-cyan); text-decoration: underline; }
   </style>
 </head>
 <body>
@@ -39,6 +50,7 @@
       <li><a href="index.html#features">Features</a></li>
       <li><a href="index.html#community">Community</a></li>
       <li><a href="community.html">Directory</a></li>
+      <li><a href="getting-started.html">Guide</a></li>
       <li><a href="register.html">Register</a></li>
       <li><a href="contact.html">Contact</a></li>
     </ul>
@@ -55,6 +67,12 @@
 <header class="page-header">
   <h1>Choose Your Client</h1>
   <p style="margin: 0 auto;">By registering you agree to our <a href="terms.html">Terms of Service</a>. We allow registrations from certain email service providers; if you'd like your provider whitelisted, please <a href="contact.html">contact us</a> to request whitelisting.</p>
+
+  <div class="email-check">
+    <label for="emailCheckInput" class="mono-label">Check your email provider</label>
+    <input id="emailCheckInput" type="text" inputmode="email" placeholder="you@example.com or just example.com" autocomplete="off" spellcheck="false" autocapitalize="none">
+    <p id="emailCheckResult" class="email-check-result" aria-live="polite"></p>
+  </div>
 
   <details class="collapsible-wrapper" style="margin: 0.75rem auto 0; max-width: 900px;">
     <summary class="collapsible-summary">Allowed email providers (click to expand)</summary>
@@ -582,7 +600,10 @@
     <p class="footer-text">&copy; <span id="year"></span> Dewrito.net — Community-run server infrastructure.</p>
     <ul class="footer-links">
       <li><a href="register.html">Register</a></li>
+      <li><a href="getting-started.html">Guide</a></li>
+      <li><a href="status.html">Status</a></li>
       <li><a href="terms.html">Terms</a></li>
+      <li><a href="privacy.html">Privacy</a></li>
       <li><a href="contact.html">Contact</a></li>
       <li><a href="donate.html">Support Us</a></li>
     </ul>
@@ -597,6 +618,28 @@
   const navToggle = document.getElementById('navToggle');
   navToggle.addEventListener('click', () => navToggle.setAttribute('aria-expanded', String(navbar.classList.toggle('mobile-open'))));
   document.querySelectorAll('.nav-links a').forEach(link => link.addEventListener('click', () => navbar.classList.remove('mobile-open')));
+
+  // Email provider checker: the allowed list is the one rendered in the dropdown above, so there is one source of truth.
+  (function () {
+    const allowed = new Set([...document.querySelectorAll('.whitelist-grid li')].map(li => li.textContent.trim().toLowerCase()));
+    const input = document.getElementById('emailCheckInput');
+    const out = document.getElementById('emailCheckResult');
+    const esc = s => s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    input.addEventListener('input', () => {
+      let v = input.value.trim().toLowerCase();
+      if (v.includes('@')) v = v.split('@').pop();
+      v = v.replace(/^https?:\/\//, '').replace(/[\/\s].*$/, '').replace(/\.$/, '');
+      out.className = 'email-check-result';
+      if (!v || !v.includes('.')) { out.textContent = ''; return; }
+      if (allowed.has(v)) {
+        out.classList.add('ok');
+        out.innerHTML = `&#10003; <strong>${esc(v)}</strong> is allowed. Pick a client below and register.`;
+      } else {
+        out.classList.add('no');
+        out.innerHTML = `&#10007; <strong>${esc(v)}</strong> isn't on the list yet. <a href="contact.html">Ask us to add it</a>, it usually takes a day.`;
+      }
+    });
+  })();
 </script>
 </body>
 </html>

@@ -611,7 +611,9 @@ a:hover {
 
 .footer-links {
   display: flex;
-  gap: var(--space-lg);
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-sm) var(--space-lg);
   list-style: none;
 }
 

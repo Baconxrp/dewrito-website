@@ -1,0 +1,12 @@
+{
+  "note": "Shown on status.html. Newest first. level: info | maintenance | incident | resolved. Set active to false once an item is over; inactive items stay in the history list.",
+  "items": [
+    {
+      "date": "2026-10-31",
+      "level": "info",
+      "active": true,
+      "title": "Status page launched",
+      "body": "Live service checks and maintenance notices now live here. Boosted-community listings also show member counts and expiry dates."
+    }
+  ]
+}

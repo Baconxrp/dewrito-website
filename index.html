@@ -15,6 +15,7 @@
   <link href="img/favicon.ico" rel="shortcut icon"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/site.css">
+  <script src="js/analytics.js" defer></script>
   <style>
     /* --- Boosted Communities Bar (fixed top, below navbar) --- */
     .boost-bar { position: fixed; top: 81px; left: 0; right: 0; z-index: 9998; background: rgba(5,5,16,0.8); border-bottom: 1px solid var(--border-subtle); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); }
@@ -48,7 +49,7 @@
     .status-strip { position: fixed; bottom: 0; left: 0; right: 0; z-index: 9999; background: rgba(5,5,16,0.8); border-top: 1px solid var(--border-subtle); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); }
     body { padding-bottom: 72px; padding-top: 118px; }
     .status-strip-inner { display: flex; align-items: center; gap: 12px; height: 26px; padding: 0 20px; margin: 0 auto; max-width: 1200px; }
-    .status-strip-label { font-size: 0.65rem; font-family: var(--font-mono); color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; flex-shrink: 0; }
+    .status-strip-label { text-decoration: none; font-size: 0.65rem; font-family: var(--font-mono); color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; flex-shrink: 0; }
     .status-strip-services { display: flex; align-items: center; gap: 10px; flex: 1; justify-content: center; }
     .status-chip { display: inline-flex; align-items: center; gap: 5px; font-size: 0.72rem; white-space: nowrap; }
     .status-dot-sm { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; position: relative; }
@@ -101,6 +102,7 @@
       <li><a href="#features">Features</a></li>
       <li><a href="#community">Community</a></li>
       <li><a href="community.html">Directory</a></li>
+      <li><a href="getting-started.html">Guide</a></li>
       <li><a href="register.html">Register</a></li>
       <li><a href="contact.html">Contact</a></li>
     </ul>
@@ -137,7 +139,7 @@
 <!-- Status Strip (fixed bottom bar) -->
 <div class="status-strip">
   <div class="status-strip-inner">
-    <span class="status-strip-label">STATUS</span>
+    <a class="status-strip-label" href="status.html" title="Service status and notices">STATUS &#8599;</a>
     <div class="status-strip-services">
       <span class="status-chip" id="rowMatrix">
         <span class="status-dot-sm status-checking"></span>
@@ -262,7 +264,10 @@
     <p class="footer-text">&copy; <span id="year"></span> Dewrito.net — Community-run server infrastructure.</p>
     <ul class="footer-links">
       <li><a href="register.html">Register</a></li>
+      <li><a href="getting-started.html">Guide</a></li>
+      <li><a href="status.html">Status</a></li>
       <li><a href="terms.html">Terms</a></li>
+      <li><a href="privacy.html">Privacy</a></li>
       <li><a href="contact.html">Contact</a></li>
       <li><a href="donate.html">Support Us</a></li>
     </ul>
@@ -271,6 +276,7 @@
 
 <script src="js/starfield.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/listings.js"></script>
 <script>
   // Update copyright year
   document.getElementById('year').textContent = new Date().getFullYear();
@@ -293,127 +299,37 @@
     });
   });
 
-  // --- Dynamic Slider Sync Script Section ---
-  const XLM_WALLET = "GCCL23ZM4PLTMULZ2K5KQHBLK3WHSCXXLFCHOMDSLJFQ2UN532WN3HYR";
-  const SUPABASE_URL = "https://emdooqonibsgrazbcvzp.supabase.co"; 
-  const SUPABASE_ANON_KEY = "sb_publishable_r7eqc_NvhJI77DBNhvvQjA_ohkMfrKE";
-  const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
-
-  // The specific blocked federated/community domains to filter out
-  const BLOCKED_DOMAINS = [
-    "cutefunny.art", 
-    "midov.pl", 
-    "dropnet.ch", 
-    "nicheart.online", 
-    "lolisho.chat", 
-    "cuteness-overdose.com", 
-    "capybara.pictures", 
-    "nerdsin.space"
-  ];
-
-  // Base text patterns for quick string matching validation rules
-  const BAD_WORDS = ["gore", "scam", "crypto-scam", "loli", "lolicon", "cp", "child", "toddler", "shota", "nigga", "nigger", "fag", "faggot", "fuck", "shit", "bitch", "tranny"];
-
-
-  // --- Shared safety helpers: user-submitted text is rendered with innerHTML, so escape it ---
-  function escapeHtml(str) {
-    return String(str ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-  }
-  // Only ever link to http(s) Fluxer invites or well-formed Matrix aliases/room ids.
-  function safeHref(ad) {
-    const url = String(ad.url || '').trim();
-    if (ad.platform === "Fluxer") return /^https?:\/\/[^\s"'<>]+$/i.test(url) ? url : '#';
-    return /^[#!][^\s"'<>\/]+:[A-Za-z0-9.\-]+(:\d+)?$/.test(url) ? `https://matrix.to/#/${url}` : '#';
-  }
-  // Whole-word match so "cp" or "scam" don't flag "mcp" or "scampi".
-  function matchesBannedWord(text, words) {
-    if (!text) return false;
-    const re = new RegExp(`(^|[^a-z0-9])(${words.map(w => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})(?=$|[^a-z0-9])`, 'i');
-    return re.test(String(text));
-  }
-
+  // --- Boosted Communities bar (data and safety helpers live in js/listings.js) ---
+  const L = window.DewritoListings;
   let processedAds = [];
   let rotationSchedule = ["All"];
   let currentScheduleIndex = 0;
   let countdownSeconds = 15;
   let tickerTimerInstance = null;
 
-  function passesWordFilter(text) {
-    return !matchesBannedWord(text, BAD_WORDS);
-  }
-
   async function fetchAndProcessSliderData() {
-    if (!supabaseClient) return;
+    const stack = document.getElementById('sliderItemsStack');
+    if (!L) { stack.innerHTML = '<span style="color:var(--text-muted);font-size:0.72rem;">Unavailable</span>'; return; }
     try {
-      const { data: dbRecords } = await supabaseClient.from('community_ads').select('*');
-      const dbMap = new Map((dbRecords || []).map(item => [item.id.toLowerCase(), item]));
-      
-      let res = await fetch(`https://horizon.stellar.org/accounts/${XLM_WALLET}/transactions?limit=200&order=desc`);
-      let data = await res.json();
-      
-      const communityMap = new Map();
-      for (let tx of (data._embedded?.records || [])) {
-        if (tx.memo_type === "text" && tx.memo) {
-          const memoKey = tx.memo.trim().toLowerCase();
-          if (dbMap.has(memoKey)) {
-            const matched = dbMap.get(memoKey);
-            const key = matched.url.toLowerCase();
-            if (!communityMap.has(key)) {
-              communityMap.set(key, { ...matched, platform: matched.platform || (matched.url.startsWith('http') ? 'Fluxer' : 'Matrix'), totalXlm: 0, boosts: [] });
-            }
-            const entry = communityMap.get(key);
-            entry.boosts.push(new Date(tx.created_at));
-            entry.totalXlm += 25; 
-          }
-        }
-      }
-
-      (dbRecords || []).forEach(item => {
-        if (parseInt(item.is_permanent) === 1 && !communityMap.has(item.url.toLowerCase())) {
-          communityMap.set(item.url.toLowerCase(), { ...item, platform: item.platform || (item.url.startsWith('http') ? 'Fluxer' : 'Matrix'), boosts: [new Date()], totalXlm: 100 });
-        }
-      });
-
-      processedAds = Array.from(communityMap.values())
-        .map(com => {
-          const isPermanent = parseInt(com.is_permanent) === 1;
-          const totalMonthsPaid = Math.max(1, Math.floor(com.totalXlm / 25));
-          return { 
-            ...com, 
-            months: totalMonthsPaid, 
-            isExpired: !isPermanent && (new Date() - new Date(Math.max(...com.boosts))) > (totalMonthsPaid * 2592000000) 
-          };
-        })
-        .filter(ad => {
-          if (ad.isExpired) return false;
-          if (ad.content_rating === "NSFW") return false;
-
-          // Strip out the blocked domain nodes from showing up on the homepage slider
-          const cleanUrl = ad.url.toLowerCase().trim();
-          const matchesBlockedNode = BLOCKED_DOMAINS.some(domain => cleanUrl.includes(domain));
-          if (matchesBlockedNode) return false;
-
-          // Enforce string content rules
-          if (!passesWordFilter(ad.name) || !passesWordFilter(ad.description)) return false;
-
-          return true;
-        });
-
+      const { listings } = await L.load();
+      // Only active boosts and pinned entries make the bar; the directory page shows the rest.
+      processedAds = listings.filter(l => (l.tier === 'boosted' || l.tier === 'pinned') && L.passesContentRules(l));
       const uniqueCats = Array.from(new Set(processedAds.map(a => a.category))).filter(Boolean);
       rotationSchedule = ["All", ...uniqueCats];
-      
       renderActiveSlide();
       startTickerLoop();
-    } catch(e) { console.error("Slider initialization failure:", e); }
+    } catch(e) {
+      console.error("Boost bar failed to load:", e);
+      stack.innerHTML = '<span style="color:var(--text-muted);font-size:0.72rem;">Unavailable</span>';
+    }
   }
 
   function renderActiveSlide() {
     const activeScope = rotationSchedule[currentScheduleIndex];
-    document.getElementById('sliderCategoryHeader').textContent = activeScope === "All" ? "All" : `\ud83d\udcc2 ${activeScope}`;
+    document.getElementById('sliderCategoryHeader').textContent = activeScope === "All" ? "All" : `📂 ${activeScope}`;
 
-    let scopedAds = activeScope === "All" ? processedAds : processedAds.filter(a => a.category === activeScope);
-    scopedAds.sort((a, b) => b.months - a.months);
-
+    const scopedAds = (activeScope === "All" ? processedAds : processedAds.filter(a => a.category === activeScope))
+      .slice().sort((a, b) => b.rank - a.rank);
     const top3 = scopedAds.slice(0, 3);
     const stackElement = document.getElementById('sliderItemsStack');
 
@@ -421,10 +337,9 @@
       stackElement.innerHTML = `<span style="color:var(--text-muted);font-size:0.72rem;">No active listings</span>`;
       return;
     }
-
     stackElement.innerHTML = top3.map(ad => {
       const netTagClass = ad.platform === "Fluxer" ? "mini-tag-fluxer" : "mini-tag-matrix";
-      return `<a href="${escapeHtml(safeHref(ad))}" target="_blank" rel="noopener" class="boost-chip-link" title="${escapeHtml(ad.description || '')}"><span class="boost-chip-name">${escapeHtml(ad.name)}</span><span class="mini-tag ${netTagClass}">${escapeHtml(ad.platform)}</span></a>`;
+      return `<a href="${L.escapeHtml(ad.href)}" target="_blank" rel="noopener" class="boost-chip-link" title="${L.escapeHtml(ad.description || '')}"><span class="boost-chip-name">${L.escapeHtml(ad.name)}</span><span class="mini-tag ${netTagClass}">${L.escapeHtml(ad.platform)}</span></a>`;
     }).join('');
   }
 
@@ -432,11 +347,9 @@
     if (tickerTimerInstance) clearInterval(tickerTimerInstance);
     countdownSeconds = 15;
     document.getElementById('sliderTimerCountdown').textContent = `${countdownSeconds}s`;
-
     tickerTimerInstance = setInterval(() => {
       countdownSeconds--;
       document.getElementById('sliderTimerCountdown').textContent = `${countdownSeconds}s`;
-
       if (countdownSeconds <= 0) {
         countdownSeconds = 15;
         currentScheduleIndex = (currentScheduleIndex + 1) % rotationSchedule.length;
