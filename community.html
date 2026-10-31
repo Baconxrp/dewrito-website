@@ -162,13 +162,24 @@
       .g-recaptcha { transform: scale(0.88); transform-origin: 0 0; }
     }
 
-    /* Mobile view structural insurance rules */
+    /* Phones: each listing becomes a stacked card instead of a three-column table row */
     @media (max-width: 768px) {
-      .promo-list-container {
-        width: 100%;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-      }
+      .promo-list-container { width: 100%; overflow: visible; }
+      .promo-table, .promo-table tbody, .promo-table tr, .promo-table td { display: block; width: 100% !important; box-sizing: border-box; }
+      .promo-table thead { display: none; }
+      .promo-row { position: relative; padding: 14px 16px 14px; border-top: 1px solid rgba(255,255,255,0.04); }
+      .promo-row td { padding: 0; border: 0; text-align: left !important; }
+      .promo-row .col-name { padding-right: 64px; }
+      .promo-row .col-name a { font-size: 1rem; }
+      .promo-row .col-name br { display: none; }
+      .promo-row .meta-labels-container { margin-top: 8px; }
+      .promo-row .col-desc { margin-top: 10px; font-size: 0.88rem; line-height: 1.5; }
+      .promo-row td:last-child { position: absolute; top: 12px; right: 12px; width: auto !important; }
+      .row-actions { gap: 4px; }
+      .list-boost-btn { width: 38px; height: 38px; font-size: 1rem; }
+      .report-btn { font-size: 0.68rem; }
+      .section-sep td { padding: 8px 16px !important; }
+      .promo-row.highlight { box-shadow: inset 3px 0 0 var(--accent-cyan); }
     }
   </style>
 </head>
