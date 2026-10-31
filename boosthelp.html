@@ -58,7 +58,7 @@
       <li><a href="contact.html">Contact</a></li>
     </ul>
     <div class="nav-cta"><a href="index.html" class="btn-secondary">Back Home</a></div>
-    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation"><span></span><span></span><span></span></button>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false"><span></span><span></span><span></span></button>
   </div>
 </nav>
 
@@ -79,7 +79,7 @@
       <li>Copy the exact text string shown under the <strong>"Promo/Memo Key"</strong> label.</li>
     </ul>
     <div class="note-box">
-      <strong>Important Configuration Note:</strong> You must provide this procise memo or it will not showup. If you have issues, contact support.
+      <strong>Important Configuration Note:</strong> You must provide this precise memo or your listing will not show up. If you have issues, contact support.
     </div>
   </div>
 
@@ -92,7 +92,7 @@
     </ul>
     <div class="wallet-box">GCCL23ZM4PLTMULZ2K5KQHBLK3WHSCXXLFCHOMDSLJFQ2UN532WN3HYR</div>
     <ul>
-      <li>Use a cryptocurrency service that supports memos. Such as coinbase.</li>
+      <li>Use a cryptocurrency service or wallet that supports memos, such as Coinbase.</li>
       <li>Ensure your wallet interface transaction has a <strong>Memo Field</strong>.</li>
       <li>Paste your copied <code>Memo</code> into the input field line.</li>
     </ul>
@@ -118,6 +118,7 @@
     <p class="footer-text">&copy; <span id="year"></span> Dewrito.net — Community-run server infrastructure.</p>
     <ul class="footer-links">
       <li><a href="register.html">Register</a></li>
+      <li><a href="terms.html">Terms</a></li>
       <li><a href="contact.html">Contact</a></li>
       <li><a href="donate.html">Support Us</a></li>
     </ul>
@@ -129,7 +130,7 @@
   document.getElementById('year').textContent = new Date().getFullYear();
   const navbar = document.getElementById('navbar');
   const navToggle = document.getElementById('navToggle');
-  navToggle.addEventListener('click', () => navbar.classList.toggle('mobile-open'));
+  navToggle.addEventListener('click', () => navToggle.setAttribute('aria-expanded', String(navbar.classList.toggle('mobile-open'))));
   document.querySelectorAll('.nav-links a').forEach(link => link.addEventListener('click', () => navbar.classList.remove('mobile-open')));
 </script>
 </body>

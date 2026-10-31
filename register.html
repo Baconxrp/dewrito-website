@@ -37,7 +37,7 @@
     <div class="nav-cta">
       <a href="index.html" class="btn-secondary">Back Home</a>
     </div>
-    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
   </div>
@@ -587,7 +587,7 @@
 
   const navbar = document.getElementById('navbar');
   const navToggle = document.getElementById('navToggle');
-  navToggle.addEventListener('click', () => navbar.classList.toggle('mobile-open'));
+  navToggle.addEventListener('click', () => navToggle.setAttribute('aria-expanded', String(navbar.classList.toggle('mobile-open'))));
   document.querySelectorAll('.nav-links a').forEach(link => link.addEventListener('click', () => navbar.classList.remove('mobile-open')));
 </script>
 </body>

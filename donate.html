@@ -24,7 +24,7 @@
       <li><a href="contact.html">Contact</a></li>
     </ul>
     <div class="nav-cta"><a href="index.html" class="btn-secondary">Back Home</a></div>
-    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation"><span></span><span></span><span></span></button>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false"><span></span><span></span><span></span></button>
   </div>
 </nav>
 
@@ -68,7 +68,7 @@
 
     <div class="contact-card">
       <h3>Boost a Community</h3>
-      <p>You can always support a community</p>
+      <p>Put a room you love in the spotlight on the <a href="community.html">Boosted Communities</a> page.</p>
     </div>
   </div>
 </section>
@@ -90,7 +90,7 @@
   document.getElementById('year').textContent = new Date().getFullYear();
   const navbar = document.getElementById('navbar');
   const navToggle = document.getElementById('navToggle');
-  navToggle.addEventListener('click', () => navbar.classList.toggle('mobile-open'));
+  navToggle.addEventListener('click', () => navToggle.setAttribute('aria-expanded', String(navbar.classList.toggle('mobile-open'))));
   document.querySelectorAll('.nav-links a').forEach(link => link.addEventListener('click', () => navbar.classList.remove('mobile-open')));
 </script>
 </body>

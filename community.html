@@ -136,7 +136,7 @@
       <li><a href="contact.html">Contact</a></li>
     </ul>
     <div class="nav-cta"><a href="register.html" class="btn-primary">Get Started</a></div>
-    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation"><span></span><span></span><span></span></button>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false"><span></span><span></span><span></span></button>
   </div>
 </nav>
 
@@ -341,13 +341,31 @@
   document.getElementById('year').textContent = new Date().getFullYear();
   const navbar = document.getElementById('navbar');
   const navToggle = document.getElementById('navToggle');
-  if(navToggle) navToggle.addEventListener('click', () => navbar.classList.toggle('mobile-open'));
+  if(navToggle) navToggle.addEventListener('click', () => navToggle.setAttribute('aria-expanded', String(navbar.classList.toggle('mobile-open'))));
 
   const XLM_WALLET = "GCCL23ZM4PLTMULZ2K5KQHBLK3WHSCXXLFCHOMDSLJFQ2UN532WN3HYR";
   const SUPABASE_URL = "https://emdooqonibsgrazbcvzp.supabase.co"; 
   const SUPABASE_ANON_KEY = "sb_publishable_r7eqc_NvhJI77DBNhvvQjA_ohkMfrKE";
   const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
   
+
+  // --- Shared safety helpers: user-submitted text is rendered with innerHTML, so escape it ---
+  function escapeHtml(str) {
+    return String(str ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+  // Only ever link to http(s) Fluxer invites or well-formed Matrix aliases/room ids.
+  function safeHref(ad) {
+    const url = String(ad.url || '').trim();
+    if (ad.platform === "Fluxer") return /^https?:\/\/[^\s"'<>]+$/i.test(url) ? url : '#';
+    return /^[#!][^\s"'<>\/]+:[A-Za-z0-9.\-]+(:\d+)?$/.test(url) ? `https://matrix.to/#/${url}` : '#';
+  }
+  // Whole-word match so "cp" or "scam" don't flag "mcp" or "scampi".
+  function matchesBannedWord(text, words) {
+    if (!text) return false;
+    const re = new RegExp(`(^|[^a-z0-9])(${words.map(w => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})(?=$|[^a-z0-9])`, 'i');
+    return re.test(String(text));
+  }
+
   let filterState = { category: "All", platform: "All", language: "All", rating: "SFW" };
   let isAdultVerified = false;
   let globalPromoCache = [];
@@ -434,20 +452,27 @@
 
     if (BLOCKED_DOMAINS.some(d => url.toLowerCase().includes(d))) return alert("Domain Blocked.");
     if (!displayName) return alert("Please specify a display name.");
-    
+    if (safeHref({ platform, url }) === '#') {
+      return alert(platform === "Fluxer" ? "Enter a full https:// Fluxer invite link." : "Enter a valid Matrix address like #room:server.tld");
+    }
+
     // Safety check block validation verification runs over values before modal summary loads
-    const combinedContent = `${displayName} ${description}`.toLowerCase();
-    if (BANNED_KEYWORDS.some(keyword => combinedContent.includes(keyword))) {
+    if (matchesBannedWord(`${displayName} ${description}`, BANNED_KEYWORDS)) {
       return alert("Submission contains flagged terms. Please adjust your text.");
+    }
+
+    // The captcha widget is shown but was never checked; require it before the review step.
+    if (window.grecaptcha && typeof grecaptcha.getResponse === 'function' && !grecaptcha.getResponse()) {
+      return alert("Please complete the captcha first.");
     }
 
     // Inject parameters into text review summary layout box
     document.getElementById('reviewDetailsSummary').innerHTML = `
-      <strong>Community:</strong> ${displayName}<br>
-      <strong>Platform:</strong> ${platform}<br>
-      <strong>Endpoint:</strong> <span style="color:var(--accent-cyan); word-break:break-all;">${url}</span><br>
-      <strong>Classification:</strong> ${category} • ${language} • ${rating}<br>
-      <strong>Description:</strong> <em>${description || 'No summary text provided'}</em>
+      <strong>Community:</strong> ${escapeHtml(displayName)}<br>
+      <strong>Platform:</strong> ${escapeHtml(platform)}<br>
+      <strong>Endpoint:</strong> <span style="color:var(--accent-cyan); word-break:break-all;">${escapeHtml(url)}</span><br>
+      <strong>Classification:</strong> ${escapeHtml(category)} • ${escapeHtml(language)} • ${escapeHtml(rating)}<br>
+      <strong>Description:</strong> <em>${escapeHtml(description) || 'No summary text provided'}</em>
     `;
     
     document.getElementById('reviewModal').classList.add('active');
@@ -527,7 +552,7 @@
         }
       }
 
-      dbRecords.forEach(item => {
+      (dbRecords || []).forEach(item => {
         if(parseInt(item.is_permanent) === 1 && !communityMap.has(item.url.toLowerCase())) {
           communityMap.set(item.url.toLowerCase(), { ...item, platform: item.platform || (item.url.startsWith('http') ? 'Fluxer' : 'Matrix'), boosts: [new Date()], totalXlm: 100 });
         }
@@ -550,8 +575,7 @@
       const safeMatch = filterState.rating === "All" || ad.content_rating === filterState.rating;
       
       // Filter matching text strings out of layout parsing loops entirely
-      const combinedLower = `${ad.name || ''} ${ad.description || ''}`.toLowerCase();
-      const contentIsSafe = !BANNED_KEYWORDS.some(keyword => combinedLower.includes(keyword));
+      const contentIsSafe = !matchesBannedWord(`${ad.name || ''} ${ad.description || ''}`, BANNED_KEYWORDS);
       
       return catMatch && netMatch && langMatch && safeMatch && contentIsSafe;
     });
@@ -562,7 +586,7 @@
     let html = '';
     
     const appendRow = (ad) => {
-      const cleanHref = ad.platform === "Fluxer" ? ad.url : `https://matrix.to/#/${ad.url}`;
+      const cleanHref = escapeHtml(safeHref(ad));
       const netLabel = ad.platform === "Fluxer" ? `<span class="cat-label net-tag-fluxer">Fluxer</span>` : `<span class="cat-label net-tag-matrix">Matrix</span>`;
       const isPin = parseInt(ad.is_permanent) === 1;
       
@@ -584,17 +608,17 @@
       return `
         <tr class="promo-row ${ad.isExpired ? 'legacy-expired' : ''}">
           <td class="col-name" style="width: 35%;">
-            <a href="${cleanHref}" target="_blank" rel="noopener">${ad.name}</a><br>
+            <a href="${cleanHref}" target="_blank" rel="noopener">${escapeHtml(ad.name)}</a><br>
             <div class="meta-labels-container">
               ${netLabel} 
-              <span class="cat-label ${catClass}">${ad.category}</span> 
-              <span class="cat-label ${langClass}">${ad.language}</span>
+              <span class="cat-label ${catClass}">${escapeHtml(ad.category)}</span> 
+              <span class="cat-label ${langClass}">${escapeHtml(ad.language)}</span>
               ${durationLabel}
               ${ad.content_rating === 'NSFW' ? '<span class="cat-label nsfw-tag">NSFW</span>' : ''}
             </div>
           </td>
-          <td class="col-desc" style="width: 55%;">${ad.description || '<i>No description provided</i>'}</td>
-          <td style="text-align: center; width: 10%;"><button class="list-boost-btn" onclick="showBoostInfo('${ad.id}')">🚀</button></td>
+          <td class="col-desc" style="width: 55%;">${escapeHtml(ad.description) || '<i>No description provided</i>'}</td>
+          <td style="text-align: center; width: 10%;"><button class="list-boost-btn" onclick="showBoostInfo(${escapeHtml(JSON.stringify(String(ad.id)))})">🚀</button></td>
         </tr>`;
     };
 

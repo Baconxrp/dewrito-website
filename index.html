@@ -99,7 +99,7 @@
     <div class="nav-cta">
       <a href="register.html" class="btn-primary">Get Started</a>
     </div>
-    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
   </div>
@@ -274,7 +274,8 @@
   const navToggle = document.getElementById('navToggle');
   
   navToggle.addEventListener('click', () => {
-    navbar.classList.toggle('mobile-open');
+    const open = navbar.classList.toggle('mobile-open');
+    navToggle.setAttribute('aria-expanded', String(open));
   });
 
   // Close mobile menu on link click
@@ -305,6 +306,24 @@
   // Base text patterns for quick string matching validation rules
   const BAD_WORDS = ["gore", "scam", "crypto-scam", "loli", "lolicon", "cp", "child", "toddler", "shota", "nigga", "nigger", "fag", "faggot", "fuck", "shit", "bitch", "tranny"];
 
+
+  // --- Shared safety helpers: user-submitted text is rendered with innerHTML, so escape it ---
+  function escapeHtml(str) {
+    return String(str ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+  // Only ever link to http(s) Fluxer invites or well-formed Matrix aliases/room ids.
+  function safeHref(ad) {
+    const url = String(ad.url || '').trim();
+    if (ad.platform === "Fluxer") return /^https?:\/\/[^\s"'<>]+$/i.test(url) ? url : '#';
+    return /^[#!][^\s"'<>\/]+:[A-Za-z0-9.\-]+(:\d+)?$/.test(url) ? `https://matrix.to/#/${url}` : '#';
+  }
+  // Whole-word match so "cp" or "scam" don't flag "mcp" or "scampi".
+  function matchesBannedWord(text, words) {
+    if (!text) return false;
+    const re = new RegExp(`(^|[^a-z0-9])(${words.map(w => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})(?=$|[^a-z0-9])`, 'i');
+    return re.test(String(text));
+  }
+
   let processedAds = [];
   let rotationSchedule = ["All"];
   let currentScheduleIndex = 0;
@@ -312,9 +331,7 @@
   let tickerTimerInstance = null;
 
   function passesWordFilter(text) {
-    if (!text) return true;
-    const cleanText = text.toLowerCase();
-    return !BAD_WORDS.some(word => cleanText.includes(word));
+    return !matchesBannedWord(text, BAD_WORDS);
   }
 
   async function fetchAndProcessSliderData() {
@@ -343,7 +360,7 @@
         }
       }
 
-      dbRecords.forEach(item => {
+      (dbRecords || []).forEach(item => {
         if (parseInt(item.is_permanent) === 1 && !communityMap.has(item.url.toLowerCase())) {
           communityMap.set(item.url.toLowerCase(), { ...item, platform: item.platform || (item.url.startsWith('http') ? 'Fluxer' : 'Matrix'), boosts: [new Date()], totalXlm: 100 });
         }
@@ -398,9 +415,8 @@
     }
 
     stackElement.innerHTML = top3.map(ad => {
-      const cleanHref = ad.platform === "Fluxer" ? ad.url : `https://matrix.to/#/${ad.url}`;
       const netTagClass = ad.platform === "Fluxer" ? "mini-tag-fluxer" : "mini-tag-matrix";
-      return `<a href="${cleanHref}" target="_blank" rel="noopener" class="boost-chip-link" title="${ad.description || ''}"><span class="boost-chip-name">${ad.name}</span><span class="mini-tag ${netTagClass}">${ad.platform}</span></a>`;
+      return `<a href="${escapeHtml(safeHref(ad))}" target="_blank" rel="noopener" class="boost-chip-link" title="${escapeHtml(ad.description || '')}"><span class="boost-chip-name">${escapeHtml(ad.name)}</span><span class="mini-tag ${netTagClass}">${escapeHtml(ad.platform)}</span></a>`;
     }).join('');
   }
 
@@ -449,9 +465,11 @@
   }, { passive: true });
 
   // --- Server Status Health Checks ---
+  // Matrix sends Access-Control-Allow-Origin, so we can read its real HTTP status.
+  // Fluxer does not, so it is checked in no-cors mode (reachable vs unreachable only).
   const STATUS_SERVICES = [
-    { id: 'Matrix', url: 'https://matrix.dewrito.net/.well-known/matrix/server', rowId: 'rowMatrix', badgeId: 'badgeMatrix', latencyId: 'latencyMatrix' },
-    { id: 'Fluxer', url: 'https://fluxer.dewrito.net/', rowId: 'rowFluxer', badgeId: 'badgeFluxer', latencyId: 'latencyFluxer' }
+    { id: 'Matrix', url: 'https://matrix.dewrito.net/.well-known/matrix/server', mode: 'cors', rowId: 'rowMatrix', badgeId: 'badgeMatrix', latencyId: 'latencyMatrix' },
+    { id: 'Fluxer', url: 'https://fluxer.dewrito.net/', mode: 'no-cors', rowId: 'rowFluxer', badgeId: 'badgeFluxer', latencyId: 'latencyFluxer' }
   ];
 
   function updateStatusRow(service, status, latencyMs) {
@@ -507,12 +525,10 @@
       try {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 8000);
-        // Use no-cors mode: Fluxer doesn't send access-control-allow-origin, so a normal fetch is blocked by CORS.
-        // With no-cors we get an opaque response \u2014 if it resolves the server is up, if it throws the server is down.
-        const res = await fetch(svc.url, { method: 'GET', signal: controller.signal, mode: 'no-cors' });
+        const res = await fetch(svc.url, { method: 'GET', signal: controller.signal, mode: svc.mode, cache: 'no-store' });
         clearTimeout(timeoutId);
         const latency = Math.round(performance.now() - start);
-        // Opaque response (status=0) means the request succeeded but we can't read headers \u2014 server is up.
+        // Opaque response (status=0) means a no-cors request succeeded but headers are hidden: server is reachable.
         if (res.ok || res.type === 'opaque') {
           status = latency > 2000 ? 'degraded' : 'up';
         } else if (res.status < 500) {

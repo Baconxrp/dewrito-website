@@ -564,8 +564,8 @@ a:hover {
 
 .matrix-link-desc {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
-  color: var(--text-muted);
+  font-size: 0.75rem;
+  color: var(--text-secondary);
 }
 
 /* ---- Support / Donate Section ---- */
