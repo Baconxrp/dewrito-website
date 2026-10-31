@@ -175,7 +175,7 @@ a:hover {
   font-family: var(--font-main);
   font-size: 0.9rem;
   font-weight: 500;
-  color: #fff;
+  color: var(--bg-primary); /* dark on cyan: ~12:1 contrast (white was ~1.9:1) */
   background: var(--accent-cyan);
   border: none;
   border-radius: var(--radius-pill);
@@ -401,7 +401,7 @@ a:hover {
 
 /* ---- Hero Section ---- */
 .hero {
-  min-height: 90vh;
+  min-height: 70vh; /* shorter box so the centred content sits closer to the top bars */
   display: flex;
   align-items: center;
   justify-content: center;
