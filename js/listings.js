@@ -18,6 +18,7 @@ window.DewritoListings = (function () {
   const HORIZON = "https://horizon.stellar.org";
   const HORIZON_PAGE = 200;
   const MAX_HORIZON_PAGES = 10; // up to 2,000 payments; the wallet receives a lot of dust spam
+  const EXPIRING_SOON_DAYS = 7;  // boosted listings get an "ends soon" badge inside this window
 
   // Words that keep a listing out of the directory entirely (whole-word match, case-insensitive).
   const BAD_WORDS = ["gore", "scam", "crypto-scam", "loli", "lolicon", "cp", "child", "toddler", "shota", "nigga", "nigger", "fag", "faggot", "fuck", "shit", "bitch", "tranny"];
@@ -143,9 +144,11 @@ window.DewritoListings = (function () {
       const isPaid = months > 0;
       const isExpired = isPaid && !isPermanent && expiresAt < now;
       const tier = isPermanent ? 'pinned' : isPaid && !isExpired ? 'boosted' : isExpired ? 'expired' : 'unboosted';
+      const daysLeft = tier === 'boosted' ? Math.ceil((expiresAt - now) / 86400000) : null;
       const createdAt = group.map(r => r.created_at ? new Date(r.created_at) : null).filter(Boolean).sort((a, b) => a - b)[0] || null;
       listings.push({
         ...base, platform, isPermanent, isBanned, isPaid, isExpired, months, totalXlm, lastBoost, expiresAt, createdAt, tier,
+        daysLeft, expiresSoon: daysLeft !== null && daysLeft <= EXPIRING_SOON_DAYS,
         // Pinned entries sort as if they had paid for four months (same weighting the site always used).
         rank: isPermanent ? 4 + months : (isExpired ? 0 : months),
         href: safeHref({ platform, url: base.url }),

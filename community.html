@@ -129,6 +129,11 @@
     .tier-expired { background: rgba(255,255,255,0.04); color: var(--text-muted); border: 1px solid rgba(255,255,255,0.06); }
     .tier-unboosted { background: rgba(255,255,255,0.04); color: var(--text-muted); border: 1px solid rgba(255,255,255,0.06); }
     .col-desc .from-topic { color: var(--text-muted); font-style: italic; }
+    .tier-soon { background: rgba(255, 170, 0, 0.12); color: #ffaa00; border: 1px solid rgba(255, 170, 0, 0.25); }
+    .promo-row.highlight { background: rgba(0, 204, 255, 0.08); box-shadow: inset 3px 0 0 var(--accent-cyan); }
+    .row-actions { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .report-btn { background: none; border: none; color: var(--text-muted); font-size: 0.72rem; cursor: pointer; padding: 2px 6px; border-radius: 4px; text-decoration: none; }
+    .report-btn:hover { color: #ff4d4d; background: rgba(255,77,77,0.08); }
     .section-sep td { background: rgba(0, 0, 0, 0.3) !important; color: var(--text-muted) !important; font-size: 0.75rem !important; letter-spacing: 1px; padding: 8px 16px; font-weight: 700; text-transform: uppercase; }
 
     /* Boost modal: duration, pay link, QR */
@@ -169,6 +174,7 @@
 </head>
 <body>
 
+<a class="skip-link" href="#main">Skip to content</a>
 <canvas id="starfield"></canvas>
 
 <nav class="navbar" id="navbar">
@@ -187,7 +193,7 @@
   </div>
 </nav>
 
-<header class="page-header">
+<header class="page-header" id="main" tabindex="-1">
   <h1>Boosted Communities <span class="exp-badge">Experimental</span></h1>
   <p class="subtitle">Boosted via Stellar (XLM) • 25 XLM = 1 Month Visibility</p>
 </header>
@@ -436,6 +442,36 @@
 
   let filterState = { category: "All", platform: "All", language: "All", rating: "SFW", search: "", sort: "boost" };
   let isAdultVerified = false;
+
+  // Filters live in the URL (?category=Gaming&platform=Matrix&q=...), so a filtered view can be shared.
+  const URL_KEYS = { category: 'category', platform: 'platform', language: 'language', rating: 'rating', search: 'q', sort: 'sort' };
+  const DEFAULTS = { ...filterState };
+  function readFiltersFromUrl() {
+    const params = new URLSearchParams(location.search);
+    const pick = (key, allowed) => { const v = params.get(URL_KEYS[key]); return v !== null && (!allowed || allowed.includes(v)) ? v : DEFAULTS[key]; };
+    filterState.category = pick('category', CATEGORIES);
+    filterState.platform = pick('platform', ['All', 'Matrix', 'Fluxer']);
+    filterState.language = pick('language', [...document.getElementById('filterLanguage').options].map(o => o.value));
+    filterState.sort = pick('sort', ['boost', 'members', 'newest']);
+    filterState.search = (params.get('q') || '').trim().toLowerCase().slice(0, 80);
+    const rating = pick('rating', ['SFW', 'All', 'NSFW']);
+    filterState.rating = 'SFW'; // an NSFW view from the URL is applied only after the age gate below is confirmed
+    document.getElementById('filterPlatform').value = filterState.platform;
+    document.getElementById('filterLanguage').value = filterState.language;
+    document.getElementById('filterSort').value = filterState.sort;
+    document.getElementById('filterSearch').value = params.get('q') || '';
+    document.getElementById('filterRating').value = rating;
+    if (rating !== 'SFW') document.getElementById('ageGateModal').classList.add('active');
+  }
+  function writeFiltersToUrl() {
+    const params = new URLSearchParams();
+    for (const [key, name] of Object.entries(URL_KEYS)) {
+      const v = key === 'search' ? document.getElementById('filterSearch').value.trim() : filterState[key];
+      if (v && v !== DEFAULTS[key]) params.set(name, v);
+    }
+    const qs = params.toString();
+    history.replaceState(null, '', location.pathname + (qs ? '?' + qs : '') + location.hash);
+  }
   let globalPromoCache = [];
   let activeMemo = "";
   let activeMonths = 1;
@@ -457,6 +493,7 @@
   function setCategoryBubble(category) {
     filterState.category = category;
     setupCategoryFilters();
+    writeFiltersToUrl();
     renderPromos();
   }
 
@@ -471,6 +508,7 @@
     filterState.rating = ratingSelect.value;
     filterState.search = document.getElementById('filterSearch').value.trim().toLowerCase();
     filterState.sort = document.getElementById('filterSort').value;
+    writeFiltersToUrl();
     renderPromos();
   }
 
@@ -557,13 +595,26 @@
   }
 
   // ---------- directory ----------
+  // A link like community.html#listing-ABCDE scrolls to that row. Member counts arrive a few seconds
+  // after the first render and re-sort the table, so we scroll again then, unless the reader has moved.
+  let lastAutoScrollY = null;
+  function scrollToLinkedListing() {
+    if (!location.hash.startsWith('#listing-')) return;
+    const row = document.getElementById(location.hash.slice(1));
+    if (!row) return;
+    if (lastAutoScrollY !== null && Math.abs(window.scrollY - lastAutoScrollY) > 2) return; // reader scrolled
+    row.scrollIntoView({ block: 'center', behavior: 'instant' });
+    lastAutoScrollY = window.scrollY;
+  }
+
   async function loadDirectory() {
     try {
       const { listings } = await L.load();
       globalPromoCache = listings.filter(l => L.passesContentRules(l, { allowNsfw: true }));
       renderPromos();
-      // Member counts and topics arrive a little later; re-render once they do.
-      L.enrichWithRoomInfo(globalPromoCache, renderPromos);
+      scrollToLinkedListing();
+      // Member counts and topics arrive a little later; re-render as they do.
+      L.enrichWithRoomInfo(globalPromoCache, renderPromos).then(scrollToLinkedListing);
     } catch(e) {
       console.error(e);
       document.getElementById('promoListBody').innerHTML = '<tr><td colspan="3" style="text-align:center; padding:20px;">The directory could not be loaded. Please try again in a moment.</td></tr>';
@@ -609,6 +660,7 @@
 
   function tierLabel(ad) {
     if (ad.tier === 'pinned') return `<span class="cat-label tier-pinned" title="Listed permanently by the Dewrito team">📌 Pinned</span>`;
+    if (ad.tier === 'boosted' && ad.expiresSoon) return `<span class="cat-label tier-soon" title="Boost ends ${L.escapeHtml(L.formatDate(ad.expiresAt))}. Boost again to keep it listed.">⏳ Ends in ${ad.daysLeft <= 0 ? 'less than a day' : ad.daysLeft + ' day' + (ad.daysLeft > 1 ? 's' : '')}</span>`;
     if (ad.tier === 'boosted') return `<span class="cat-label tier-boosted" title="Boost ends ${L.escapeHtml(L.formatDate(ad.expiresAt))}">⚡ ${ad.months} month${ad.months > 1 ? 's' : ''} · until ${L.escapeHtml(L.formatDate(ad.expiresAt))}</span>`;
     if (ad.tier === 'expired') return `<span class="cat-label tier-expired">Boost ended ${L.escapeHtml(L.formatDate(ad.expiresAt))}</span>`;
     return `<span class="cat-label tier-unboosted">Unboosted</span>`;
@@ -620,8 +672,14 @@
     let desc = ad.description ? L.escapeHtml(ad.description) : '';
     if (!desc && ad.room && ad.room.topic) desc = `<span class="from-topic">${L.escapeHtml(ad.room.topic.slice(0, 140))}${ad.room.topic.length > 140 ? '…' : ''}</span>`;
     if (!desc) desc = '<i>No description provided</i>';
+    const rowId = 'listing-' + String(ad.id).replace(/[^A-Za-z0-9_-]/g, '');
+    const highlight = location.hash === '#' + rowId ? ' highlight' : '';
+    const reportHref = 'mailto:abuse@dewrito.net?' + new URLSearchParams({
+      subject: `Directory listing report: ${ad.id}`,
+      body: `Listing: ${ad.name}\nAddress: ${ad.url}\nLink: ${location.origin + location.pathname}#${rowId}\n\nWhat is wrong with it:\n`
+    }).toString().replace(/\+/g, '%20');
     return `
-      <tr class="promo-row ${ad.tier === 'expired' || ad.tier === 'unboosted' ? 'legacy-expired' : ''}">
+      <tr class="promo-row ${ad.tier === 'expired' || ad.tier === 'unboosted' ? 'legacy-expired' : ''}${highlight}" id="${rowId}">
         <td class="col-name" style="width: 35%;">
           <a href="${L.escapeHtml(ad.href)}" target="_blank" rel="noopener">${L.escapeHtml(ad.name)}</a><br>
           <div class="meta-labels-container">
@@ -634,7 +692,12 @@
           </div>
         </td>
         <td class="col-desc" style="width: 55%;">${desc}</td>
-        <td style="text-align: center; width: 10%;"><button class="list-boost-btn" title="Boost this listing" onclick="showBoostInfo(${L.escapeHtml(JSON.stringify(String(ad.id)))})">🚀</button></td>
+        <td style="text-align: center; width: 10%;">
+          <div class="row-actions">
+            <button class="list-boost-btn" title="Boost this listing" onclick="showBoostInfo(${L.escapeHtml(JSON.stringify(String(ad.id)))})">🚀</button>
+            <a class="report-btn" href="${L.escapeHtml(reportHref)}" title="Report this listing to the moderators">⚑ Report</a>
+          </div>
+        </td>
       </tr>`;
   }
 
@@ -676,6 +739,7 @@
   function copyMemoText() { navigator.clipboard.writeText(activeMemo).then(() => flashButton('modalCopyBtn', 'Copied!', 'Copy Memo')); }
   function copyAddress() { navigator.clipboard.writeText(L.XLM_WALLET).then(() => flashButton('addrCopyBtn', 'Copied!', 'Copy')); }
 
+  readFiltersFromUrl();
   setupCategoryFilters();
   loadDirectory();
   setInterval(loadDirectory, 60000);

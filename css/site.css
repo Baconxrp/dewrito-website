@@ -107,6 +107,49 @@ body::after {
   );
 }
 
+/* ---- Accessibility: skip link + visible keyboard focus ---- */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: var(--space-md);
+  z-index: 100000;
+  padding: 10px 16px;
+  background: var(--accent-cyan);
+  color: var(--bg-primary);
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  text-decoration: none;
+  transition: top 0.15s ease;
+}
+
+.skip-link:focus {
+  top: var(--space-md);
+  opacity: 1;
+  outline: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.btn-primary:focus-visible,
+.btn-secondary:focus-visible {
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px var(--accent-cyan-dim);
+}
+
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline-offset: 0;
+}
+
+[tabindex="-1"]:focus {
+  outline: none;
+}
+
 /* ---- Typography ---- */
 h1, h2, h3, h4 {
   color: var(--text-primary);
