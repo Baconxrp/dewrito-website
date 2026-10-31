@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="css/site.css">
   <style>
     /* --- Boosted Communities Bar (fixed top, below navbar) --- */
-    .boost-bar { position: fixed; top: 64px; left: 0; right: 0; z-index: 9998; background: rgba(5,5,16,0.8); border-bottom: 1px solid var(--border-subtle); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); }
+    .boost-bar { position: fixed; top: 81px; left: 0; right: 0; z-index: 9998; background: rgba(5,5,16,0.8); border-bottom: 1px solid var(--border-subtle); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); }
     .boost-bar-inner { display: flex; align-items: center; gap: 10px; height: 36px; padding: 0 20px; margin: 0 auto; max-width: 1200px; overflow-x: auto; scrollbar-width: none; }
     .boost-bar-inner::-webkit-scrollbar { display: none; }
     .boost-bar-header { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
@@ -39,7 +39,7 @@
     /* --- Server Status Strip (fixed bottom bar) --- */
     @keyframes statusPulse { 0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(62,207,142,0.5)} 50%{opacity:0.7;box-shadow:0 0 0 6px rgba(62,207,142,0)} }
     .status-strip { position: fixed; bottom: 0; left: 0; right: 0; z-index: 9999; background: rgba(5,5,16,0.8); border-top: 1px solid var(--border-subtle); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); }
-    body { padding-bottom: 32px; padding-top: 80px; }
+    body { padding-bottom: 72px; padding-top: 118px; }
     .status-strip-inner { display: flex; align-items: center; gap: 12px; height: 26px; padding: 0 20px; margin: 0 auto; max-width: 1200px; }
     .status-strip-label { font-size: 0.65rem; font-family: var(--font-mono); color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; flex-shrink: 0; }
     .status-strip-services { display: flex; align-items: center; gap: 10px; flex: 1; justify-content: center; }
@@ -77,7 +77,7 @@
       .boost-chip-name { max-width: 70px; font-size: 0.65rem; }
       .mini-tag { font-size: 0.55rem; padding: 1px 4px; }
       .boost-bar-viewall { font-size: 0.58rem; padding: 2px 6px; }
-      body { padding-top: 108px; }
+      body { padding-top: 140px; }
     }
   </style>
 </head>
@@ -588,12 +588,10 @@
 })();
 </script>
 <noscript><a href="https://ko-fi.com/dewrito" target="_blank" rel="noopener">Support us on Ko-fi</a></noscript>
-</body>
 <!-- Non-JS fallback badge: visible link when overlay doesn't load -->
 <a id="kofi-fallback" class="kofi-fallback" href="https://ko-fi.com/dewrito" target="_blank" rel="noopener noreferrer" aria-label="Support us on Ko-fi">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h11v6a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7z"></path><path d="M16 8h1a3 3 0 0 1 0 6h-1"></path></svg>
   <span>Support on Ko‑fi</span>
 </a>
-</html>
 </body>
 </html>
