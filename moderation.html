@@ -12,7 +12,6 @@
   <meta property="og:image" content="https://dewrito.net/img/logo.png">
   <meta name="twitter:card" content="summary">
   <link rel="me" href="https://bsky.app/profile/dewrito.net">
-  <meta name="i18n-coverage" content="chrome">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="img/favicon.ico" rel="shortcut icon"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -52,48 +51,48 @@
 </nav>
 
 <header class="page-header">
-  <span class="mono-label section-label">Moderation</span>
-  <h1>How we keep the lights on and the trolls out</h1>
-  <p style="margin: 0 auto; max-width: 60ch;">The rules are in the <a href="terms.html">Terms of Service</a>. This page is about enforcement: who does it, how reports are handled, and which servers we keep out of the directory.</p>
+  <span class="mono-label section-label" data-i18n-html="mod.01">Moderation</span>
+  <h1 data-i18n-html="mod.02">How we keep the lights on and the trolls out</h1>
+  <p style="margin: 0 auto; max-width: 60ch;" data-i18n-html="mod.03">The rules are in the <a href="terms.html">Terms of Service</a>. This page is about enforcement: who does it, how reports are handled, and which servers we keep out of the directory.</p>
 </header>
 
 <section class="content-section">
-  <h2>What we act on</h2>
-  <p>In short: illegal content, harassment, spam, and anything that puts the server or other users at risk. The full list is in <a href="terms.html">sections 3 to 5 of the terms</a>. We do not act on good-faith disagreement, tone complaints or lawful discussion we happen to dislike.</p>
+  <h2 data-i18n-html="mod.04">What we act on</h2>
+  <p data-i18n-html="mod.05">In short: illegal content, harassment, spam, and anything that puts the server or other users at risk. The full list is in <a href="terms.html">sections 3 to 5 of the terms</a>. We do not act on good-faith disagreement, tone complaints or lawful discussion we happen to dislike.</p>
 
-  <h2>Reporting</h2>
+  <h2 data-i18n-html="mod.06">Reporting</h2>
   <div class="flow">
-    <div class="flow-step"><span class="n">STEP 1</span><h3>Report it</h3><p>Use your client's report option on the message, or email <a href="mailto:abuse@dewrito.net">abuse@dewrito.net</a>. Include the room, the user, roughly when, and a screenshot if you have one.</p></div>
-    <div class="flow-step"><span class="n">STEP 2</span><h3>We look</h3><p>A moderator reviews the report, usually within a day. Reports from other homeserver admins about our users get the same treatment.</p></div>
-    <div class="flow-step"><span class="n">STEP 3</span><h3>We act</h3><p>Depending on severity: a warning, message removal, a room ban, a server-wide ban, or account deactivation. Illegal material is removed immediately and reported where the law requires.</p></div>
-    <div class="flow-step"><span class="n">STEP 4</span><h3>Appeal</h3><p>Think we got it wrong? Email <a href="mailto:support@dewrito.net">support@dewrito.net</a>. A different moderator reviews appeals where possible.</p></div>
+    <div class="flow-step"><span class="n" data-i18n-html="mod.07">STEP 1</span><h3 data-i18n-html="mod.08">Report it</h3><p data-i18n-html="mod.09">Use your client's report option on the message, or email <a href="mailto:abuse@dewrito.net">abuse@dewrito.net</a>. Include the room, the user, roughly when, and a screenshot if you have one.</p></div>
+    <div class="flow-step"><span class="n" data-i18n-html="mod.10">STEP 2</span><h3 data-i18n-html="mod.11">We look</h3><p data-i18n-html="mod.12">A moderator reviews the report, usually within a day. Reports from other homeserver admins about our users get the same treatment.</p></div>
+    <div class="flow-step"><span class="n" data-i18n-html="mod.13">STEP 3</span><h3 data-i18n-html="mod.14">We act</h3><p data-i18n-html="mod.15">Depending on severity: a warning, message removal, a room ban, a server-wide ban, or account deactivation. Illegal material is removed immediately and reported where the law requires.</p></div>
+    <div class="flow-step"><span class="n" data-i18n-html="mod.16">STEP 4</span><h3 data-i18n-html="mod.17">Appeal</h3><p data-i18n-html="mod.18">Think we got it wrong? Email <a href="mailto:support@dewrito.net">support@dewrito.net</a>. A different moderator reviews appeals where possible.</p></div>
   </div>
-  <p>Reports made through a Matrix client only reach <em>our</em> moderators, even when the reported user is on another server. For users elsewhere, their own homeserver's admins need to hear from you too. Our admin contacts are published in the standard <code style="font-family:var(--font-mono);font-size:0.85em;">/.well-known/matrix/support</code> file so other servers can reach us the same way.</p>
+  <p data-i18n-html="mod.19">Reports made through a Matrix client only reach <em>our</em> moderators, even when the reported user is on another server. For users elsewhere, their own homeserver's admins need to hear from you too. Our admin contacts are published in the standard <code style="font-family:var(--font-mono);font-size:0.85em;">/.well-known/matrix/support</code> file so other servers can reach us the same way.</p>
 
-  <h2>Tools</h2>
+  <h2 data-i18n-html="mod.20">Tools</h2>
   <ul>
-    <li><strong>Draupnir</strong>, a moderation bot, applies bans and redactions across the rooms in our space and subscribes to shared ban lists for known spam and abuse accounts.</li>
-    <li><strong>Email whitelist</strong> at registration, which stops most throwaway-account spam before it starts. Providers can be added on request.</li>
-    <li><strong>Federation controls</strong> on the homeserver for servers that are a persistent source of abuse.</li>
-    <li>On <strong>Fluxer</strong>, server owners manage their own roles and bans; instance moderators step in for terms violations.</li>
+    <li data-i18n-html="mod.21"><strong>Draupnir</strong>, a moderation bot, applies bans and redactions across the rooms in our space and subscribes to shared ban lists for known spam and abuse accounts.</li>
+    <li data-i18n-html="mod.22"><strong>Email whitelist</strong> at registration, which stops most throwaway-account spam before it starts. Providers can be added on request.</li>
+    <li data-i18n-html="mod.23"><strong>Federation controls</strong> on the homeserver for servers that are a persistent source of abuse.</li>
+    <li data-i18n-html="mod.24">On <strong>Fluxer</strong>, server owners manage their own roles and bans; instance moderators step in for terms violations.</li>
   </ul>
 
-  <h2>The community directory</h2>
-  <p>Anyone can submit a listing to the <a href="community.html">Boosted Communities</a> page, so it has its own checks:</p>
+  <h2 data-i18n-html="mod.25">The community directory</h2>
+  <p data-i18n-html="mod.26">Anyone can submit a listing to the <a href="community.html">Boosted Communities</a> page, so it has its own checks:</p>
   <ul>
-    <li>A captcha and a review step before a listing is created.</li>
-    <li>NSFW listings are hidden behind an age confirmation and never appear in the home-page bar.</li>
-    <li>A word filter on names and descriptions, and a flag moderators can set to pull a listing without deleting it.</li>
-    <li>A blocklist of homeservers whose rooms are never listed, shown below. Boost payments for excluded listings are not refunded.</li>
+    <li data-i18n-html="mod.27">A captcha and a review step before a listing is created.</li>
+    <li data-i18n-html="mod.28">NSFW listings are hidden behind an age confirmation and never appear in the home-page bar.</li>
+    <li data-i18n-html="mod.29">A word filter on names and descriptions, and a flag moderators can set to pull a listing without deleting it.</li>
+    <li data-i18n-html="mod.30">A blocklist of homeservers whose rooms are never listed, shown below. Boost payments for excluded listings are not refunded.</li>
   </ul>
 
-  <h3>Directory blocklist</h3>
-  <p class="mono-label" style="margin-bottom:0;">Updated <span id="blockUpdated">&mdash;</span></p>
+  <h3 data-i18n-html="mod.31">Directory blocklist</h3>
+  <p class="mono-label" style="margin-bottom:0;" data-i18n-html="mod.32">Updated <span id="blockUpdated">&mdash;</span></p>
   <table class="block-table"><tbody id="blockRows"><tr><td>Loading&hellip;</td></tr></tbody></table>
-  <p style="margin-top: var(--space-md); font-size: 0.85rem;">Think a server is on this list by mistake? <a href="contact.html">Tell us</a>.</p>
+  <p style="margin-top: var(--space-md); font-size: 0.85rem;" data-i18n-html="mod.33">Think a server is on this list by mistake? <a href="contact.html">Tell us</a>.</p>
 
-  <h2>Transparency</h2>
-  <p>We are a small volunteer team. We do not publish per-case details, but we will say when a rule changes, and we post service-affecting moderation actions, such as blocking a server, as notices on the <a href="status.html">status page</a>.</p>
+  <h2 data-i18n-html="mod.34">Transparency</h2>
+  <p data-i18n-html="mod.35">We are a small volunteer team. We do not publish per-case details, but we will say when a rule changes, and we post service-affecting moderation actions, such as blocking a server, as notices on the <a href="status.html">status page</a>.</p>
 </section>
 
 <footer class="footer">
@@ -119,11 +118,20 @@
   navToggle.addEventListener('click', () => navToggle.setAttribute('aria-expanded', String(navbar.classList.toggle('mobile-open'))));
 
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-  fetch('data/blocklist.json', { cache: 'no-cache' }).then(r => r.json()).then(j => {
-    document.getElementById('blockUpdated').textContent = j.updated || '\u2014';
-    const rows = (j.domains || []).map(d => `<tr><td>${esc(d)}</td><td>excluded from directory</td></tr>`);
-    document.getElementById('blockRows').innerHTML = rows.join('') || '<tr><td>No servers are currently blocked.</td></tr>';
-  }).catch(() => { document.getElementById('blockRows').innerHTML = '<tr><td>Blocklist could not be loaded.</td></tr>'; });
+  const T = (k, f) => (window.i18n ? window.i18n.t(k, f) : f);
+  let blocklist = null, blocklistFailed = false;
+  function renderBlocklist() {
+    const rowsEl = document.getElementById('blockRows');
+    if (blocklistFailed) { rowsEl.innerHTML = `<tr><td>${T('mod.blk.error', 'Blocklist could not be loaded.')}</td></tr>`; return; }
+    if (!blocklist) return;
+    document.getElementById('blockUpdated').textContent = blocklist.updated || '\u2014';
+    const rows = (blocklist.domains || []).map(d => `<tr><td>${esc(d)}</td><td>${T('mod.blk.excluded', 'excluded from directory')}</td></tr>`);
+    rowsEl.innerHTML = rows.join('') || `<tr><td>${T('mod.blk.none', 'No servers are currently blocked.')}</td></tr>`;
+  }
+  fetch('data/blocklist.json', { cache: 'no-cache' }).then(r => r.json()).then(j => { blocklist = j; renderBlocklist(); })
+    .catch(() => { blocklistFailed = true; renderBlocklist(); });
+  // The "Updated" line and table are rebuilt whenever the language changes.
+  document.addEventListener('i18n:ready', renderBlocklist);
 </script>
 </body>
 </html>

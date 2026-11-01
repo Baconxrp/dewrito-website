@@ -30,7 +30,7 @@ Everything rendered from the table is HTML-escaped, and links are only built fro
 
 ## Languages
 
-`js/i18n.js` translates the site chrome and the pages a newcomer uses (home, register, directory, contact, donate, status, 404) into Brazilian Portuguese, Spanish, French, German, Russian and Simplified Chinese. The language comes from `?lang=xx`, then the visitor's saved choice, then the browser's language list, else English. A switcher sits in the navbar; changing it translates the page in place, without a reload, and the choice is remembered. The long reference pages (guide, terms, privacy, moderation, boost help) stay English and show a translated notice.
+`js/i18n.js` translates the site chrome and the pages a newcomer uses (home, register, directory, guide, contact, donate, status, moderation, 404) into Brazilian Portuguese, Spanish, French, German, Russian and Simplified Chinese. The language comes from `?lang=xx`, then the visitor's saved choice, then the browser's language list, else English. A switcher sits in the navbar; changing it translates the page in place, without a reload, and the choice is remembered. The legal and reference pages (terms, privacy, boost help) stay English and show a translated notice.
 
 - Strings live in `lang/<code>.json`; `lang/en.json` is the reference list of keys and English text (the English itself is in the HTML).
 - Markup is tagged with `data-i18n="key"` (text), `data-i18n-html="key"` (markup allowed) or `data-i18n-attr="placeholder:key"`.
