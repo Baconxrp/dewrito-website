@@ -3,11 +3,11 @@
 <head>
   <title>Dewrito | Register</title>
   <meta charset="UTF-8">
-  <meta name="description" content="Register for Dewrito community services — Matrix chat and Fluxer client.">
+  <meta name="description" content="Join Dewrito: check your email provider, create a Matrix or Fluxer account, pick an app and join the community.">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Dewrito">
   <meta property="og:title" content="Dewrito | Register">
-  <meta property="og:description" content="Register for Dewrito community services — Matrix chat and Fluxer client.">
+  <meta property="og:description" content="Join Dewrito: check your email provider, create a Matrix or Fluxer account, pick an app and join the community.">
   <meta property="og:url" content="https://dewrito.net/register.html">
   <meta property="og:image" content="https://dewrito.net/img/logo.png">
   <meta name="twitter:card" content="summary">
@@ -36,6 +36,41 @@
     .email-check-result.ok { color: var(--accent-green); }
     .email-check-result.no { color: #ffaa00; }
     .email-check-result a { color: var(--accent-cyan); text-decoration: underline; }
+
+    .guide-steps { counter-reset: step; }
+    .guide-step { position: relative; padding-left: 56px; margin-bottom: var(--space-2xl); }
+    .guide-step::before { counter-increment: step; content: counter(step); position: absolute; left: 0; top: 2px; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-weight: 600; color: var(--bg-primary); background: var(--accent-cyan); }
+    .guide-step h2 { margin-top: 0 !important; }
+    .client-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-md); margin: var(--space-md) 0 var(--space-lg); }
+    .client-item { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: var(--space-md) var(--space-lg); display: flex; flex-direction: column; gap: 6px; }
+    .client-item h3 { font-size: 1rem; margin: 0 !important; }
+    .client-item p { font-size: 0.85rem; margin: 0 !important; }
+    .client-item .platforms { font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+    .client-item a.btn-primary, .client-item a.btn-secondary { margin-top: auto; padding: 8px 16px; font-size: 0.8rem; align-self: flex-start; }
+    .callout { border-left: 3px solid var(--accent-cyan); background: rgba(0, 212, 255, 0.04); padding: 12px 16px; border-radius: 0 8px 8px 0; margin: var(--space-md) 0; font-size: 0.9rem; }
+    .callout.warn { border-color: #ffaa00; background: rgba(255, 170, 0, 0.05); }
+    code { font-family: var(--font-mono); font-size: 0.85em; background: rgba(255,255,255,0.06); padding: 1px 6px; border-radius: 4px; color: var(--text-primary); }
+    .inline-pill { display: inline-block; font-family: var(--font-mono); font-size: 0.7rem; padding: 2px 8px; border-radius: 999px; margin-left: 6px; vertical-align: middle; }
+    .pill-matrix { background: var(--accent-green-dim); color: var(--accent-green); }
+    .pill-fluxer { background: var(--accent-cyan-dim); color: var(--accent-cyan); }
+    /* Step 1 cards: sign-up action at the bottom of each card */
+    .client-card .card-how { font-size: 0.85rem; margin: 0 0 var(--space-md); }
+    .client-card .card-cta { margin: 0 0 var(--space-sm); }
+    .client-card .card-cta .btn-primary, .client-card > a.btn-primary { width: 100%; justify-content: center; }
+    .client-card .card-alt { font-size: 0.8rem; text-align: center; margin: 0; }
+    .client-card h3 { display: flex; align-items: center; }
+    .after-signup { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-lg); margin-top: var(--space-xl); }
+    .after-signup h3 { font-size: 1rem; margin: 0 0 var(--space-sm) !important; display: flex; align-items: center; gap: 4px; }
+    .after-signup p { font-size: 0.9rem; }
+    .step-note { font-size: 0.9rem; color: var(--text-muted); margin-top: var(--space-md); }
+    @media (max-width: 760px) { .after-signup { grid-template-columns: 1fr; } }
+    /* Phones: step number sits above its heading so cards get the full width */
+    .client-grid { grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); }
+    @media (max-width: 600px) {
+      .guide-step { padding-left: 0; }
+      .guide-step::before { position: static; display: flex; margin-bottom: var(--space-sm); }
+      .content-section { padding-left: var(--space-md); padding-right: var(--space-md); }
+    }
   </style>
 </head>
 <body>
@@ -49,10 +84,7 @@
       <img src="img/logo.png" alt="Dewrito">
     </a>
     <ul class="nav-links">
-      <li><a href="index.html#features" data-i18n="nav.features">Features</a></li>
-      <li><a href="index.html#community" data-i18n="nav.community">Community</a></li>
       <li><a href="community.html" data-i18n="nav.directory">Directory</a></li>
-      <li><a href="getting-started.html" data-i18n="nav.guide">Guide</a></li>
       <li><a href="register.html" data-i18n="nav.register">Register</a></li>
       <li><a href="contact.html" data-i18n="nav.contact">Contact</a></li>
     </ul>
@@ -68,8 +100,10 @@
 
 <!-- Page Header -->
 <header class="page-header">
-  <h1 data-i18n="register.title">Choose Your Client</h1>
-  <p style="margin: 0 auto;" data-i18n-html="register.intro">By registering you agree to our <a href="terms.html">Terms of Service</a>. We allow registrations from certain email service providers; if you'd like your provider whitelisted, please <a href="contact.html">contact us</a> to request whitelisting.</p>
+  <span class="mono-label section-label" data-i18n-html="guide.01">Getting Started</span>
+  <h1 data-i18n-html="guide.02">From zero to chatting</h1>
+  <p style="margin: 0 auto var(--space-sm); max-width: 60ch;" data-i18n-html="guide.03">Dewrito runs two chat services. <strong>Matrix</strong> is the open, federated network where most of our community lives. <strong>Fluxer</strong> is a self-hosted, Discord-style app. You can use one or both. This guide takes about ten minutes.</p>
+  <p style="margin: 0 auto; max-width: 60ch; font-size: 0.9rem;" data-i18n-html="register.intro">By registering you agree to our <a href="terms.html">Terms of Service</a>. We allow registrations from certain email service providers; if you'd like your provider whitelisted, please <a href="contact.html">contact us</a> to request whitelisting.</p>
 
   <div class="email-check">
     <label for="emailCheckInput" class="mono-label" data-i18n="register.check.label">Check your email provider</label>
@@ -520,72 +554,162 @@
 
 <!-- Content Section -->
 <section class="content-section">
-  <!-- Matrix Card -->
-  <div class="client-grid">
-    <div class="client-card">
-      <h3>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3ecf8e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        Matrix
-      </h3>
-      <p data-i18n="register.matrix.body">The open, decentralized communication protocol. Full control, end-to-end encryption, and federation across servers.</p>
+  <div class="guide-steps">
+
+    <div class="guide-step">
+      <h2 data-i18n-html="reg.step1.title">Create your account</h2>
+      <p data-i18n-html="reg.step1.body">Matrix and Fluxer are separate accounts. Pick one to start with; you can add the other any time.</p>
+          <div class="client-grid">
+        <div class="client-card">
+          <h3>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3ecf8e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Matrix
+          </h3>
+          <p data-i18n="register.matrix.body">The open, decentralized communication protocol. Full control, end-to-end encryption, and federation across servers.</p>
       
-      <div style="margin-bottom: var(--space-md);">
-        <strong style="color: var(--accent-green); font-size: 0.85rem;" data-i18n="register.pros">Pros</strong>
-        <ul style="font-size: 0.875rem; color: var(--text-secondary); margin-top: var(--space-xs);">
-          <li data-i18n="register.matrix.pro1">Decentralized & federated — no single company controls it</li>
-          <li data-i18n="register.matrix.pro2">End-to-end encryption available in private rooms</li>
-          <li data-i18n="register.matrix.pro3">Interoperable with Discord, IRC via bridges</li>
-          <li data-i18n="register.matrix.pro4">Fully open-source, community-driven, privacy-first</li>
-        </ul>
+          <div style="margin-bottom: var(--space-md);">
+            <strong style="color: var(--accent-green); font-size: 0.85rem;" data-i18n="register.pros">Pros</strong>
+            <ul style="font-size: 0.875rem; color: var(--text-secondary); margin-top: var(--space-xs);">
+              <li data-i18n="register.matrix.pro1">Decentralized & federated — no single company controls it</li>
+              <li data-i18n="register.matrix.pro2">End-to-end encryption available in private rooms</li>
+              <li data-i18n="register.matrix.pro3">Interoperable with Discord, IRC via bridges</li>
+              <li data-i18n="register.matrix.pro4">Fully open-source, community-driven, privacy-first</li>
+            </ul>
+          </div>
+
+          <div style="margin-bottom: var(--space-lg);">
+            <strong style="color: rgba(240, 100, 100, 0.8); font-size: 0.85rem;" data-i18n="register.cons">Cons</strong>
+            <ul style="font-size: 0.875rem; color: var(--text-secondary); margin-top: var(--space-xs);">
+              <li data-i18n="register.matrix.con1">Can feel slow in large rooms or on low-end devices</li>
+              <li data-i18n="register.matrix.con2">Some metadata exposed to homeserver</li>
+              <li data-i18n="register.matrix.con3">Client UX varies (Cinny, Commet, etc.)</li>
+              <li data-i18n="register.matrix.con4">Joining the right rooms can be tricky for beginners</li>
+            </ul>
+          </div>
+
+          <p class="card-how" data-i18n-html="guide.06">Registration happens through Sable, the web client we host. It is pre-pointed at our homeserver, so you only fill in a username, password and email.</p>
+          <p class="card-cta" data-i18n-html="guide.07"><a href="https://sable.dewrito.net/register?server=https://matrix.dewrito.net" class="btn-primary" target="_blank" rel="noopener">Register on Sable &rarr;</a></p>
+        </div>
+
+        <!-- Fluxer Card -->
+        <div class="client-card">
+          <h3>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            Fluxer
+          </h3>
+          <p data-i18n="register.fluxer.body">A Discord-like experience with strong privacy. Channels, roles, voice/video calls, screen sharing — all self-hosted.</p>
+      
+          <div style="margin-bottom: var(--space-md);">
+            <strong style="color: var(--accent-cyan); font-size: 0.85rem;" data-i18n="register.pros">Pros</strong>
+            <ul style="font-size: 0.875rem; color: var(--text-secondary); margin-top: var(--space-xs);">
+              <li data-i18n="register.fluxer.pro1">Familiar Discord-like experience — easy transition</li>
+              <li data-i18n="register.fluxer.pro2">Privacy-first, open-source, no ads</li>
+              <li data-i18n="register.fluxer.pro3">Lightweight & fast — smoother than heavy clients</li>
+              <li data-i18n="register.fluxer.pro4">Good community tools: roles, permissions, audit logs</li>
+            </ul>
+          </div>
+
+          <div style="margin-bottom: var(--space-lg);">
+            <strong style="color: rgba(240, 100, 100, 0.8); font-size: 0.85rem;" data-i18n="register.cons">Cons</strong>
+            <ul style="font-size: 0.875rem; color: var(--text-secondary); margin-top: var(--space-xs);">
+              <li data-i18n="register.fluxer.con1">Newer product (~2026) — still maturing in polish</li>
+              <li data-i18n="register.fluxer.con2">Centralized by default (self-hostable but single-instance)</li>
+              <li data-i18n="register.fluxer.con3">No federation yet — rooms don't federate across instances</li>
+            </ul>
+          </div>
+
+          <p class="card-how" data-i18n-html="guide.49">Create your account and join our community with the invite link.</p>
+          <a href="https://fluxer.dewrito.net/invite/BQVNmkEW" class="btn-primary" style="background: var(--accent-cyan); margin-bottom: var(--space-sm);" target="_blank" rel="noopener" data-i18n-html="guide.50">Join via invite</a>
+          <p class="card-alt"><a href="https://fluxer.app/download" target="_blank" rel="noopener" data-i18n-html="guide.54">Download apps</a></p>
+        </div>
       </div>
 
-      <div style="margin-bottom: var(--space-lg);">
-        <strong style="color: rgba(240, 100, 100, 0.8); font-size: 0.85rem;" data-i18n="register.cons">Cons</strong>
-        <ul style="font-size: 0.875rem; color: var(--text-secondary); margin-top: var(--space-xs);">
-          <li data-i18n="register.matrix.con1">Can feel slow in large rooms or on low-end devices</li>
-          <li data-i18n="register.matrix.con2">Some metadata exposed to homeserver</li>
-          <li data-i18n="register.matrix.con3">Client UX varies (Cinny, Commet, etc.)</li>
-          <li data-i18n="register.matrix.con4">Joining the right rooms can be tricky for beginners</li>
-        </ul>
+      <div class="after-signup">
+        <div>
+          <h3><span data-i18n-html="reg.afterMatrix">After signing up on Matrix</span> <span class="inline-pill pill-matrix">Matrix</span></h3>
+          <p data-i18n-html="guide.08">Check your inbox for the verification email and click the link. Your full Matrix ID will be <code>@yourname:dewrito.net</code>. That is the address people use to find you anywhere on the Matrix network, not only on our server.</p>
+          <div class="callout warn" data-i18n-html="guide.09"><strong>Write down your password.</strong> Matrix encrypts private rooms on your device. If you lose both your password and your recovery key (step 4), nobody, including us, can recover your encrypted history.</div>
+        </div>
+        <div>
+          <h3><span data-i18n-html="reg.afterFluxer">After signing up on Fluxer</span> <span class="inline-pill pill-fluxer">Fluxer</span></h3>
+          <p data-i18n-html="guide.53">Phone and desktop apps come from the Fluxer project. Point them at <code>fluxer.dewrito.net</code> when asked for an instance.</p>
+          <p data-i18n-html="guide.55">Fluxer is a young project, so expect the occasional rough edge. The source is public at <a href="https://github.com/fluxerapp/fluxer" target="_blank" rel="noopener">github.com/fluxerapp/fluxer</a>.</p>
+          <p class="step-note" data-i18n-html="reg.fluxerOnly">Only using Fluxer? You're all set. Steps 2 to 4 are for Matrix.</p>
+        </div>
       </div>
-
-      <a href="https://sable.dewrito.net/register?server=https://matrix.dewrito.net" class="btn-primary" style="width: 100%; justify-content: center;" data-i18n="register.matrix.open">
-        Open Matrix →
-      </a>
     </div>
 
-    <!-- Fluxer Card -->
-    <div class="client-card">
-      <h3>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-        Fluxer
-      </h3>
-      <p data-i18n="register.fluxer.body">A Discord-like experience with strong privacy. Channels, roles, voice/video calls, screen sharing — all self-hosted.</p>
-      
-      <div style="margin-bottom: var(--space-md);">
-        <strong style="color: var(--accent-cyan); font-size: 0.85rem;" data-i18n="register.pros">Pros</strong>
-        <ul style="font-size: 0.875rem; color: var(--text-secondary); margin-top: var(--space-xs);">
-          <li data-i18n="register.fluxer.pro1">Familiar Discord-like experience — easy transition</li>
-          <li data-i18n="register.fluxer.pro2">Privacy-first, open-source, no ads</li>
-          <li data-i18n="register.fluxer.pro3">Lightweight & fast — smoother than heavy clients</li>
-          <li data-i18n="register.fluxer.pro4">Good community tools: roles, permissions, audit logs</li>
-        </ul>
+    <div class="guide-step">
+      <h2><span data-i18n-html="guide.10">Pick a client</span> <span class="inline-pill pill-matrix">Matrix</span></h2>
+      <p data-i18n-html="guide.11">Matrix is a protocol, so any Matrix app works with your Dewrito account. When an app asks for your homeserver, enter <code>dewrito.net</code>. The app discovers the rest on its own.</p>
+      <div class="client-list">
+        <div class="client-item">
+          <span class="platforms" data-i18n-html="guide.12">Web &middot; hosted by us</span>
+          <h3 data-i18n-html="guide.13">Sable</h3>
+          <p data-i18n-html="guide.14">The client you registered with. Nothing to install, open it in any browser. Based on Cinny.</p>
+          <a href="https://sable.dewrito.net/" class="btn-primary" target="_blank" rel="noopener" data-i18n-html="guide.15">Open Sable</a>
+        </div>
+        <div class="client-item">
+          <span class="platforms" data-i18n-html="guide.16">Web &middot; hosted by us</span>
+          <h3 data-i18n-html="guide.17">Cinny</h3>
+          <p data-i18n-html="guide.18">Clean, Discord-like layout, running on our own server. Sable is built on it, so switching between the two feels natural.</p>
+          <a href="https://cinny.dewrito.net/" class="btn-primary" target="_blank" rel="noopener" data-i18n-html="guide.19">Open Cinny</a>
+        </div>
+        <div class="client-item">
+          <span class="platforms" data-i18n-html="guide.20">iOS &middot; Android &middot; Desktop</span>
+          <h3 data-i18n-html="guide.21">FluffyChat</h3>
+          <p data-i18n-html="guide.22">Simple and friendly, especially on phones. A good pick if you want something that just works.</p>
+          <a href="https://fluffychat.im/" class="btn-secondary" target="_blank" rel="noopener" data-i18n-html="guide.23">Get FluffyChat</a>
+        </div>
+        <div class="client-item">
+          <span class="platforms" data-i18n-html="guide.24">Windows &middot; Linux &middot; Android &middot; Web</span>
+          <h3 data-i18n-html="guide.25">Commet</h3>
+          <p data-i18n-html="guide.26">A comfortable, privacy-respecting client with voice chat, a shared calendar and photo albums, and several accounts signed in at once.</p>
+          <a href="https://commet.chat/" class="btn-secondary" target="_blank" rel="noopener" data-i18n-html="guide.27">Get Commet</a>
+        </div>
+        <div class="client-item">
+          <span class="platforms" data-i18n-html="guide.28">Web &middot; Desktop &middot; Mobile &middot; test builds</span>
+          <h3 data-i18n-html="guide.29">Vommet</h3>
+          <p data-i18n-html="guide.30">A fork of Commet that aims to feel like Discord: familiar layout, themes and voice. Unofficial and still in testing.</p>
+          <a href="https://vommet.app/" class="btn-secondary" target="_blank" rel="noopener" data-i18n-html="guide.31">Get Vommet</a>
+        </div>
       </div>
-
-      <div style="margin-bottom: var(--space-lg);">
-        <strong style="color: rgba(240, 100, 100, 0.8); font-size: 0.85rem;" data-i18n="register.cons">Cons</strong>
-        <ul style="font-size: 0.875rem; color: var(--text-secondary); margin-top: var(--space-xs);">
-          <li data-i18n="register.fluxer.con1">Newer product (~2026) — still maturing in polish</li>
-          <li data-i18n="register.fluxer.con2">Centralized by default (self-hostable but single-instance)</li>
-          <li data-i18n="register.fluxer.con3">No federation yet — rooms don't federate across instances</li>
-        </ul>
-      </div>
-
-      <a href="https://fluxer.dewrito.net" target="_blank" rel="noopener" class="btn-primary" style="width: 100%; justify-content: center; background: var(--accent-cyan);" data-i18n="register.fluxer.open">
-        Open Fluxer →
-      </a>
+      <p data-i18n-html="guide.32">You can sign in on several devices at once. Each one shows up as a session you can name and sign out from in your account settings.</p>
     </div>
+
+    <div class="guide-step">
+      <h2><span data-i18n-html="guide.33">Join the Dewrito space</span> <span class="inline-pill pill-matrix">Matrix</span></h2>
+      <p data-i18n-html="guide.34">A <em>space</em> is a folder of rooms. Our official space holds the general chat, announcements and the rooms our members run. Join it and everything else is one click away.</p>
+      <p data-i18n-html="guide.35"><a href="https://matrix.to/#/#dewrito:dewrito.net" class="btn-primary" target="_blank" rel="noopener">Join #dewrito:dewrito.net &rarr;</a></p>
+      <ul>
+        <li data-i18n-html="guide.36">The link opens a matrix.to page that hands you to whichever client you installed. On Sable, paste <code>#dewrito:dewrito.net</code> into the search box instead.</li>
+        <li data-i18n-html="guide.37">Say hello in <code>#dewrito_general:dewrito.net</code>, the main chat room.</li>
+        <li data-i18n-html="guide.38">Open the space in your client and pick the rooms you want to see. Leaving a room never leaves the space.</li>
+      </ul>
+      <p data-i18n-html="guide.39">Looking for communities outside our space? The <a href="community.html">directory</a> lists rooms across the Matrix network and Fluxer servers, with member counts and descriptions.</p>
+    </div>
+
+    <div class="guide-step">
+      <h2><span data-i18n-html="guide.40">Secure your account</span> <span class="inline-pill pill-matrix">Matrix</span></h2>
+      <p data-i18n-html="guide.41">Do this once, in the first client you set up. It takes a minute and protects your encrypted messages.</p>
+      <ul>
+        <li data-i18n-html="guide.42"><strong>Set up key backup.</strong> In your client's security settings, enable "secure backup" and save the recovery key somewhere safe, such as a password manager.</li>
+        <li data-i18n-html="guide.43"><strong>Verify new devices.</strong> When you sign in somewhere new, your existing session asks you to verify it with emoji. Do it. Unverified sessions cannot read your encrypted history.</li>
+        <li data-i18n-html="guide.44"><strong>Turn on notifications</strong> in the mobile app settings if you want pings for mentions and direct messages.</li>
+      </ul>
+    </div>
+
   </div>
+
+  <hr class="divider">
+
+  <h2 data-i18n-html="guide.56">Good to know</h2>
+  <ul>
+    <li data-i18n-html="guide.57"><strong>Bridges.</strong> A Discord bridge bot runs on our homeserver. If you run a Discord server and want a room bridged, ask in the general room.</li>
+    <li data-i18n-html="guide.58"><strong>Reporting.</strong> Use your client's report feature, or email <a href="mailto:abuse@dewrito.net">abuse@dewrito.net</a>. Our <a href="moderation.html">moderation page</a> explains what happens next.</li>
+    <li data-i18n-html="guide.59"><strong>Service problems?</strong> Check the <a href="status.html">status page</a> before assuming it is your connection.</li>
+    <li data-i18n-html="guide.60"><strong>Stuck?</strong> <a href="contact.html">Contact us</a>. Registration and email-whitelist questions are the most common, and we answer them.</li>
+  </ul>
 
   <hr class="divider">
 
@@ -603,7 +727,6 @@
     <p class="footer-text" data-i18n-html="footer.text">&copy; <span id="year"></span> Dewrito.net &mdash; Community-run server infrastructure.</p>
     <ul class="footer-links">
       <li><a href="register.html" data-i18n="footer.register">Register</a></li>
-      <li><a href="getting-started.html" data-i18n="footer.guide">Guide</a></li>
       <li><a href="status.html" data-i18n="footer.status">Status</a></li>
       <li><a href="terms.html" data-i18n="footer.terms">Terms</a></li>
       <li><a href="privacy.html" data-i18n="footer.privacy">Privacy</a></li>

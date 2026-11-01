@@ -8,8 +8,8 @@ The public site for [Dewrito.net](https://dewrito.net), a community-run Matrix h
 | --- | --- |
 | `index.html` | Landing page with the boosted-communities bar (top) and live status strip (bottom) |
 | `community.html` | Boosted Communities directory: submit a listing, filter, search, boost with XLM |
-| `register.html` | Client comparison, allowed email providers, email provider checker |
-| `getting-started.html` | Step-by-step onboarding guide for Matrix and Fluxer |
+| `register.html` | Joining guide: email provider checker, Matrix and Fluxer sign-up (step 1), app choice, joining the space, account security |
+| `getting-started.html` | Redirects to `register.html` (the old guide was merged into it) |
 | `status.html` | Live service checks and notices from `data/announcements.json` |
 | `boosthelp.html` | How boosting with Stellar works |
 | `donate.html`, `contact.html`, `terms.html`, `privacy.html`, `moderation.html` | Support, contact, legal, and moderation policy |

@@ -903,10 +903,10 @@ a:hover {
   }
 }
 
-/* Navbar collapses to the hamburger menu below 1180px: six links, the Bluesky icon,
-   the language switcher and the button need ~1020px in English and ~1120px in French
-   (the longest translation), so this keeps every language on one line. */
-@media (max-width: 1180px) {
+/* Navbar collapses to the hamburger menu below 900px: three links, the Bluesky icon, the
+   language switcher and the button need ~800px in English and ~850px in German (the
+   longest translation), so this keeps every language on one line. */
+@media (max-width: 900px) {
   .nav-links,
   .nav-cta {
     display: none;
