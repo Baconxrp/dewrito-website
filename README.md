@@ -8,8 +8,8 @@ The public site for [Dewrito.net](https://dewrito.net), a community-run Matrix h
 | --- | --- |
 | `index.html` | Landing page with the boosted-communities bar (top) and live status strip (bottom) |
 | `community.html` | Boosted Communities directory: submit a listing, filter, search, boost with XLM |
-| `register.html` | Client comparison, allowed email providers, email provider checker |
-| `getting-started.html` | Step-by-step onboarding guide for Matrix and Fluxer |
+| `get-started.html` | Joining guide: email provider checker, Matrix and Fluxer sign-up (step 1), app choice, joining the space, account security |
+| `register.html`, `getting-started.html` | Redirect to `get-started.html` (old addresses) |
 | `status.html` | Live service checks and notices from `data/announcements.json` |
 | `boosthelp.html` | How boosting with Stellar works |
 | `donate.html`, `contact.html`, `terms.html`, `privacy.html`, `moderation.html` | Support, contact, legal, and moderation policy |
@@ -30,7 +30,7 @@ Everything rendered from the table is HTML-escaped, and links are only built fro
 
 ## Languages
 
-`js/i18n.js` translates the site chrome and the pages a newcomer uses (home, register, directory, contact, donate, status, 404) into Brazilian Portuguese, Spanish, French, German, Russian and Simplified Chinese. The language comes from `?lang=xx`, then the visitor's saved choice, then the browser's language list, else English. A switcher sits in the navbar and the footer. The long reference pages (guide, terms, privacy, moderation, boost help) stay English and show a translated notice.
+`js/i18n.js` translates every page into Brazilian Portuguese, Spanish, French, German, Russian and Simplified Chinese. The language comes from `?lang=xx`, then the visitor's saved choice, then the browser's language list, else English. A switcher sits in the navbar; changing it translates the page in place, without a reload, and the choice is remembered. The terms and privacy pages show a translated note that the English version is the binding one (`<meta name="i18n-coverage" content="legal">`). When you change the English text of those pages, update or remove the matching `terms.*` / `privacy.*` keys in each `lang/*.json` so the translations don't go stale.
 
 - Strings live in `lang/<code>.json`; `lang/en.json` is the reference list of keys and English text (the English itself is in the HTML).
 - Markup is tagged with `data-i18n="key"` (text), `data-i18n-html="key"` (markup allowed) or `data-i18n-attr="placeholder:key"`.
@@ -42,7 +42,7 @@ Everything rendered from the table is HTML-escaped, and links are only built fro
 
 - **Notices** (maintenance, incidents): add an item to `data/announcements.json`. Set `active` to `false` when it is over.
 - **Directory blocklist**: edit `data/blocklist.json`. It feeds both the directory filter and `moderation.html`.
-- **Email whitelist**: edit the lists in `register.html`. The checker on that page reads them from the DOM, so there is nothing else to update. Keep it in sync with the homeserver's registration config.
+- **Email whitelist**: edit the lists in `get-started.html`. The checker on that page reads them from the DOM, so there is nothing else to update. Keep it in sync with the homeserver's registration config.
 - **Uptime history**: deploy something like [Uptime Kuma](https://github.com/louislam/uptime-kuma), create a public status page there, and put its URL in `UPTIME_HISTORY_URL` in `status.html`.
 - **Analytics**: set `scriptUrl` (and `websiteId` or `domain`) in `js/analytics.js`. It is off until then, and skips visitors with Do Not Track or Global Privacy Control. Name the tool in `privacy.html` when you enable it.
 

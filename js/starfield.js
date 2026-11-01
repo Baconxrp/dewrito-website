@@ -40,10 +40,41 @@
       }
     }
 
+    // The sky and nebulae are painted as a CSS background on a fixed layer behind the canvas.
+    // Drawing them on the canvas meant three full-screen gradient fills every frame (~10ms at
+    // 1080p, most of the frame budget) for something that only moves when the page scrolls.
+    // Now they are repainted only on resize and scroll; the canvas draws just the stars.
+    let sky = document.getElementById('starfield-sky');
+    if (!sky) {
+      sky = document.createElement('div');
+      sky.id = 'starfield-sky';
+      sky.setAttribute('aria-hidden', 'true');
+      sky.style.cssText = 'position:fixed;inset:0;z-index:-2;pointer-events:none;background-color:#030112;';
+      canvas.parentNode.insertBefore(sky, canvas);
+    }
+    let lastSkyKey = '';
+    function paintSky() {
+      if (width === 0 || height === 0) return;
+      const key = width + 'x' + height + '@' + Math.round(scrollY);
+      if (key === lastSkyKey) return;
+      lastSkyKey = key;
+      const scrollShift = scrollY * 0.0003;
+      const gx = width / 2 + scrollShift * 200;
+      const gy = height / 2 + scrollShift * 100;
+      const n1x = width * 0.3 - scrollY * 0.02, n1y = height * 0.4 - scrollY * 0.03;
+      const n2x = width * 0.75 - scrollY * 0.015, n2y = height * 0.65 - scrollY * 0.025;
+      sky.style.backgroundImage = [
+        `radial-gradient(circle 350px at ${n1x}px ${n1y}px, rgba(80,23,85,0.06), rgba(80,23,85,0.02) 50%, transparent 100%)`,
+        `radial-gradient(circle 300px at ${n2x}px ${n2y}px, rgba(0,180,212,0.04), rgba(0,180,212,0.015) 50%, transparent 100%)`,
+        `radial-gradient(circle ${Math.round(Math.max(width, height) * 0.7)}px at ${gx}px ${gy}px, #0a0520, #070318 50%, #030112 100%)`
+      ].join(',');
+    }
+
     function resizeCanvas() {
       width = canvas.width = window.innerWidth;
       height = canvas.height = window.innerHeight;
       createStars();
+      paintSky();
       if (reduceMotion) drawStars(0);
     }
 
@@ -52,36 +83,7 @@
 
       ctx.clearRect(0, 0, width, height);
 
-      const scrollShift = scrollY * 0.0003;
-      const gx = width / 2 + scrollShift * 200;
-      const gy = height / 2 + scrollShift * 100;
-      const grad = ctx.createRadialGradient(gx, gy, 0, width / 2, height / 2, Math.max(width, height) * 0.7);
-      grad.addColorStop(0, '#0a0520');
-      grad.addColorStop(0.5, '#070318');
-      grad.addColorStop(1, '#030112');
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, width, height);
-
-      // Nebulae...
-      const n1x = width * 0.3 - scrollY * 0.02;
-      const n1y = height * 0.4 - scrollY * 0.03;
-      const n1Grad = ctx.createRadialGradient(n1x, n1y, 0, n1x, n1y, 350);
-      n1Grad.addColorStop(0, 'rgba(80, 23, 85, 0.06)');
-      n1Grad.addColorStop(0.5, 'rgba(80, 23, 85, 0.02)');
-      n1Grad.addColorStop(1, 'transparent');
-      ctx.fillStyle = n1Grad;
-      ctx.fillRect(0, 0, width, height);
-
-      const n2x = width * 0.75 - scrollY * 0.015;
-      const n2y = height * 0.65 - scrollY * 0.025;
-      const n2Grad = ctx.createRadialGradient(n2x, n2y, 0, n2x, n2y, 300);
-      n2Grad.addColorStop(0, 'rgba(0, 180, 212, 0.04)');
-      n2Grad.addColorStop(0.5, 'rgba(0, 180, 212, 0.015)');
-      n2Grad.addColorStop(1, 'transparent');
-      ctx.fillStyle = n2Grad;
-      ctx.fillRect(0, 0, width, height);
-
-      // Draw stars (same as before)
+      // Draw stars
       for (const s of stars) {
         const layer = LAYERS[s.layer];
         const pulse = Math.sin(time * s.pulseSpeed + s.pulseOffset);
@@ -145,7 +147,11 @@
     window.addEventListener('scroll', () => {
       if (!ticking) {
         requestAnimationFrame(() => {
-          scrollY = window.pageYOffset;
+          // With "reduce motion" on, the sky and stars stay still while scrolling, as before.
+          if (!reduceMotion) {
+            scrollY = window.pageYOffset;
+            paintSky();
+          }
           ticking = false;
         });
         ticking = true;

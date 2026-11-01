@@ -107,27 +107,7 @@ body::after {
   );
 }
 
-/* ---- Accessibility: skip link + visible keyboard focus ---- */
-.skip-link {
-  position: absolute;
-  top: -100px;
-  left: var(--space-md);
-  z-index: 100000;
-  padding: 10px 16px;
-  background: var(--accent-cyan);
-  color: var(--bg-primary);
-  border-radius: var(--radius-sm);
-  font-weight: 600;
-  text-decoration: none;
-  transition: top 0.15s ease;
-}
-
-.skip-link:focus {
-  top: var(--space-md);
-  opacity: 1;
-  outline: none;
-}
-
+/* ---- Visible keyboard focus ---- */
 :focus-visible {
   outline: 2px solid var(--accent-cyan);
   outline-offset: 3px;
@@ -146,9 +126,6 @@ textarea:focus-visible {
   outline-offset: 0;
 }
 
-[tabindex="-1"]:focus {
-  outline: none;
-}
 
 /* ---- Language switcher + English-only notice (js/i18n.js) ---- */
 .lang-select {
@@ -441,7 +418,9 @@ a:hover {
   justify-content: center;
   width: 36px;
   height: 36px;
+  margin-left: var(--space-md);
   margin-right: var(--space-sm);
+  flex-shrink: 0;
   border-radius: 50%;
   color: var(--text-secondary);
   transition: color 0.2s ease, background 0.2s ease;
@@ -470,10 +449,13 @@ a:hover {
   color: var(--text-primary);
 }
 
-.nav-cta .btn-primary {
+.nav-cta .btn-primary,
+.nav-cta .btn-secondary {
   padding: 8px 20px;
   font-size: 0.8rem;
+  white-space: nowrap;
 }
+
 
 /* Mobile nav toggle */
 .nav-toggle {
@@ -921,23 +903,10 @@ a:hover {
   }
 }
 
-@media (max-width: 768px) {
-  :root {
-    --space-4xl: 64px;
-    --space-3xl: 48px;
-    --space-2xl: 32px;
-  }
-
-  .hero {
-    min-height: auto;
-    padding-top: var(--space-xl);
-    padding-bottom: var(--space-2xl);
-  }
-
-  .hero-content {
-    padding: var(--space-xl) var(--space-md);
-  }
-
+/* Navbar collapses to the hamburger menu below 900px: three links, the Bluesky icon, the
+   language switcher and the button need ~800px in English and ~850px in German (the
+   longest translation), so this keeps every language on one line. */
+@media (max-width: 900px) {
   .nav-links,
   .nav-cta {
     display: none;
@@ -1011,6 +980,24 @@ a:hover {
   @keyframes slideDown {
     from { opacity: 0; transform: translateY(-8px); }
     to   { opacity: 1; transform: translateY(0); }
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --space-4xl: 64px;
+    --space-3xl: 48px;
+    --space-2xl: 32px;
+  }
+
+  .hero {
+    min-height: auto;
+    padding-top: var(--space-xl);
+    padding-bottom: var(--space-2xl);
+  }
+
+  .hero-content {
+    padding: var(--space-xl) var(--space-md);
   }
 
   .features-grid {

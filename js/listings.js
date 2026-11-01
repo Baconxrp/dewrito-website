@@ -193,7 +193,7 @@ window.DewritoListings = (function () {
 
   // Fills `room` on Matrix listings a few at a time. onUpdate is called (debounced) as results arrive,
   // since lookups that go over federation to other homeservers can take several seconds each.
-  async function enrichWithRoomInfo(listings, onUpdate, concurrency = 4) {
+  async function enrichWithRoomInfo(listings, onUpdate, concurrency = 8) {
     const queue = listings.filter(l => l.platform === 'Matrix' && l.href !== '#' && l.room === null);
     let timer = null;
     const notify = () => {

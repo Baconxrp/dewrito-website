@@ -12,7 +12,7 @@
   <meta property="og:image" content="https://dewrito.net/img/logo.png">
   <meta name="twitter:card" content="summary">
   <link rel="me" href="https://bsky.app/profile/dewrito.net">
-  <meta name="i18n-coverage" content="chrome">
+  <meta name="i18n-coverage" content="legal">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="img/favicon.ico" rel="shortcut icon"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -25,18 +25,14 @@
 </head>
 <body>
 
-<a class="skip-link" href="#main" data-i18n="nav.skip">Skip to content</a>
 <canvas id="starfield"></canvas>
 
 <nav class="navbar" id="navbar">
   <div class="container">
     <a href="index.html" class="nav-logo"><img src="img/logo.png" alt="Dewrito"></a>
     <ul class="nav-links">
-      <li><a href="index.html#features" data-i18n="nav.features">Features</a></li>
-      <li><a href="index.html#community" data-i18n="nav.community">Community</a></li>
       <li><a href="community.html" data-i18n="nav.directory">Directory</a></li>
-      <li><a href="getting-started.html" data-i18n="nav.guide">Guide</a></li>
-      <li><a href="register.html" data-i18n="nav.register">Register</a></li>
+      <li><a href="get-started.html" data-i18n="nav.register">Register</a></li>
       <li><a href="contact.html" data-i18n="nav.contact">Contact</a></li>
     </ul>
     <a class="nav-bsky" href="https://bsky.app/profile/dewrito.net" target="_blank" rel="me noopener" aria-label="Dewrito on Bluesky" title="@dewrito.net on Bluesky"><svg class="bsky-icon" viewBox="0 0 568 501" aria-hidden="true"><path fill="currentColor" d="M123.121 33.664C188.241 82.553 258.281 181.68 284 234.873c25.719-53.192 95.759-152.32 160.879-201.21C491.866-1.611 568-28.906 568 57.947c0 17.346-9.945 145.713-15.778 166.555-20.275 72.453-94.155 90.933-159.875 79.748C507.222 323.8 536.444 388.56 473.333 453.32c-119.86 122.992-172.272-30.859-185.702-70.281-2.462-7.227-3.614-10.608-3.631-7.733-.017-2.875-1.169.506-3.631 7.733-13.43 39.422-65.842 193.273-185.702 70.281-63.111-64.76-33.89-129.52 80.986-149.071-65.72 11.185-139.6-7.295-159.875-79.748C9.945 203.659 0 75.291 0 57.946 0-28.906 76.135-1.612 123.121 33.664z"/></svg></a>
@@ -45,72 +41,71 @@
   </div>
 </nav>
 
-<header class="page-header" id="main" tabindex="-1">
-  <span class="mono-label section-label">Privacy</span>
-  <h1>Privacy Policy</h1>
-  <p style="margin: 0 auto;">Last updated: October 31, 2026. This explains what Dewrito.net stores about you, why, and how to get it removed.</p>
+<header class="page-header">
+  <span class="mono-label section-label" data-i18n-html="privacy.01">Privacy</span>
+  <h1 data-i18n-html="privacy.02">Privacy Policy</h1>
+  <p style="margin: 0 auto;" data-i18n-html="privacy.03">Last updated: October 31, 2026. This explains what Dewrito.net stores about you, why, and how to get it removed.</p>
 </header>
 
 <section class="content-section">
-  <p>Dewrito.net is a community-run Matrix homeserver and Fluxer instance. We are volunteers, not a company, and we keep only what is needed to run the services and keep them safe. Questions go to <a href="mailto:support@dewrito.net">support@dewrito.net</a>.</p>
+  <p data-i18n-html="privacy.04">Dewrito.net is a community-run Matrix homeserver and Fluxer instance. We are volunteers, not a company, and we keep only what is needed to run the services and keep them safe. Questions go to <a href="mailto:support@dewrito.net">support@dewrito.net</a>.</p>
 
-  <h2>1. What we store</h2>
-  <h3>Account data</h3>
+  <h2 data-i18n-html="privacy.05">1. What we store</h2>
+  <h3 data-i18n-html="privacy.06">Account data</h3>
   <ul>
-    <li>Your username, a hashed password, and the email address you registered with. The email is used for verification, password resets and, rarely, to contact you about your account.</li>
-    <li>Session records: the devices you are signed in on, their IP addresses and user agents, and when they were last seen. You can view and remove sessions in your client's settings.</li>
+    <li data-i18n-html="privacy.07">Your username, a hashed password, and the email address you registered with. The email is used for verification, password resets and, rarely, to contact you about your account.</li>
+    <li data-i18n-html="privacy.08">Session records: the devices you are signed in on, their IP addresses and user agents, and when they were last seen. You can view and remove sessions in your client's settings.</li>
   </ul>
-  <h3>Content</h3>
+  <h3 data-i18n-html="privacy.09">Content</h3>
   <ul>
-    <li><strong>Matrix:</strong> messages, files, reactions, room state and membership for every room you take part in. In encrypted rooms we store the encrypted payload and cannot read it. In unencrypted rooms, and for all metadata (who, when, which room), we can.</li>
-    <li><strong>Fluxer:</strong> messages, uploads, voice and video session metadata, server and role membership. Fluxer does not encrypt messages end to end.</li>
-    <li>Uploaded media is stored on our servers until you or a room moderator deletes it, or we remove it for a policy reason.</li>
+    <li data-i18n-html="privacy.10"><strong>Matrix:</strong> messages, files, reactions, room state and membership for every room you take part in. In encrypted rooms we store the encrypted payload and cannot read it. In unencrypted rooms, and for all metadata (who, when, which room), we can.</li>
+    <li data-i18n-html="privacy.11"><strong>Fluxer:</strong> messages, uploads, voice and video session metadata, server and role membership. Fluxer does not encrypt messages end to end.</li>
+    <li data-i18n-html="privacy.12">Uploaded media is stored on our servers until you or a room moderator deletes it, or we remove it for a policy reason.</li>
   </ul>
-  <h3>Technical logs</h3>
-  <p>Our web servers and homeserver write access logs containing IP addresses, timestamps and requested URLs. We keep them for a short period for debugging and abuse handling, then delete them.</p>
+  <h3 data-i18n-html="privacy.13">Technical logs</h3>
+  <p data-i18n-html="privacy.14">Our web servers and homeserver write access logs containing IP addresses, timestamps and requested URLs. We keep them for a short period for debugging and abuse handling, then delete them.</p>
 
-  <h2>2. Federation</h2>
-  <p>Matrix is federated. When you join a room that has members on other homeservers, your messages, profile name, avatar and Matrix ID are sent to those servers so their users can see them. Those copies are governed by the other servers' policies, and we cannot delete them. The same applies to direct messages with users elsewhere. Fluxer does not federate; its data stays on our hardware.</p>
+  <h2 data-i18n-html="privacy.15">2. Federation</h2>
+  <p data-i18n-html="privacy.16">Matrix is federated. When you join a room that has members on other homeservers, your messages, profile name, avatar and Matrix ID are sent to those servers so their users can see them. Those copies are governed by the other servers' policies, and we cannot delete them. The same applies to direct messages with users elsewhere. Fluxer does not federate; its data stays on our hardware.</p>
 
-  <h2>3. Services we rely on</h2>
+  <h2 data-i18n-html="privacy.17">3. Services we rely on</h2>
   <ul>
-    <li><strong>Hosting and management:</strong> our Matrix homeserver runs on infrastructure managed with <a href="https://etke.cc" target="_blank" rel="noopener">etke.cc</a> tooling. Their staff may access server data when we ask for support.</li>
-    <li><strong>Voice and video calls</strong> on Matrix go through a LiveKit service we host at matrix.dewrito.net. Call media is relayed, not recorded.</li>
-    <li><strong>Identity server:</strong> clients are pointed at vector.im for contact discovery. It only receives data if you explicitly choose to share your email or phone number in your client settings.</li>
-    <li><strong>Community directory:</strong> listings you submit on the <a href="community.html">Boosted Communities</a> page are stored in a Supabase database and are public. Boost payments are recorded on the public Stellar ledger, which is permanent and visible to anyone.</li>
-    <li><strong>Donations:</strong> handled by Ko-fi and NOWPayments under their own policies. We receive the amount and whatever name or message you choose to attach, not your payment details.</li>
-    <li><strong>This website:</strong> loads fonts from Google Fonts, the Ko-fi widget on the home page, and Google reCAPTCHA on the directory page. These providers see your IP address and browser details when those resources load. The site sets no cookies of its own. If we enable usage analytics, we will use a cookie-free, self-hosted tool and name it here.</li>
-  </ul>
-
-  <h2>4. How we use the data</h2>
-  <p>To run the services you signed up for, to keep them secure, to enforce the <a href="terms.html">Terms of Service</a>, to respond to abuse reports, and to meet legal obligations. We do not sell data, run advertising, or profile users.</p>
-
-  <h2>5. Moderation</h2>
-  <p>Volunteer moderators can read unencrypted rooms they are in, see membership of any room on our server, and view reports you submit. A moderation bot (Draupnir) acts on bans and redactions. Details are on the <a href="moderation.html">moderation page</a>.</p>
-
-  <h2>6. Retention and deletion</h2>
-  <ul>
-    <li><strong>Deactivating your account</strong> (in your client's settings, or by emailing support) removes your profile, ends all sessions and stops the email being used. Messages you sent remain in rooms unless you also ask for them to be erased; most Matrix clients offer this at deactivation.</li>
-    <li>Erased messages are redacted on our server and a redaction is sent to federated servers, which usually honour it but are not obliged to.</li>
-    <li>You can request a copy of your data, or deletion, by emailing <a href="mailto:support@dewrito.net">support@dewrito.net</a> from your registered address. We answer within 30 days.</li>
+    <li data-i18n-html="privacy.18"><strong>Hosting and management:</strong> our Matrix homeserver runs on infrastructure managed with <a href="https://etke.cc" target="_blank" rel="noopener">etke.cc</a> tooling. Their staff may access server data when we ask for support.</li>
+    <li data-i18n-html="privacy.19"><strong>Voice and video calls</strong> on Matrix go through a LiveKit service we host at matrix.dewrito.net. Call media is relayed, not recorded.</li>
+    <li data-i18n-html="privacy.20"><strong>Identity server:</strong> clients are pointed at vector.im for contact discovery. It only receives data if you explicitly choose to share your email or phone number in your client settings.</li>
+    <li data-i18n-html="privacy.21"><strong>Community directory:</strong> listings you submit on the <a href="community.html">Boosted Communities</a> page are stored in a Supabase database and are public. Boost payments are recorded on the public Stellar ledger, which is permanent and visible to anyone.</li>
+    <li data-i18n-html="privacy.22"><strong>Donations:</strong> handled by Ko-fi and NOWPayments under their own policies. We receive the amount and whatever name or message you choose to attach, not your payment details.</li>
+    <li data-i18n-html="privacy.23"><strong>This website:</strong> loads fonts from Google Fonts, the Ko-fi widget on the home page, and Google reCAPTCHA on the directory page. These providers see your IP address and browser details when those resources load. The site sets no cookies of its own. If we enable usage analytics, we will use a cookie-free, self-hosted tool and name it here.</li>
   </ul>
 
-  <h2>7. Your rights</h2>
-  <p>If you are in the EU, UK or another jurisdiction with data-protection law, you have the right to access, correct, export and erase your data, and to object to processing. The section above is how to exercise them. You can also complain to your local supervisory authority.</p>
+  <h2 data-i18n-html="privacy.24">4. How we use the data</h2>
+  <p data-i18n-html="privacy.25">To run the services you signed up for, to keep them secure, to enforce the <a href="terms.html">Terms of Service</a>, to respond to abuse reports, and to meet legal obligations. We do not sell data, run advertising, or profile users.</p>
 
-  <h2>8. Age</h2>
-  <p>Our services are for adults. We do not knowingly keep accounts for anyone under 18 and will remove them when identified.</p>
+  <h2 data-i18n-html="privacy.26">5. Moderation</h2>
+  <p data-i18n-html="privacy.27">Volunteer moderators can read unencrypted rooms they are in, see membership of any room on our server, and view reports you submit. A moderation bot (Draupnir) acts on bans and redactions. Details are on the <a href="moderation.html">moderation page</a>.</p>
 
-  <h2>9. Changes</h2>
-  <p>We will post changes here and update the date at the top. Significant changes are announced on the <a href="status.html">status page</a> and in the Dewrito space.</p>
+  <h2 data-i18n-html="privacy.28">6. Retention and deletion</h2>
+  <ul>
+    <li data-i18n-html="privacy.29"><strong>Deactivating your account</strong> (in your client's settings, or by emailing support) removes your profile, ends all sessions and stops the email being used. Messages you sent remain in rooms unless you also ask for them to be erased; most Matrix clients offer this at deactivation.</li>
+    <li data-i18n-html="privacy.30">Erased messages are redacted on our server and a redaction is sent to federated servers, which usually honour it but are not obliged to.</li>
+    <li data-i18n-html="privacy.31">You can request a copy of your data, or deletion, by emailing <a href="mailto:support@dewrito.net">support@dewrito.net</a> from your registered address. We answer within 30 days.</li>
+  </ul>
+
+  <h2 data-i18n-html="privacy.32">7. Your rights</h2>
+  <p data-i18n-html="privacy.33">If you are in the EU, UK or another jurisdiction with data-protection law, you have the right to access, correct, export and erase your data, and to object to processing. The section above is how to exercise them. You can also complain to your local supervisory authority.</p>
+
+  <h2 data-i18n-html="privacy.34">8. Age</h2>
+  <p data-i18n-html="privacy.35">Our services are for adults. We do not knowingly keep accounts for anyone under 18 and will remove them when identified.</p>
+
+  <h2 data-i18n-html="privacy.36">9. Changes</h2>
+  <p data-i18n-html="privacy.37">We will post changes here and update the date at the top. Significant changes are announced on the <a href="status.html">status page</a> and in the Dewrito space.</p>
 </section>
 
 <footer class="footer">
   <div class="container">
     <p class="footer-text" data-i18n-html="footer.text">&copy; <span id="year"></span> Dewrito.net &mdash; Community-run server infrastructure.</p>
     <ul class="footer-links">
-      <li><a href="register.html" data-i18n="footer.register">Register</a></li>
-      <li><a href="getting-started.html" data-i18n="footer.guide">Guide</a></li>
+      <li><a href="get-started.html" data-i18n="footer.register">Register</a></li>
       <li><a href="status.html" data-i18n="footer.status">Status</a></li>
       <li><a href="terms.html" data-i18n="footer.terms">Terms</a></li>
       <li><a href="privacy.html" data-i18n="footer.privacy">Privacy</a></li>

@@ -14,8 +14,14 @@
   <link rel="me" href="https://bsky.app/profile/dewrito.net">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="img/favicon.ico" rel="shortcut icon"/>
+  <link rel="preconnect" href="https://matrix.dewrito.net" crossorigin>
+  <link rel="preconnect" href="https://fluxer.dewrito.net" crossorigin>
+  <link rel="preconnect" href="https://sable.dewrito.net" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/site.css">
+  <noscript><style>
+    .noscript-note { max-width: 760px; margin: 0 auto var(--space-lg); padding: 12px 16px; border-left: 3px solid var(--accent-cyan); background: rgba(0, 212, 255, 0.05); border-radius: 0 8px 8px 0; color: var(--text-secondary); font-size: 0.9rem; }
+  </style></noscript>
   <script src="js/i18n.js"></script>
   <script src="js/analytics.js" defer></script>
   <style>
@@ -56,18 +62,14 @@
 </head>
 <body>
 
-<a class="skip-link" href="#main" data-i18n="nav.skip">Skip to content</a>
 <canvas id="starfield"></canvas>
 
 <nav class="navbar" id="navbar">
   <div class="container">
     <a href="index.html" class="nav-logo"><img src="img/logo.png" alt="Dewrito"></a>
     <ul class="nav-links">
-      <li><a href="index.html#features" data-i18n="nav.features">Features</a></li>
-      <li><a href="index.html#community" data-i18n="nav.community">Community</a></li>
       <li><a href="community.html" data-i18n="nav.directory">Directory</a></li>
-      <li><a href="getting-started.html" data-i18n="nav.guide">Guide</a></li>
-      <li><a href="register.html" data-i18n="nav.register">Register</a></li>
+      <li><a href="get-started.html" data-i18n="nav.register">Register</a></li>
       <li><a href="contact.html" data-i18n="nav.contact">Contact</a></li>
     </ul>
     <a class="nav-bsky" href="https://bsky.app/profile/dewrito.net" target="_blank" rel="me noopener" aria-label="Dewrito on Bluesky" title="@dewrito.net on Bluesky"><svg class="bsky-icon" viewBox="0 0 568 501" aria-hidden="true"><path fill="currentColor" d="M123.121 33.664C188.241 82.553 258.281 181.68 284 234.873c25.719-53.192 95.759-152.32 160.879-201.21C491.866-1.611 568-28.906 568 57.947c0 17.346-9.945 145.713-15.778 166.555-20.275 72.453-94.155 90.933-159.875 79.748C507.222 323.8 536.444 388.56 473.333 453.32c-119.86 122.992-172.272-30.859-185.702-70.281-2.462-7.227-3.614-10.608-3.631-7.733-.017-2.875-1.169.506-3.631 7.733-13.43 39.422-65.842 193.273-185.702 70.281-63.111-64.76-33.89-129.52 80.986-149.071-65.72 11.185-139.6-7.295-159.875-79.748C9.945 203.659 0 75.291 0 57.946 0-28.906 76.135-1.612 123.121 33.664z"/></svg></a>
@@ -76,7 +78,7 @@
   </div>
 </nav>
 
-<header class="page-header" id="main" tabindex="-1">
+<header class="page-header">
   <span class="mono-label section-label" data-i18n="status.pageLabel">Service Status</span>
   <h1 data-i18n="status.title">Is it up?</h1>
   <p style="margin: 0 auto;" data-i18n="status.intro">Live checks run from your browser every 30 seconds. Notices and maintenance windows are posted below.</p>
@@ -84,6 +86,7 @@
 </header>
 
 <section class="content-section">
+  <noscript><p class="noscript-note">Live checks run in your browser, so they need JavaScript. For outages and maintenance, follow <a href="https://bsky.app/profile/dewrito.net">@dewrito.net on Bluesky</a> or check <a href="data/announcements.json">the notices file</a>.</p></noscript>
   <div class="svc-list" id="svcList"></div>
   <p class="refresh-note" data-i18n-html="status.refreshNote">Last checked <span id="lastChecked">&mdash;</span>. "Reachable" means the service answered but did not expose an HTTP status to this page.</p>
   <p id="historyWrap" style="text-align:center; margin-top: var(--space-md); display:none;"><a id="historyLink" class="btn-secondary" href="#" target="_blank" rel="noopener" data-i18n="status.history">View uptime history &#8599;</a></p>
@@ -102,8 +105,7 @@
   <div class="container">
     <p class="footer-text" data-i18n-html="footer.text">&copy; <span id="year"></span> Dewrito.net &mdash; Community-run server infrastructure.</p>
     <ul class="footer-links">
-      <li><a href="register.html" data-i18n="footer.register">Register</a></li>
-      <li><a href="getting-started.html" data-i18n="footer.guide">Guide</a></li>
+      <li><a href="get-started.html" data-i18n="footer.register">Register</a></li>
       <li><a href="status.html" data-i18n="footer.status">Status</a></li>
       <li><a href="terms.html" data-i18n="footer.terms">Terms</a></li>
       <li><a href="privacy.html" data-i18n="footer.privacy">Privacy</a></li>
@@ -176,19 +178,29 @@
     document.getElementById('ms-' + svc.id).textContent = state === 'down' ? '\u2014' : ms + ' ms';
   }
 
+  let lastResults = null, lastCheckedAt = null;
   async function runChecks() {
     const results = await Promise.all(SERVICES.map(async s => { const r = await checkOne(s); paint(r); return r; }));
+    lastResults = results; lastCheckedAt = new Date();
+    paintOverall(results);
+  }
+  function paintOverall(results) {
     const overall = document.getElementById('overall');
     const text = document.getElementById('overallText');
     const anyDown = results.some(r => r.state === 'down');
     const anyDegraded = results.some(r => r.state === 'degraded');
     overall.className = 'overall ' + (anyDown ? 'status-down' : anyDegraded ? 'status-degraded' : 'status-up');
     text.textContent = anyDown ? T('status.someDown', 'Some services are down') : anyDegraded ? T('status.someSlow', 'Some services are slow') : T('status.allUp', 'All systems operational');
-    document.getElementById('lastChecked').textContent = new Date().toLocaleTimeString();
+    if (lastCheckedAt) document.getElementById('lastChecked').textContent = lastCheckedAt.toLocaleTimeString();
   }
   runChecks();
   setInterval(runChecks, 30000);
-  document.addEventListener('i18n:ready', () => { buildList(); runChecks(); renderNotices(); });
+  // A language change rebuilds the labels from the last results; it doesn't hit the servers again.
+  document.addEventListener('i18n:ready', () => {
+    buildList();
+    if (lastResults) { lastResults.forEach(paint); paintOverall(lastResults); }
+    renderNotices();
+  });
 
   // Notices come from data/announcements.json (edit that file to post one).
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
