@@ -431,6 +431,31 @@ a:hover {
   align-items: center;
   gap: var(--space-xl);
   list-style: none;
+  margin: 0 auto; /* stays centred; the icon and CTA sit flush right */
+}
+
+/* Bluesky icon in the navbar */
+.nav-bsky {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  margin-right: var(--space-sm);
+  border-radius: 50%;
+  color: var(--text-secondary);
+  transition: color 0.2s ease, background 0.2s ease;
+}
+
+.nav-bsky .bsky-icon {
+  width: 20px;
+  height: 18px;
+}
+
+.nav-bsky:hover {
+  opacity: 1;
+  color: #0085ff; /* Bluesky blue */
+  background: rgba(0, 133, 255, 0.1);
 }
 
 .nav-links a {
@@ -713,21 +738,6 @@ a:hover {
   color: var(--text-secondary);
 }
 
-.footer-social {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.8rem;
-  color: var(--text-muted);
-  text-decoration: none;
-  transition: color 0.2s ease;
-}
-
-.footer-social:hover {
-  opacity: 1;
-  color: #0085ff; /* Bluesky blue */
-}
-
 .bsky-icon {
   width: 16px;
   height: 14px;
@@ -955,6 +965,12 @@ a:hover {
 
   .nav-logo {
     order: 1;
+  }
+
+  .nav-bsky {
+    order: 1;
+    margin-left: auto;
+    margin-right: 4px;
   }
 
   .nav-toggle {
