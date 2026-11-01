@@ -28,6 +28,16 @@ The public site for [Dewrito.net](https://dewrito.net), a community-run Matrix h
 
 Everything rendered from the table is HTML-escaped, and links are only built from `https://` Fluxer URLs or well-formed Matrix aliases.
 
+## Languages
+
+`js/i18n.js` translates the site chrome and the pages a newcomer uses (home, register, directory, contact, donate, status, 404) into Russian, Spanish, German, French and Simplified Chinese. The language comes from `?lang=xx`, then the visitor's saved choice, then the browser's language list, else English. A switcher sits in the navbar and the footer. The long reference pages (guide, terms, privacy, moderation, boost help) stay English and show a translated notice.
+
+- Strings live in `lang/<code>.json`; `lang/en.json` is the reference list of keys and English text (the English itself is in the HTML).
+- Markup is tagged with `data-i18n="key"` (text), `data-i18n-html="key"` (markup allowed) or `data-i18n-attr="placeholder:key"`.
+- Page scripts build some strings at runtime and use `i18n.t(key, fallback)`, re-rendering on the `i18n:ready` event.
+- To add a language: copy `lang/en.json`, translate the values (keep `{placeholders}` and tags), add the code to `SUPPORTED` in `js/i18n.js`.
+- The translations were machine-assisted; a native speaker's pass is welcome.
+
 ## Editing content
 
 - **Notices** (maintenance, incidents): add an item to `data/announcements.json`. Set `active` to `false` when it is over.
