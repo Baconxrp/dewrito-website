@@ -9,7 +9,7 @@
 // English is the text already in the HTML; lang/en.json exists only as the reference for translators.
 (function () {
   'use strict';
-  const SUPPORTED = { en: 'English', ru: 'Русский', es: 'Español', de: 'Deutsch', fr: 'Français', zh: '中文' };
+  const SUPPORTED = { en: 'English', pt: 'Português', es: 'Español', fr: 'Français', de: 'Deutsch', ru: 'Русский', zh: '中文' };
   const STORAGE_KEY = 'dw_lang';
   const scriptEl = document.currentScript;
   const LANG_BASE = scriptEl ? new URL('../lang/', scriptEl.src).href : 'lang/';
@@ -95,7 +95,7 @@
     : fetch(LANG_BASE + lang + '.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : Promise.reject(r.status)).then(j => { dict = j || {}; }).catch(() => { lang = 'en'; dict = {}; })
   ).then(() => new Promise(res => (document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', res) : res())))
    .then(() => {
-      document.documentElement.lang = lang === 'zh' ? 'zh-Hans' : lang;
+      document.documentElement.lang = lang === 'zh' ? 'zh-Hans' : lang === 'pt' ? 'pt-BR' : lang;
       apply();
       injectSwitchers();
       englishOnlyNotice();

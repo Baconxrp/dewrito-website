@@ -259,6 +259,7 @@
               <option value="German" data-i18n="lang.german">German</option>
               <option value="French" data-i18n="lang.french">French</option>
               <option value="Chinese" data-i18n="lang.chinese">Chinese</option>
+              <option value="Portuguese" data-i18n="lang.portuguese">Portuguese</option>
               <option value="Other" data-i18n="cat.other">Other</option>
             </select>
           </div>
@@ -327,6 +328,7 @@
             <option value="German" data-i18n="lang.german">German</option>
             <option value="French" data-i18n="lang.french">French</option>
             <option value="Chinese" data-i18n="lang.chinese">Chinese</option>
+              <option value="Portuguese" data-i18n="lang.portuguese">Portuguese</option>
             <option value="Other" data-i18n="lang.other">Other</option>
           </select>
         </div>
@@ -448,7 +450,7 @@
 
   const T = (k, f) => (window.i18n ? window.i18n.t(k, f) : f);
   const CAT_KEYS = { "Gaming": "cat.gaming", "Politics & Opinion": "cat.politics", "Art & Music": "cat.art", "Entertainment": "cat.entertainment", "Education": "cat.education", "Science & Technology": "cat.tech", "Content Creator": "cat.creator", "Anime & Manga": "cat.anime", "Movies & TV": "cat.movies", "Vtuber": "cat.vtuber", "Furry": "cat.furry", "LGBT+": "cat.lgbt", "Other": "cat.other" };
-  const LANG_KEYS = { "English": "lang.english", "Russian": "lang.russian", "Spanish": "lang.spanish", "German": "lang.german", "French": "lang.french", "Chinese": "lang.chinese", "Other": "lang.other" };
+  const LANG_KEYS = { "English": "lang.english", "Russian": "lang.russian", "Spanish": "lang.spanish", "German": "lang.german", "French": "lang.french", "Chinese": "lang.chinese", "Portuguese": "lang.portuguese", "Other": "lang.other" };
   const catLabel = c => c === 'All' ? T('dir.all', 'All') : T(CAT_KEYS[c] || '', c);
   const langLabel = l => T(LANG_KEYS[l] || '', l);
   const fmt = (key, fallback, vars) => Object.entries(vars).reduce((str, [k, v]) => str.split('{' + k + '}').join(v), T(key, fallback));
