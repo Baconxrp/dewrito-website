@@ -3,7 +3,7 @@
 // - Picks a language from ?lang=xx, then the saved choice, then the browser's languages, else English.
 // - Loads lang/<code>.json and applies it to elements marked data-i18n (text), data-i18n-html (markup)
 //   and data-i18n-attr="attr:key;attr:key" (attributes such as placeholder or title).
-// - Adds a language switcher to the navbar and the footer, and a notice on pages that are English-only
+// - Adds a language switcher to the navbar (switching happens in place, no reload), and a notice on pages that are English-only
 //   (those carry <meta name="i18n-coverage" content="chrome">).
 // - Page scripts use i18n.t(key, fallback) for strings they build themselves and re-render on 'i18n:ready'.
 // English is the text already in the HTML; lang/en.json exists only as the reference for translators.
@@ -40,22 +40,45 @@
     setTimeout(() => document.documentElement.classList.remove('i18n-loading'), 1500);
   }
 
-  function apply(root) {
-    root = root || document;
-    root.querySelectorAll('[data-i18n]').forEach(el => { const v = dict[el.dataset.i18n]; if (v != null) el.textContent = v; });
-    root.querySelectorAll('[data-i18n-html]').forEach(el => { const v = dict[el.dataset.i18nHtml]; if (v != null) el.innerHTML = v; });
-    root.querySelectorAll('[data-i18n-attr]').forEach(el => {
-      el.dataset.i18nAttr.split(';').forEach(pair => {
-        const [attr, key] = pair.split(':').map(s => s.trim());
-        const v = dict[key];
-        if (attr && v != null) el.setAttribute(attr, v);
-      });
-    });
+  // English lives in the HTML. The first time an element is translated, its original English is kept
+  // here so switching back to English (or to another language) never needs a page reload.
+  const originals = new WeakMap();
+  function original(el, slot, read) {
+    let o = originals.get(el);
+    if (!o) { o = {}; originals.set(el, o); }
+    if (!(slot in o)) o[slot] = read();
+    return o[slot];
   }
 
-  function makeSwitcher(className) {
+  function apply(root) {
+    root = root || document;
+    root.querySelectorAll('[data-i18n]').forEach(el => {
+      const en = original(el, 'text', () => el.textContent);
+      const v = dict[el.dataset.i18n];
+      el.textContent = v != null ? v : en;
+    });
+    root.querySelectorAll('[data-i18n-html]').forEach(el => {
+      const en = original(el, 'html', () => el.innerHTML);
+      const v = dict[el.dataset.i18nHtml];
+      el.innerHTML = v != null ? v : en;
+    });
+    root.querySelectorAll('[data-i18n-attr]').forEach(el => {
+      el.dataset.i18nAttr.split(';').forEach(pair => {
+        const [attr, key] = pair.split(':').map(x => x.trim());
+        if (!attr) return;
+        const en = original(el, 'attr:' + attr, () => el.getAttribute(attr));
+        const v = dict[key];
+        if (v != null) el.setAttribute(attr, v); else if (en != null) el.setAttribute(attr, en);
+      });
+    });
+    // Translated markup can replace these placeholders, so refill them.
+    const year = document.getElementById('year');
+    if (year && !year.textContent) year.textContent = new Date().getFullYear();
+  }
+
+  function makeSwitcher() {
     const sel = document.createElement('select');
-    sel.className = 'lang-select ' + (className || '');
+    sel.className = 'lang-select lang-select-nav';
     sel.setAttribute('aria-label', t('i18n.language', 'Language'));
     for (const [code, name] of Object.entries(SUPPORTED)) {
       const o = document.createElement('option');
@@ -65,13 +88,18 @@
     sel.addEventListener('change', () => set(sel.value));
     return sel;
   }
-  function injectSwitchers() {
+  function injectSwitcher() {
     const nav = document.querySelector('.navbar .nav-cta');
-    if (nav) nav.prepend(makeSwitcher('lang-select-nav'));
-    const foot = document.querySelector('.footer .container');
-    if (foot) foot.appendChild(makeSwitcher('lang-select-footer'));
+    if (nav && !nav.querySelector('.lang-select')) nav.prepend(makeSwitcher());
+  }
+  function syncSwitcher() {
+    document.querySelectorAll('.lang-select').forEach(sel => {
+      sel.value = lang;
+      sel.setAttribute('aria-label', t('i18n.language', 'Language'));
+    });
   }
   function englishOnlyNotice() {
+    document.querySelectorAll('.i18n-notice').forEach(n => n.remove());
     if (lang === 'en') return;
     const meta = document.querySelector('meta[name="i18n-coverage"][content="chrome"]');
     const header = document.querySelector('.page-header');
@@ -82,26 +110,42 @@
     header.insertAdjacentElement('afterend', n);
   }
 
+  const cache = {};
+  function loadDict(code) {
+    if (code === 'en') return Promise.resolve({});
+    if (cache[code]) return Promise.resolve(cache[code]);
+    return fetch(LANG_BASE + code + '.json', { cache: 'no-cache' })
+      .then(r => (r.ok ? r.json() : Promise.reject(r.status)))
+      .then(j => (cache[code] = j || {}));
+  }
+
+  function render() {
+    document.documentElement.lang = lang === 'zh' ? 'zh-Hans' : lang === 'pt' ? 'pt-BR' : lang;
+    apply();
+    syncSwitcher();
+    englishOnlyNotice();
+    document.documentElement.classList.remove('i18n-loading');
+    document.dispatchEvent(new CustomEvent('i18n:ready', { detail: { lang } }));
+  }
+
+  // Switch language in place: no reload, no navigation, scroll position untouched.
   function set(code) {
     code = normalise(code) || 'en';
     try { localStorage.setItem(STORAGE_KEY, code); } catch (e) { /* ignore */ }
+    // Drop a ?lang= from the address so a later reload keeps the visitor's choice.
     const url = new URL(location.href);
-    url.searchParams.delete('lang');
-    location.href = url.href; // reload with the new choice
+    if (url.searchParams.has('lang')) { url.searchParams.delete('lang'); history.replaceState(history.state, '', url.href); }
+    return loadDict(code)
+      .then(d => { lang = code; dict = d; })
+      .catch(() => { lang = 'en'; dict = {}; })
+      .then(render);
   }
 
-  const ready = (lang === 'en'
-    ? Promise.resolve()
-    : fetch(LANG_BASE + lang + '.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : Promise.reject(r.status)).then(j => { dict = j || {}; }).catch(() => { lang = 'en'; dict = {}; })
-  ).then(() => new Promise(res => (document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', res) : res())))
-   .then(() => {
-      document.documentElement.lang = lang === 'zh' ? 'zh-Hans' : lang === 'pt' ? 'pt-BR' : lang;
-      apply();
-      injectSwitchers();
-      englishOnlyNotice();
-      document.documentElement.classList.remove('i18n-loading');
-      document.dispatchEvent(new CustomEvent('i18n:ready', { detail: { lang } }));
-   });
+  const ready = loadDict(lang)
+    .then(d => { dict = d; })
+    .catch(() => { lang = 'en'; dict = {}; })
+    .then(() => new Promise(res => (document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', res) : res())))
+    .then(() => { injectSwitcher(); render(); });
 
   window.i18n = { t, apply, set, ready, SUPPORTED, get lang() { return lang; } };
 })();
