@@ -101,12 +101,15 @@
   function englishOnlyNotice() {
     document.querySelectorAll('.i18n-notice').forEach(n => n.remove());
     if (lang === 'en') return;
-    const meta = document.querySelector('meta[name="i18n-coverage"][content="chrome"]');
+    // chrome = body text is English only; legal = translated, but the English text is the binding one
+    const meta = document.querySelector('meta[name="i18n-coverage"]');
     const header = document.querySelector('.page-header');
     if (!meta || !header) return;
     const n = document.createElement('div');
     n.className = 'i18n-notice';
-    n.textContent = t('i18n.englishOnly', 'This page is available in English only.');
+    n.textContent = meta.content === 'legal'
+      ? t('i18n.legalNote', 'This translation is provided for convenience. If it differs from the English version, the English version applies.')
+      : t('i18n.englishOnly', 'This page is available in English only.');
     header.insertAdjacentElement('afterend', n);
   }
 
