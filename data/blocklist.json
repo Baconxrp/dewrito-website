@@ -1,0 +1,14 @@
+{
+  "updated": "2026-10-31",
+  "note": "Homeservers excluded from the Boosted Communities directory. Listings whose address contains one of these domains are never shown. Published on moderation.html and loaded by js/listings.js.",
+  "domains": [
+    "cutefunny.art",
+    "midov.pl",
+    "dropnet.ch",
+    "nicheart.online",
+    "lolisho.chat",
+    "cuteness-overdose.com",
+    "capybara.pictures",
+    "nerdsin.space"
+  ]
+}

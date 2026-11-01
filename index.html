@@ -4,13 +4,23 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Dewrito — Community-run server infrastructure for the Dewrito community. Matrix chat, Fluxer client, and open collaboration.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Dewrito">
+  <meta property="og:title" content="Dewrito — Community Infrastructure">
+  <meta property="og:description" content="Dewrito — Community-run server infrastructure for the Dewrito community. Matrix chat, Fluxer client, and open collaboration.">
+  <meta property="og:url" content="https://dewrito.net/">
+  <meta property="og:image" content="https://dewrito.net/img/logo.png">
+  <meta name="twitter:card" content="summary">
+  <link rel="me" href="https://bsky.app/profile/dewrito.net">
   <title>Dewrito — Community Infrastructure</title>
   <link href="img/favicon.ico" rel="shortcut icon"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/site.css">
+  <script src="js/i18n.js"></script>
+  <script src="js/analytics.js" defer></script>
   <style>
     /* --- Boosted Communities Bar (fixed top, below navbar) --- */
-    .boost-bar { position: fixed; top: 64px; left: 0; right: 0; z-index: 9998; background: rgba(5,5,16,0.8); border-bottom: 1px solid var(--border-subtle); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); }
+    .boost-bar { position: fixed; top: 81px; left: 0; right: 0; z-index: 9998; background: rgba(5,5,16,0.8); border-bottom: 1px solid var(--border-subtle); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); }
     .boost-bar-inner { display: flex; align-items: center; gap: 10px; height: 36px; padding: 0 20px; margin: 0 auto; max-width: 1200px; overflow-x: auto; scrollbar-width: none; }
     .boost-bar-inner::-webkit-scrollbar { display: none; }
     .boost-bar-header { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
@@ -25,6 +35,7 @@
     .mini-tag { font-size: 0.6rem; padding: 1px 5px; border-radius: 3px; font-weight: 600; flex-shrink: 0; }
     .mini-tag-matrix { background: rgba(0, 255, 157, 0.1) !important; color: #00ff9d !important; border: 1px solid rgba(0, 255, 157, 0.15); }
     .mini-tag-fluxer { background: rgba(0, 204, 255, 0.1) !important; color: var(--accent-cyan) !important; border: 1px solid rgba(0, 204, 255, 0.15); }
+    .mini-tag-soon { background: rgba(255, 170, 0, 0.12) !important; color: #ffaa00 !important; border: 1px solid rgba(255, 170, 0, 0.25); }
     .boost-bar-viewall { font-size: 0.68rem; padding: 3px 10px; border-radius: 6px; background: rgba(0, 204, 255, 0.08); color: var(--accent-cyan) !important; border: 1px solid rgba(0, 204, 255, 0.15); text-decoration: none !important; font-weight: 600; white-space: nowrap; flex-shrink: 0; transition: all 0.18s; }
     .boost-bar-viewall:hover { background: var(--accent-cyan) !important; color: #000 !important; }
 
@@ -39,9 +50,9 @@
     /* --- Server Status Strip (fixed bottom bar) --- */
     @keyframes statusPulse { 0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(62,207,142,0.5)} 50%{opacity:0.7;box-shadow:0 0 0 6px rgba(62,207,142,0)} }
     .status-strip { position: fixed; bottom: 0; left: 0; right: 0; z-index: 9999; background: rgba(5,5,16,0.8); border-top: 1px solid var(--border-subtle); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); }
-    body { padding-bottom: 32px; padding-top: 80px; }
+    body { padding-bottom: 72px; padding-top: 118px; }
     .status-strip-inner { display: flex; align-items: center; gap: 12px; height: 26px; padding: 0 20px; margin: 0 auto; max-width: 1200px; }
-    .status-strip-label { font-size: 0.65rem; font-family: var(--font-mono); color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; flex-shrink: 0; }
+    .status-strip-label { text-decoration: none; font-size: 0.65rem; font-family: var(--font-mono); color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; flex-shrink: 0; }
     .status-strip-services { display: flex; align-items: center; gap: 10px; flex: 1; justify-content: center; }
     .status-chip { display: inline-flex; align-items: center; gap: 5px; font-size: 0.72rem; white-space: nowrap; }
     .status-dot-sm { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; position: relative; }
@@ -77,12 +88,13 @@
       .boost-chip-name { max-width: 70px; font-size: 0.65rem; }
       .mini-tag { font-size: 0.55rem; padding: 1px 4px; }
       .boost-bar-viewall { font-size: 0.58rem; padding: 2px 6px; }
-      body { padding-top: 108px; }
+      body { padding-top: 140px; }
     }
   </style>
 </head>
 <body>
 
+<a class="skip-link" href="#main" data-i18n="nav.skip">Skip to content</a>
 <canvas id="starfield"></canvas>
 
 <nav class="navbar" id="navbar">
@@ -91,15 +103,18 @@
       <img src="img/logo.png" alt="Dewrito">
     </a>
     <ul class="nav-links">
-      <li><a href="#features">Features</a></li>
-      <li><a href="#community">Community</a></li>
-      <li><a href="register.html">Register</a></li>
-      <li><a href="contact.html">Contact</a></li>
+      <li><a href="#features" data-i18n="nav.features">Features</a></li>
+      <li><a href="#community" data-i18n="nav.community">Community</a></li>
+      <li><a href="community.html" data-i18n="nav.directory">Directory</a></li>
+      <li><a href="getting-started.html" data-i18n="nav.guide">Guide</a></li>
+      <li><a href="register.html" data-i18n="nav.register">Register</a></li>
+      <li><a href="contact.html" data-i18n="nav.contact">Contact</a></li>
     </ul>
+    <a class="nav-bsky" href="https://bsky.app/profile/dewrito.net" target="_blank" rel="me noopener" aria-label="Dewrito on Bluesky" title="@dewrito.net on Bluesky"><svg class="bsky-icon" viewBox="0 0 568 501" aria-hidden="true"><path fill="currentColor" d="M123.121 33.664C188.241 82.553 258.281 181.68 284 234.873c25.719-53.192 95.759-152.32 160.879-201.21C491.866-1.611 568-28.906 568 57.947c0 17.346-9.945 145.713-15.778 166.555-20.275 72.453-94.155 90.933-159.875 79.748C507.222 323.8 536.444 388.56 473.333 453.32c-119.86 122.992-172.272-30.859-185.702-70.281-2.462-7.227-3.614-10.608-3.631-7.733-.017-2.875-1.169.506-3.631 7.733-13.43 39.422-65.842 193.273-185.702 70.281-63.111-64.76-33.89-129.52 80.986-149.071-65.72 11.185-139.6-7.295-159.875-79.748C9.945 203.659 0 75.291 0 57.946 0-28.906 76.135-1.612 123.121 33.664z"/></svg></a>
     <div class="nav-cta">
-      <a href="register.html" class="btn-primary">Get Started</a>
+      <a href="register.html" class="btn-primary" data-i18n="nav.getStarted">Get Started</a>
     </div>
-    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" data-i18n-attr="aria-label:nav.toggle" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
   </div>
@@ -109,27 +124,27 @@
 <div class="boost-bar">
   <div class="boost-bar-inner">
     <div class="boost-bar-header">
-      <span class="boost-bar-label">&#9889; Boosted Communities:</span>
+      <span class="boost-bar-label" data-i18n="boost.label">&#9889; Boosted Communities:</span>
       <span class="boost-bar-scope" id="sliderCategoryHeader">All</span>
       <span class="boost-bar-timer" id="sliderTimerCountdown">15s</span>
     </div>
     <div class="boost-chips-track" id="sliderItemsStack">
-      <span style="color:var(--text-muted);font-size:0.72rem;">Syncing...</span>
+      <span style="color:var(--text-muted);font-size:0.72rem;" data-i18n="boost.syncing">Syncing...</span>
     </div>
     <div class="boost-bar-actions">
-      <a href="community.html" class="boost-bar-viewall">View All &#8599;</a>
-      <button class="boost-bar-help" id="boostHelpBtn" aria-label="What is Boosted?" onclick="toggleBoostTooltip(event)">?</button>
+      <a href="community.html" class="boost-bar-viewall" data-i18n="boost.viewAll">View All &#8599;</a>
+      <button class="boost-bar-help" id="boostHelpBtn" aria-label="What is Boosted?" data-i18n-attr="aria-label:boost.help" onclick="toggleBoostTooltip(event)">?</button>
     </div>
   </div>
 </div>
 
 <!-- Tooltip (outside boost bar so overflow doesn't clip it) -->
-<div class="boost-bar-tooltip" id="boostTooltip">Boosted via Stellar (XLM) &bull; 25 XLM = 1 Month Visibility</div>
+<div class="boost-bar-tooltip" id="boostTooltip" data-i18n="boost.tooltip">Boosted via Stellar (XLM) &bull; 25 XLM = 1 Month Visibility</div>
 
 <!-- Status Strip (fixed bottom bar) -->
 <div class="status-strip">
   <div class="status-strip-inner">
-    <span class="status-strip-label">STATUS</span>
+    <a class="status-strip-label" href="status.html" title="Service status and notices" data-i18n="status.label">STATUS &#8599;</a>
     <div class="status-strip-services">
       <span class="status-chip" id="rowMatrix">
         <span class="status-dot-sm status-checking"></span>
@@ -148,22 +163,22 @@
   </div>
 </div>
 
-<section class="hero">
+<section class="hero" id="main" tabindex="-1">
   <div class="hero-content">
-    <span class="mono-label section-label">Community Infrastructure</span>
+    <span class="mono-label section-label" data-i18n="hero.label">Community Infrastructure</span>
     <h1><span class="gradient-text">Dewrito</span></h1>
-    <p class="hero-subtitle">
+    <p class="hero-subtitle" data-i18n="hero.subtitle">
       Community-run server infrastructure for the Dewrito community. 
       Connect via Matrix, collaborate with Fluxer, and help keep the lights on.
     </p>
     <div class="hero-actions">
       <a href="register.html" class="btn-primary">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
-        Register
+        <span data-i18n="hero.register">Register</span>
       </a>
       <a href="#community" class="btn-secondary">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-        Join the Community
+        <span data-i18n="hero.join">Join the Community</span>
       </a>
     </div>
   </div>
@@ -171,32 +186,32 @@
 
 <section class="section" id="features">
   <div class="container">
-    <span class="mono-label section-label">What We Offer</span>
-    <h2>Built by the community, for the community.</h2>
+    <span class="mono-label section-label" data-i18n="features.label">What We Offer</span>
+    <h2 data-i18n="features.title">Built by the community, for the community.</h2>
     
     <div class="features-grid">
       <div class="feature-card">
         <div class="feature-icon matrix">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
         </div>
-        <h3>Matrix Chat</h3>
-        <p>Host your own chat server on the open Matrix protocol. Full control, full privacy, no vendor lock-in.</p>
+        <h3 data-i18n="features.matrix.title">Matrix Chat</h3>
+        <p data-i18n="features.matrix.body">Host your own chat server on the open Matrix protocol. Full control, full privacy, no vendor lock-in.</p>
       </div>
 
       <div class="feature-card">
         <div class="feature-icon fluxer">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
         </div>
-        <h3>Fluxer Client</h3>
-        <p>Real-time chat, voice calls, and screen sharing all self-hosted. The privacy-first alternative to Discord.</p>
+        <h3 data-i18n="features.fluxer.title">Fluxer Client</h3>
+        <p data-i18n="features.fluxer.body">Real-time chat, voice calls, and screen sharing all self-hosted. The privacy-first alternative to Discord.</p>
       </div>
 
       <div class="feature-card">
         <div class="feature-icon community">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         </div>
-        <h3>Open Community</h3>
-        <p>Just a community keeping infrastructure running for everyone.</p>
+        <h3 data-i18n="features.community.title">Open Community</h3>
+        <p data-i18n="features.community.body">Just a community keeping infrastructure running for everyone.</p>
       </div>
     </div>
   </div>
@@ -206,9 +221,9 @@
   <div class="container">
     <div class="matrix-grid">
       <div class="matrix-info">
-        <span class="mono-label section-label">Community Hub</span>
-        <h2>Join the <span class="gradient-text">#dewrito</span> space</h2>
-        <p>
+        <span class="mono-label section-label" data-i18n="community.label">Community Hub</span>
+        <h2 data-i18n-html="community.title">Join the <span class="gradient-text">#dewrito</span> space</h2>
+        <p data-i18n="community.body">
           The Matrix protocol is open, federated, and privacy-respecting. 
           Our official #dewrito space on matrix.dewrito.net is where the community 
           connects, shares information, and coordinates — all on infrastructure we control.
@@ -217,13 +232,13 @@
 
       <div class="matrix-links">
         <a href="https://matrix.to/#/#dewrito:dewrito.net" target="_blank" rel="noopener" class="matrix-link-item">
-          <span class="matrix-link-label">Open Matrix (Sable)</span>
+          <span class="matrix-link-label" data-i18n="community.openMatrix">Open Matrix (Sable)</span>
           <span class="matrix-link-desc">#dewrito:dewrito.net →</span>
         </a>
 
         <a href="https://fluxer.dewrito.net/invite/BQVNmkEW" target="_blank" rel="noopener" class="matrix-link-item">
-          <span class="matrix-link-label">Open Fluxer</span>
-          <span class="matrix-link-desc">Launch →</span>
+          <span class="matrix-link-label" data-i18n="community.openFluxer">Open Fluxer</span>
+          <span class="matrix-link-desc" data-i18n="community.launch">Launch →</span>
         </a>
       </div>
     </div>
@@ -232,18 +247,18 @@
 
 <section class="section support-section" id="support">
   <div class="container">
-    <span class="mono-label section-label">Sustain the Infrastructure</span>
-    <h2>Help keep the servers running.</h2>
+    <span class="mono-label section-label" data-i18n="support.label">Sustain the Infrastructure</span>
+    <h2 data-i18n="support.title">Help keep the servers running.</h2>
     
     <div class="support-card">
-      <p>
+      <p data-i18n="support.body">
         Our infrastructure is community-funded and community-maintained. 
         Every contribution helps us keep the Matrix homeserver, Fluxer deployment, 
         and all services online for everyone.
       </p>
       <a href="donate.html" class="btn-primary">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-        Support Us
+        <span data-i18n="support.button">Support Us</span>
       </a>
     </div>
   </div>
@@ -251,18 +266,22 @@
 
 <footer class="footer">
   <div class="container">
-    <p class="footer-text">&copy; <span id="year"></span> Dewrito.net — Community-run server infrastructure.</p>
+    <p class="footer-text" data-i18n-html="footer.text">&copy; <span id="year"></span> Dewrito.net &mdash; Community-run server infrastructure.</p>
     <ul class="footer-links">
-      <li><a href="register.html">Register</a></li>
-      <li><a href="terms.html">Terms</a></li>
-      <li><a href="contact.html">Contact</a></li>
-      <li><a href="donate.html">Support Us</a></li>
+      <li><a href="register.html" data-i18n="footer.register">Register</a></li>
+      <li><a href="getting-started.html" data-i18n="footer.guide">Guide</a></li>
+      <li><a href="status.html" data-i18n="footer.status">Status</a></li>
+      <li><a href="terms.html" data-i18n="footer.terms">Terms</a></li>
+      <li><a href="privacy.html" data-i18n="footer.privacy">Privacy</a></li>
+      <li><a href="contact.html" data-i18n="footer.contact">Contact</a></li>
+      <li><a href="donate.html" data-i18n="footer.support">Support Us</a></li>
     </ul>
   </div>
 </footer>
 
 <script src="js/starfield.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/listings.js"></script>
 <script>
   // Update copyright year
   document.getElementById('year').textContent = new Date().getFullYear();
@@ -274,7 +293,8 @@
   const navToggle = document.getElementById('navToggle');
   
   navToggle.addEventListener('click', () => {
-    navbar.classList.toggle('mobile-open');
+    const open = navbar.classList.toggle('mobile-open');
+    navToggle.setAttribute('aria-expanded', String(open));
   });
 
   // Close mobile menu on link click
@@ -284,123 +304,50 @@
     });
   });
 
-  // --- Dynamic Slider Sync Script Section ---
-  const XLM_WALLET = "GCCL23ZM4PLTMULZ2K5KQHBLK3WHSCXXLFCHOMDSLJFQ2UN532WN3HYR";
-  const SUPABASE_URL = "https://emdooqonibsgrazbcvzp.supabase.co"; 
-  const SUPABASE_ANON_KEY = "sb_publishable_r7eqc_NvhJI77DBNhvvQjA_ohkMfrKE";
-  const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
-
-  // The specific blocked federated/community domains to filter out
-  const BLOCKED_DOMAINS = [
-    "cutefunny.art", 
-    "midov.pl", 
-    "dropnet.ch", 
-    "nicheart.online", 
-    "lolisho.chat", 
-    "cuteness-overdose.com", 
-    "capybara.pictures", 
-    "nerdsin.space"
-  ];
-
-  // Base text patterns for quick string matching validation rules
-  const BAD_WORDS = ["gore", "scam", "crypto-scam", "loli", "lolicon", "cp", "child", "toddler", "shota", "nigga", "nigger", "fag", "faggot", "fuck", "shit", "bitch", "tranny"];
-
+  const T = (k, f) => (window.i18n ? window.i18n.t(k, f) : f);
+  // --- Boosted Communities bar (data and safety helpers live in js/listings.js) ---
+  const L = window.DewritoListings;
+  const CAT_KEYS = { "Gaming": "cat.gaming", "Politics & Opinion": "cat.politics", "Art & Music": "cat.art", "Entertainment": "cat.entertainment", "Education": "cat.education", "Science & Technology": "cat.tech", "Content Creator": "cat.creator", "Anime & Manga": "cat.anime", "Movies & TV": "cat.movies", "Vtuber": "cat.vtuber", "Furry": "cat.furry", "LGBT+": "cat.lgbt", "Other": "cat.other" };
   let processedAds = [];
   let rotationSchedule = ["All"];
   let currentScheduleIndex = 0;
   let countdownSeconds = 15;
   let tickerTimerInstance = null;
 
-  function passesWordFilter(text) {
-    if (!text) return true;
-    const cleanText = text.toLowerCase();
-    return !BAD_WORDS.some(word => cleanText.includes(word));
-  }
-
   async function fetchAndProcessSliderData() {
-    if (!supabaseClient) return;
+    const stack = document.getElementById('sliderItemsStack');
+    if (!L) { stack.innerHTML = `<span style="color:var(--text-muted);font-size:0.72rem;">${T('boost.unavailable', 'Unavailable')}</span>`; return; }
     try {
-      const { data: dbRecords } = await supabaseClient.from('community_ads').select('*');
-      const dbMap = new Map((dbRecords || []).map(item => [item.id.toLowerCase(), item]));
-      
-      let res = await fetch(`https://horizon.stellar.org/accounts/${XLM_WALLET}/transactions?limit=200&order=desc`);
-      let data = await res.json();
-      
-      const communityMap = new Map();
-      for (let tx of (data._embedded?.records || [])) {
-        if (tx.memo_type === "text" && tx.memo) {
-          const memoKey = tx.memo.trim().toLowerCase();
-          if (dbMap.has(memoKey)) {
-            const matched = dbMap.get(memoKey);
-            const key = matched.url.toLowerCase();
-            if (!communityMap.has(key)) {
-              communityMap.set(key, { ...matched, platform: matched.platform || (matched.url.startsWith('http') ? 'Fluxer' : 'Matrix'), totalXlm: 0, boosts: [] });
-            }
-            const entry = communityMap.get(key);
-            entry.boosts.push(new Date(tx.created_at));
-            entry.totalXlm += 25; 
-          }
-        }
-      }
-
-      dbRecords.forEach(item => {
-        if (parseInt(item.is_permanent) === 1 && !communityMap.has(item.url.toLowerCase())) {
-          communityMap.set(item.url.toLowerCase(), { ...item, platform: item.platform || (item.url.startsWith('http') ? 'Fluxer' : 'Matrix'), boosts: [new Date()], totalXlm: 100 });
-        }
-      });
-
-      processedAds = Array.from(communityMap.values())
-        .map(com => {
-          const isPermanent = parseInt(com.is_permanent) === 1;
-          const totalMonthsPaid = Math.max(1, Math.floor(com.totalXlm / 25));
-          return { 
-            ...com, 
-            months: totalMonthsPaid, 
-            isExpired: !isPermanent && (new Date() - new Date(Math.max(...com.boosts))) > (totalMonthsPaid * 2592000000) 
-          };
-        })
-        .filter(ad => {
-          if (ad.isExpired) return false;
-          if (ad.content_rating === "NSFW") return false;
-
-          // Strip out the blocked domain nodes from showing up on the homepage slider
-          const cleanUrl = ad.url.toLowerCase().trim();
-          const matchesBlockedNode = BLOCKED_DOMAINS.some(domain => cleanUrl.includes(domain));
-          if (matchesBlockedNode) return false;
-
-          // Enforce string content rules
-          if (!passesWordFilter(ad.name) || !passesWordFilter(ad.description)) return false;
-
-          return true;
-        });
-
+      const { listings } = await L.load();
+      // Only active boosts and pinned entries make the bar; the directory page shows the rest.
+      processedAds = listings.filter(l => (l.tier === 'boosted' || l.tier === 'pinned') && L.passesContentRules(l));
       const uniqueCats = Array.from(new Set(processedAds.map(a => a.category))).filter(Boolean);
       rotationSchedule = ["All", ...uniqueCats];
-      
       renderActiveSlide();
       startTickerLoop();
-    } catch(e) { console.error("Slider initialization failure:", e); }
+    } catch(e) {
+      console.error("Boost bar failed to load:", e);
+      stack.innerHTML = `<span style="color:var(--text-muted);font-size:0.72rem;">${T('boost.unavailable', 'Unavailable')}</span>`;
+    }
   }
 
   function renderActiveSlide() {
     const activeScope = rotationSchedule[currentScheduleIndex];
-    document.getElementById('sliderCategoryHeader').textContent = activeScope === "All" ? "All" : `\ud83d\udcc2 ${activeScope}`;
+    document.getElementById('sliderCategoryHeader').textContent = activeScope === "All" ? T('dir.all', 'All') : `📂 ${T(CAT_KEYS[activeScope] || '', activeScope)}`;
 
-    let scopedAds = activeScope === "All" ? processedAds : processedAds.filter(a => a.category === activeScope);
-    scopedAds.sort((a, b) => b.months - a.months);
-
+    const scopedAds = (activeScope === "All" ? processedAds : processedAds.filter(a => a.category === activeScope))
+      .slice().sort((a, b) => b.rank - a.rank);
     const top3 = scopedAds.slice(0, 3);
     const stackElement = document.getElementById('sliderItemsStack');
 
     if (top3.length === 0) {
-      stackElement.innerHTML = `<span style="color:var(--text-muted);font-size:0.72rem;">No active listings</span>`;
+      stackElement.innerHTML = `<span style="color:var(--text-muted);font-size:0.72rem;">${T('boost.noListings', 'No active listings')}</span>`;
       return;
     }
-
     stackElement.innerHTML = top3.map(ad => {
-      const cleanHref = ad.platform === "Fluxer" ? ad.url : `https://matrix.to/#/${ad.url}`;
       const netTagClass = ad.platform === "Fluxer" ? "mini-tag-fluxer" : "mini-tag-matrix";
-      return `<a href="${cleanHref}" target="_blank" rel="noopener" class="boost-chip-link" title="${ad.description || ''}"><span class="boost-chip-name">${ad.name}</span><span class="mini-tag ${netTagClass}">${ad.platform}</span></a>`;
+      const soon = ad.expiresSoon ? `<span class="mini-tag mini-tag-soon" title="Boost ends ${L.escapeHtml(L.formatDate(ad.expiresAt))}">⏳ ${ad.daysLeft <= 0 ? '<1d' : ad.daysLeft + 'd'}</span>` : '';
+      return `<a href="${L.escapeHtml(ad.href)}" target="_blank" rel="noopener" class="boost-chip-link" title="${L.escapeHtml(ad.description || '')}"><span class="boost-chip-name">${L.escapeHtml(ad.name)}</span><span class="mini-tag ${netTagClass}">${L.escapeHtml(ad.platform)}</span>${soon}</a>`;
     }).join('');
   }
 
@@ -408,11 +355,9 @@
     if (tickerTimerInstance) clearInterval(tickerTimerInstance);
     countdownSeconds = 15;
     document.getElementById('sliderTimerCountdown').textContent = `${countdownSeconds}s`;
-
     tickerTimerInstance = setInterval(() => {
       countdownSeconds--;
       document.getElementById('sliderTimerCountdown').textContent = `${countdownSeconds}s`;
-
       if (countdownSeconds <= 0) {
         countdownSeconds = 15;
         currentScheduleIndex = (currentScheduleIndex + 1) % rotationSchedule.length;
@@ -422,6 +367,7 @@
   }
 
   fetchAndProcessSliderData();
+  document.addEventListener('i18n:ready', () => { if (processedAds.length) renderActiveSlide(); checkServiceHealth(); });
 
   // --- Boost tooltip: toggle + close on outside click ---
   const boostHelpBtn = document.getElementById('boostHelpBtn');
@@ -449,9 +395,11 @@
   }, { passive: true });
 
   // --- Server Status Health Checks ---
+  // Matrix sends Access-Control-Allow-Origin, so we can read its real HTTP status.
+  // Fluxer does not, so it is checked in no-cors mode (reachable vs unreachable only).
   const STATUS_SERVICES = [
-    { id: 'Matrix', url: 'https://matrix.dewrito.net/.well-known/matrix/server', rowId: 'rowMatrix', badgeId: 'badgeMatrix', latencyId: 'latencyMatrix' },
-    { id: 'Fluxer', url: 'https://fluxer.dewrito.net/', rowId: 'rowFluxer', badgeId: 'badgeFluxer', latencyId: 'latencyFluxer' }
+    { id: 'Matrix', url: 'https://matrix.dewrito.net/.well-known/matrix/server', mode: 'cors', rowId: 'rowMatrix', badgeId: 'badgeMatrix', latencyId: 'latencyMatrix' },
+    { id: 'Fluxer', url: 'https://fluxer.dewrito.net/', mode: 'no-cors', rowId: 'rowFluxer', badgeId: 'badgeFluxer', latencyId: 'latencyFluxer' }
   ];
 
   function updateStatusRow(service, status, latencyMs) {
@@ -463,7 +411,7 @@
     row.classList.remove('status-up', 'status-degraded', 'status-down', 'status-checking');
     row.classList.add(`status-${status}`);
 
-    badge.textContent = status === 'up' ? 'Operational' : status === 'degraded' ? 'Degraded' : status === 'down' ? 'Down' : 'Checking';
+    badge.textContent = status === 'up' ? T('strip.operational', 'Operational') : status === 'degraded' ? T('strip.degraded', 'Degraded') : status === 'down' ? T('strip.down', 'Down') : T('strip.checking', 'Checking');
     latencyEl.textContent = status !== 'checking' ? `${latencyMs} ms` : '\u2014 ms';
   }
 
@@ -476,18 +424,18 @@
     const anyDegraded = results.some(r => r.status === 'degraded');
 
     let dotClass = 'status-checking';
-    let label = 'Checking...';
+    let label = T('strip.checkingDots', 'Checking...');
     if (allUp) {
       dotClass = 'status-up';
-      label = 'All Operational';
+      label = T('strip.allOperational', 'All Operational');
       overall.style.color = 'var(--accent-green)';
     } else if (anyDown) {
       dotClass = 'status-down';
-      label = 'Outage';
+      label = T('strip.outage', 'Outage');
       overall.style.color = '#ff4d4d';
     } else if (anyDegraded) {
       dotClass = 'status-degraded';
-      label = 'Degraded';
+      label = T('strip.degraded', 'Degraded');
       overall.style.color = '#ffaa00';
     } else {
       overall.style.color = 'var(--text-muted)';
@@ -507,12 +455,10 @@
       try {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 8000);
-        // Use no-cors mode: Fluxer doesn't send access-control-allow-origin, so a normal fetch is blocked by CORS.
-        // With no-cors we get an opaque response \u2014 if it resolves the server is up, if it throws the server is down.
-        const res = await fetch(svc.url, { method: 'GET', signal: controller.signal, mode: 'no-cors' });
+        const res = await fetch(svc.url, { method: 'GET', signal: controller.signal, mode: svc.mode, cache: 'no-store' });
         clearTimeout(timeoutId);
         const latency = Math.round(performance.now() - start);
-        // Opaque response (status=0) means the request succeeded but we can't read headers \u2014 server is up.
+        // Opaque response (status=0) means a no-cors request succeeded but headers are hidden: server is reachable.
         if (res.ok || res.type === 'opaque') {
           status = latency > 2000 ? 'degraded' : 'up';
         } else if (res.status < 500) {
@@ -588,12 +534,10 @@
 })();
 </script>
 <noscript><a href="https://ko-fi.com/dewrito" target="_blank" rel="noopener">Support us on Ko-fi</a></noscript>
-</body>
 <!-- Non-JS fallback badge: visible link when overlay doesn't load -->
 <a id="kofi-fallback" class="kofi-fallback" href="https://ko-fi.com/dewrito" target="_blank" rel="noopener noreferrer" aria-label="Support us on Ko-fi">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h11v6a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7z"></path><path d="M16 8h1a3 3 0 0 1 0 6h-1"></path></svg>
-  <span>Support on Ko‑fi</span>
+  <span data-i18n="kofi.fallback">Support on Ko‑fi</span>
 </a>
-</html>
 </body>
 </html>

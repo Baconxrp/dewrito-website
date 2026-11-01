@@ -4,10 +4,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Boosted community listings and payment verification details for Dewrito.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Dewrito">
+  <meta property="og:title" content="Dewrito | Boosted Communities">
+  <meta property="og:description" content="Boosted community listings and payment verification details for Dewrito.">
+  <meta property="og:url" content="https://dewrito.net/community.html">
+  <meta property="og:image" content="https://dewrito.net/img/logo.png">
+  <meta name="twitter:card" content="summary">
+  <link rel="me" href="https://bsky.app/profile/dewrito.net">
   <title>Dewrito | Boosted Communities</title>
   <link href="img/favicon.ico" rel="shortcut icon"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/site.css">
+  <script src="js/i18n.js"></script>
+  <script src="js/analytics.js" defer></script>
   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   <style>
     /* Layout styling modules */
@@ -90,9 +100,9 @@
     .promo-row.legacy-expired:hover { opacity: 0.85; }
     .legacy-sep-header { background: rgba(0, 0, 0, 0.3) !important; color: var(--text-muted) !important; font-size: 0.75rem !important; letter-spacing: 1px; }
 
-    .modal-overlay { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(5,5,10,0.7); backdrop-filter:blur(6px); z-index:1000; opacity:0; pointer-events:none; transition:opacity .2s; }
+    .modal-overlay { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; padding:16px; box-sizing:border-box; overflow-y:auto; background:rgba(5,5,10,0.7); backdrop-filter:blur(6px); z-index:1000; opacity:0; pointer-events:none; transition:opacity .2s; }
     .modal-overlay.active { opacity:1; pointer-events:auto; }
-    .modal-content { background:var(--bg-card); border:1px solid var(--accent-cyan); padding:22px; border-radius:12px; max-width:520px; width:92%; color:var(--text-primary); position: relative; }
+    .modal-content { background:#0b0b1c; border:1px solid var(--accent-cyan); box-shadow: 0 24px 64px rgba(0,0,0,0.6); padding:22px; border-radius:12px; max-width:520px; width:100%; max-height:calc(100vh - 32px); overflow-y:auto; box-sizing:border-box; color:var(--text-primary); position: relative; margin:auto; }
     .modal-close { position: absolute; top: 12px; right: 16px; background: none; border: none; color: var(--text-muted); font-size: 22px; cursor: pointer; }
     .modal-close:hover { color: var(--accent-cyan); }
     
@@ -112,116 +122,174 @@
     /* Experimental Badge Styling */
     .exp-badge { display: inline-block; font-size: 0.65rem; vertical-align: middle; padding: 2px 6px; border-radius: 4px; background: rgba(0, 204, 255, 0.1); color: var(--accent-cyan); border: 1px solid rgba(0, 204, 255, 0.3); letter-spacing: 0.5px; font-weight: 700; margin-left: 8px; text-transform: uppercase; }
 
-    /* Mobile view structural insurance rules */
+    /* Search + sort live in the filter toolbar */
+    .filter-select-group input[type="search"] { width: 100%; padding: 10px; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 8px; color: var(--text-primary); font-family: inherit; box-sizing: border-box; }
+    .filter-select-group input[type="search"]:focus { outline: none; border-color: var(--accent-cyan); }
+    .members-tag { background: rgba(255,255,255,0.06); color: var(--text-secondary); }
+    .tier-pinned { background: rgba(167, 139, 250, 0.12); color: #a78bfa; border: 1px solid rgba(167, 139, 250, 0.2); }
+    .tier-boosted { background: rgba(0, 204, 255, 0.1); color: var(--accent-cyan); border: 1px solid rgba(0, 204, 255, 0.15); }
+    .tier-expired { background: rgba(255,255,255,0.04); color: var(--text-muted); border: 1px solid rgba(255,255,255,0.06); }
+    .tier-unboosted { background: rgba(255,255,255,0.04); color: var(--text-muted); border: 1px solid rgba(255,255,255,0.06); }
+    .col-desc .from-topic { color: var(--text-muted); font-style: italic; }
+    .tier-soon { background: rgba(255, 170, 0, 0.12); color: #ffaa00; border: 1px solid rgba(255, 170, 0, 0.25); }
+    .promo-row.highlight { background: rgba(0, 204, 255, 0.08); box-shadow: inset 3px 0 0 var(--accent-cyan); }
+    .row-actions { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .report-btn { background: none; border: none; color: var(--text-muted); font-size: 0.72rem; cursor: pointer; padding: 2px 6px; border-radius: 4px; text-decoration: none; }
+    .report-btn:hover { color: #ff4d4d; background: rgba(255,77,77,0.08); }
+    .section-sep td { background: rgba(0, 0, 0, 0.3) !important; color: var(--text-muted) !important; font-size: 0.75rem !important; letter-spacing: 1px; padding: 8px 16px; font-weight: 700; text-transform: uppercase; }
+
+    /* Boost modal: duration, pay link, QR */
+    .boost-amount-row { display: flex; align-items: center; gap: 12px; margin: 14px 0; flex-wrap: wrap; }
+    .boost-amount-row label { font-size: 0.85rem; color: var(--text-muted); }
+    .boost-amount-row select { padding: 8px 10px; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 8px; color: var(--text-primary); font-family: inherit; }
+    .boost-amount-row select option { background: #121214; }
+    .boost-amount { font-family: var(--font-mono); font-weight: 700; color: var(--accent-cyan); font-size: 1.05rem; margin-left: auto; }
+    .boost-pay-grid { display: grid; grid-template-columns: 168px 1fr; gap: 16px; align-items: start; margin-top: 6px; }
+    .boost-qr { width: 168px; height: 168px; padding: 4px; background: #fff; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .boost-qr img, .boost-qr canvas { display: block; width: 160px !important; height: 160px !important; }
+    .boost-qr-fallback { font-size: 0.7rem; color: #333; text-align: center; padding: 8px; }
+    .boost-pay-actions { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+    .boost-pay-actions .btn-primary { justify-content: center; }
+    .boost-hint { font-size: 0.78rem; color: var(--text-muted); line-height: 1.4; margin: 0; }
+    .boost-address { font-size: 0.78rem; color: var(--text-muted); margin: 0; }
+    .boost-address span { font-family: var(--font-mono); color: var(--text-secondary); word-break: break-all; }
+    .copy-action-btn.small { padding: 4px 8px; font-size: 0.72rem; margin-left: 6px; }
+    @media (max-width: 480px) { .boost-pay-grid { grid-template-columns: 1fr; } .boost-qr { margin: 0 auto; } }
+
+    @media (max-width: 480px) {
+      .page-header h1 { font-size: 1.3rem; }
+      .exp-badge { display: block; width: max-content; margin: 8px auto 0; }
+      .memo-box-container { flex-wrap: wrap; }
+      /* reCAPTCHA renders at a fixed 304px; scale it so it fits the panel on narrow phones */
+      .g-recaptcha { transform: scale(0.88); transform-origin: 0 0; }
+    }
+
+    /* Phones: each listing becomes a stacked card instead of a three-column table row */
     @media (max-width: 768px) {
-      .promo-list-container {
-        width: 100%;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-      }
+      .promo-list-container { width: 100%; overflow: visible; }
+      .promo-table, .promo-table tbody, .promo-table tr, .promo-table td { display: block; width: 100% !important; box-sizing: border-box; }
+      .promo-table thead { display: none; }
+      .promo-row { position: relative; padding: 14px 16px 14px; border-top: 1px solid rgba(255,255,255,0.04); }
+      .promo-row td { padding: 0; border: 0; text-align: left !important; }
+      .promo-row .col-name { padding-right: 64px; }
+      .promo-row .col-name a { font-size: 1rem; }
+      .promo-row .col-name br { display: none; }
+      .promo-row .meta-labels-container { margin-top: 8px; }
+      .promo-row .col-desc { margin-top: 10px; font-size: 0.88rem; line-height: 1.5; }
+      .promo-row td:last-child { position: absolute; top: 12px; right: 12px; width: auto !important; }
+      .row-actions { gap: 4px; }
+      .list-boost-btn { width: 38px; height: 38px; font-size: 1rem; }
+      .report-btn { font-size: 0.68rem; }
+      .section-sep td { padding: 8px 16px !important; }
+      .promo-row.highlight { box-shadow: inset 3px 0 0 var(--accent-cyan); }
     }
   </style>
 </head>
 <body>
 
+<a class="skip-link" href="#main" data-i18n="nav.skip">Skip to content</a>
 <canvas id="starfield"></canvas>
 
 <nav class="navbar" id="navbar">
   <div class="container">
     <a href="index.html" class="nav-logo"><img src="img/logo.png" alt="Dewrito"></a>
     <ul class="nav-links">
-      <li><a href="index.html#features">Features</a></li>
-      <li><a href="index.html#community">Community</a></li>
-      <li><a href="register.html">Register</a></li>
-      <li><a href="contact.html">Contact</a></li>
+      <li><a href="index.html#features" data-i18n="nav.features">Features</a></li>
+      <li><a href="index.html#community" data-i18n="nav.community">Community</a></li>
+      <li><a href="community.html" data-i18n="nav.directory">Directory</a></li>
+      <li><a href="getting-started.html" data-i18n="nav.guide">Guide</a></li>
+      <li><a href="register.html" data-i18n="nav.register">Register</a></li>
+      <li><a href="contact.html" data-i18n="nav.contact">Contact</a></li>
     </ul>
-    <div class="nav-cta"><a href="register.html" class="btn-primary">Get Started</a></div>
-    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation"><span></span><span></span><span></span></button>
+    <a class="nav-bsky" href="https://bsky.app/profile/dewrito.net" target="_blank" rel="me noopener" aria-label="Dewrito on Bluesky" title="@dewrito.net on Bluesky"><svg class="bsky-icon" viewBox="0 0 568 501" aria-hidden="true"><path fill="currentColor" d="M123.121 33.664C188.241 82.553 258.281 181.68 284 234.873c25.719-53.192 95.759-152.32 160.879-201.21C491.866-1.611 568-28.906 568 57.947c0 17.346-9.945 145.713-15.778 166.555-20.275 72.453-94.155 90.933-159.875 79.748C507.222 323.8 536.444 388.56 473.333 453.32c-119.86 122.992-172.272-30.859-185.702-70.281-2.462-7.227-3.614-10.608-3.631-7.733-.017-2.875-1.169.506-3.631 7.733-13.43 39.422-65.842 193.273-185.702 70.281-63.111-64.76-33.89-129.52 80.986-149.071-65.72 11.185-139.6-7.295-159.875-79.748C9.945 203.659 0 75.291 0 57.946 0-28.906 76.135-1.612 123.121 33.664z"/></svg></a>
+    <div class="nav-cta"><a href="register.html" class="btn-primary" data-i18n="nav.getStarted">Get Started</a></div>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" data-i18n-attr="aria-label:nav.toggle" aria-expanded="false"><span></span><span></span><span></span></button>
   </div>
 </nav>
 
-<header class="page-header">
-  <h1>Boosted Communities <span class="exp-badge">Experimental</span></h1>
-  <p class="subtitle">Boosted via Stellar (XLM) • 25 XLM = 1 Month Visibility</p>
+<header class="page-header" id="main" tabindex="-1">
+  <h1 data-i18n-html="dir.title">Boosted Communities <span class="exp-badge">Experimental</span></h1>
+  <p class="subtitle" data-i18n="dir.subtitle">Boosted via Stellar (XLM) • 25 XLM = 1 Month Visibility</p>
 </header>
 
 <section class="content-section">
   <div class="container">
     <details class="collapsible-wrapper">
-      <summary class="collapsible-summary">➕ Create Your Boost Memo</summary>
+      <summary class="collapsible-summary" data-i18n="dir.form.summary">➕ Create Your Boost Memo</summary>
       <div class="submit-panel-content">
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
           <div class="form-group">
-            <label>Display Name</label>
-            <input type="text" id="formDisplayName" maxlength="30" placeholder="e.g. My Awesome Club">
+            <label data-i18n="dir.form.name">Display Name</label>
+            <input type="text" id="formDisplayName" maxlength="30" placeholder="e.g. My Awesome Club" data-i18n-attr="placeholder:dir.form.ph.name">
           </div>
           <div class="form-group">
-            <label>Platform / Network</label>
+            <label data-i18n="dir.form.platform">Platform / Network</label>
             <select id="formPlatform" onchange="toggleUrlInputs()">
-              <option value="Matrix" selected>Matrix Protocol</option>
-              <option value="Fluxer">Fluxer Link</option>
+              <option value="Matrix" selected data-i18n="dir.form.matrixOpt">Matrix Protocol</option>
+              <option value="Fluxer" data-i18n="dir.form.fluxerOpt">Fluxer Link</option>
             </select>
           </div>
         </div>
         
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
           <div class="form-group">
-            <label>Community Category</label>
+            <label data-i18n="dir.form.category">Community Category</label>
             <select id="formCategory">
-              <option value="Gaming">Gaming</option>
-              <option value="Politics & Opinion">Politics & Opinion</option>
-              <option value="Art & Music">Art & Music</option>
-              <option value="Entertainment">Entertainment</option>
-              <option value="Education">Education</option>
-              <option value="Science & Technology">Science & Technology</option>
-              <option value="Content Creator">Content Creator</option>
-              <option value="Anime & Manga">Anime & Manga</option>
-              <option value="Movies & TV">Movies & TV</option>
-              <option value="Vtuber">Vtuber</option>
-              <option value="Furry">Furry</option>
-              <option value="LGBT+">LGBT+</option>
-              <option value="Other" selected>Other</option>
+              <option value="Gaming" data-i18n="cat.gaming">Gaming</option>
+              <option value="Politics & Opinion" data-i18n="cat.politics">Politics & Opinion</option>
+              <option value="Art & Music" data-i18n="cat.art">Art & Music</option>
+              <option value="Entertainment" data-i18n="cat.entertainment">Entertainment</option>
+              <option value="Education" data-i18n="cat.education">Education</option>
+              <option value="Science & Technology" data-i18n="cat.tech">Science & Technology</option>
+              <option value="Content Creator" data-i18n="cat.creator">Content Creator</option>
+              <option value="Anime & Manga" data-i18n="cat.anime">Anime & Manga</option>
+              <option value="Movies & TV" data-i18n="cat.movies">Movies & TV</option>
+              <option value="Vtuber" data-i18n="cat.vtuber">Vtuber</option>
+              <option value="Furry" data-i18n="cat.furry">Furry</option>
+              <option value="LGBT+" data-i18n="cat.lgbt">LGBT+</option>
+              <option value="Other" selected data-i18n="lang.other">Other</option>
             </select>
           </div>
           <div class="form-group">
-            <label>Primary Language</label>
+            <label data-i18n="dir.form.language">Primary Language</label>
             <select id="formLanguage">
-              <option value="English" selected>English</option>
-              <option value="Russian">Russian</option>
-              <option value="Spanish">Spanish</option>
-              <option value="German">German</option>
-              <option value="French">French</option>
-              <option value="Chinese">Chinese</option>
-              <option value="Other">Other</option>
+              <option value="English" selected data-i18n="lang.english">English</option>
+              <option value="Russian" data-i18n="lang.russian">Russian</option>
+              <option value="Spanish" data-i18n="lang.spanish">Spanish</option>
+              <option value="German" data-i18n="lang.german">German</option>
+              <option value="French" data-i18n="lang.french">French</option>
+              <option value="Chinese" data-i18n="lang.chinese">Chinese</option>
+              <option value="Portuguese" data-i18n="lang.portuguese">Portuguese</option>
+              <option value="Other" data-i18n="cat.other">Other</option>
             </select>
           </div>
           <div class="form-group">
-            <label>Content Rating</label>
+            <label data-i18n="dir.form.rating">Content Rating</label>
             <select id="formRating">
-              <option value="SFW" selected>SFW (Safe for Work)</option>
-              <option value="NSFW">NSFW (18+ Restrictive)</option>
+              <option value="SFW" selected data-i18n="dir.form.sfw">SFW (Safe for Work)</option>
+              <option value="NSFW" data-i18n="dir.form.nsfw">NSFW (18+ Restrictive)</option>
             </select>
           </div>
         </div>
         
         <div class="form-group" id="matrixUrlContainer">
-          <label>Community Address Matrix Target</label>
+          <label data-i18n="dir.form.matrixAddr">Community Address Matrix Target</label>
           <div class="url-splitter">
             <input type="text" id="urlNamePart" placeholder="#lounge or !roomid">
             <span>:</span>
-            <input type="text" id="urlHostPart" placeholder="homeserverurl.com">
+            <input type="text" id="urlHostPart" placeholder="homeserverurl.com" data-i18n-attr="placeholder:dir.form.ph.host">
           </div>
         </div>
 
         <div class="form-group" id="fluxerUrlContainer" style="display: none;">
-          <label>Fluxer Invitation URL Target</label>
+          <label data-i18n="dir.form.fluxerUrl">Fluxer Invitation URL Target</label>
           <input type="url" id="fluxerUrlInput" placeholder="https://fluxer.dewrito.net/invite/...">
         </div>
 
         <div class="form-group">
-          <label>Community Description (Max 90 chars)</label>
-          <textarea id="formDescription" maxlength="90" oninput="updateCharCount(this)" placeholder="Short intro summary..."></textarea>
-          <div class="char-counter"><span id="charCount">90</span> characters remaining</div>
+          <label data-i18n="dir.form.description">Community Description (Max 90 chars)</label>
+          <textarea id="formDescription" maxlength="90" oninput="updateCharCount(this)" placeholder="Short intro summary..." data-i18n-attr="placeholder:dir.form.ph.desc"></textarea>
+          <div class="char-counter" data-i18n-html="dir.form.charsLeft"><span id="charCount">90</span> characters remaining</div>
         </div>
 
         <div class="captcha-row">
@@ -229,11 +297,11 @@
             <div class="g-recaptcha" data-sitekey="6LegL-ssAAAAAGzOKLtLIdLKzk4gVYnPrYVDNpFt" data-action="SUBMIT"></div>
           </div>
           <div class="help-link-container">
-            <a href="boosthelp.html" target="_blank">Need Help Boosting? ↗</a>
+            <a href="boosthelp.html" target="_blank" data-i18n="dir.form.help">Need Help Boosting? ↗</a>
           </div>
         </div>
 
-        <button class="btn-primary gen-btn" onclick="openReviewModal()">Generate Payment Memo</button>
+        <button class="btn-primary gen-btn" onclick="openReviewModal()" data-i18n="dir.form.generate">Generate Payment Memo</button>
       </div>
     </details>
 
@@ -242,34 +310,47 @@
     <div class="filter-wrapper">
       <div class="filter-row">
         <div class="filter-select-group">
-          <label>Platform</label>
+          <label data-i18n="dir.filter.platform">Platform</label>
           <select id="filterPlatform" onchange="handleFilterChange('platform')">
-            <option value="All">All Platforms</option>
-            <option value="Matrix">Matrix Only</option>
-            <option value="Fluxer">Fluxer Only</option>
+            <option value="All" data-i18n="dir.filter.allPlatforms">All Platforms</option>
+            <option value="Matrix" data-i18n="dir.filter.matrixOnly">Matrix Only</option>
+            <option value="Fluxer" data-i18n="dir.filter.fluxerOnly">Fluxer Only</option>
           </select>
         </div>
 
         <div class="filter-select-group">
-          <label>Language</label>
+          <label data-i18n="dir.filter.language">Language</label>
           <select id="filterLanguage" onchange="handleFilterChange('language')">
-            <option value="All">All Languages</option>
-            <option value="English">English</option>
-            <option value="Russian">Russian</option>
-            <option value="Spanish">Spanish</option>
-            <option value="German">German</option>
-            <option value="French">French</option>
-            <option value="Chinese">Chinese</option>
-            <option value="Other">Other</option>
+            <option value="All" data-i18n="dir.filter.allLanguages">All Languages</option>
+            <option value="English" data-i18n="lang.english">English</option>
+            <option value="Russian" data-i18n="lang.russian">Russian</option>
+            <option value="Spanish" data-i18n="lang.spanish">Spanish</option>
+            <option value="German" data-i18n="lang.german">German</option>
+            <option value="French" data-i18n="lang.french">French</option>
+            <option value="Chinese" data-i18n="lang.chinese">Chinese</option>
+              <option value="Portuguese" data-i18n="lang.portuguese">Portuguese</option>
+            <option value="Other" data-i18n="lang.other">Other</option>
           </select>
         </div>
 
         <div class="filter-select-group">
-          <label>Safety</label>
+          <label data-i18n="dir.filter.safety">Safety</label>
           <select id="filterRating" onchange="handleFilterChange('rating')">
-            <option value="SFW">SFW Only</option>
-            <option value="All">Show All (Include NSFW)</option>
-            <option value="NSFW">NSFW Only</option>
+            <option value="SFW" data-i18n="dir.filter.sfwOnly">SFW Only</option>
+            <option value="All" data-i18n="dir.filter.showAll">Show All (Include NSFW)</option>
+            <option value="NSFW" data-i18n="dir.filter.nsfwOnly">NSFW Only</option>
+          </select>
+        </div>
+        <div class="filter-select-group">
+          <label for="filterSearch" data-i18n="dir.filter.search">Search</label>
+          <input type="search" id="filterSearch" placeholder="Name, description, address" data-i18n-attr="placeholder:dir.filter.searchPh" oninput="handleFilterChange('search')" autocomplete="off">
+        </div>
+        <div class="filter-select-group">
+          <label data-i18n="dir.filter.sort">Sort</label>
+          <select id="filterSort" onchange="handleFilterChange('sort')">
+            <option value="boost" data-i18n="dir.sort.boost">Most boosted</option>
+            <option value="members" data-i18n="dir.sort.members">Most members</option>
+            <option value="newest" data-i18n="dir.sort.newest">Newest</option>
           </select>
         </div>
       </div>
@@ -279,9 +360,9 @@
       <table class="promo-table">
         <thead>
           <tr>
-            <th style="width: 35%;">Community</th>
-            <th style="width: 55%;">Description</th>
-            <th style="text-align: center; width: 10%;">Boost</th>
+            <th style="width: 35%;" data-i18n="dir.th.community">Community</th>
+            <th style="width: 55%;" data-i18n="dir.th.description">Description</th>
+            <th style="text-align: center; width: 10%;" data-i18n="dir.th.boost">Boost</th>
           </tr>
         </thead>
         <tbody id="promoListBody"></tbody>
@@ -293,98 +374,149 @@
 <div id="reviewModal" class="modal-overlay" onclick="closeReviewModal()">
   <div class="modal-content" onclick="event.stopPropagation()" style="max-width: 480px;">
     <button class="modal-close" onclick="closeReviewModal()">&times;</button>
-    <h3 style="color: var(--accent-cyan); margin-bottom: 12px; font-size: 1.2rem;">🔍 Review Listing Details</h3>
+    <h3 style="color: var(--accent-cyan); margin-bottom: 12px; font-size: 1.2rem;" data-i18n="dir.review.title">🔍 Review Listing Details</h3>
     
     <div id="reviewDetailsSummary" style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-subtle); padding: 12px; border-radius: 8px; margin-bottom: 16px; font-size: 0.9rem; line-height: 1.5;"></div>
     
-    <div style="border-left: 3px solid #ffaa00; background: rgba(255,170,0,0.05); padding: 10px 14px; border-radius: 0 8px 8px 0; font-size: 0.82rem; line-height: 1.4; color: var(--text-secondary); margin-bottom: 18px;">
+    <div style="border-left: 3px solid #ffaa00; background: rgba(255,170,0,0.05); padding: 10px 14px; border-radius: 0 8px 8px 0; font-size: 0.82rem; line-height: 1.4; color: var(--text-secondary); margin-bottom: 18px;" data-i18n-html="dir.review.terms">
       <strong>Important Terms:</strong> All ledger entries are non-refundable and hold zero formal entitlements. Ensure your configurations are accurate before generating your listing metadata. Network problems or visibility challenges must be escalated straight to the <a href="https://dewrito.net/contact.html" target="_blank" style="color: var(--accent-cyan); text-decoration: underline;">Dewrito Staff Team</a>.
     </div>
     
-    <button class="btn-primary gen-btn" onclick="confirmAndExecuteSubmit()">Everything looks correct, proceed</button>
+    <button class="btn-primary gen-btn" onclick="confirmAndExecuteSubmit()" data-i18n="dir.review.proceed">Everything looks correct, proceed</button>
   </div>
 </div>
 
 <div id="boostModal" class="modal-overlay" onclick="closeBoostModal()">
   <div class="modal-content" onclick="event.stopPropagation()">
     <button class="modal-close" onclick="closeBoostModal()">&times;</button>
-    <h3 class="modal-title" id="modalTitleText">📋 Copy Transaction Memo</h3>
-    <p id="modalBodyMessage" style="color: var(--text-secondary); font-size:0.95rem; margin-bottom:8px;">Send <strong>25 XLM or more</strong> to our wallet with this exact short memo:</p>
-    <div class="memo-box-container" style="display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 8px; margin: 14px 0;">
+    <h3 class="modal-title" id="modalTitleText" data-i18n="dir.boost.title">&#128640; Boost this community</h3>
+    <p id="modalBodyMessage" style="color: var(--text-secondary); font-size:0.95rem; margin-bottom:8px;" data-i18n-html="dir.boost.body">Send XLM to our wallet with this exact memo. Every <strong>25 XLM</strong> adds 30 days of visibility.</p>
+    <div class="memo-box-container" style="display: flex; justify-content: space-between; align-items: center; gap: 10px; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 8px; margin: 14px 0;">
       <div id="modalMemoText" class="memo-text"></div>
-      <button id="modalCopyBtn" class="copy-action-btn" onclick="copyMemoText()">Copy Memo</button>
+      <button id="modalCopyBtn" class="copy-action-btn" onclick="copyMemoText()" data-i18n="dir.boost.copyMemo">Copy Memo</button>
     </div>
-    <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:8px;"><strong>Our Stellar Address:</strong><br><span style="word-break:break-all; color:var(--text-secondary);">GCCL23ZM4PLTMULZ2K5KQHBLK3WHSCXXLFCHOMDSLJFQ2UN532WN3HYR</span></p>
+    <div class="boost-amount-row">
+      <label for="boostMonths" data-i18n="dir.boost.duration">Duration</label>
+      <select id="boostMonths" onchange="setBoostMonths(this.value)"></select>
+      <span class="boost-amount" id="boostAmount">25 XLM</span>
+    </div>
+    <div class="boost-pay-grid">
+      <div class="boost-qr" id="boostQr" aria-label="QR code with the payment details"></div>
+      <div class="boost-pay-actions">
+        <a id="boostPayLink" class="btn-primary" href="#" data-i18n="dir.boost.openWallet">Open in Stellar wallet</a>
+        <p class="boost-hint" data-i18n="dir.boost.hint">Works with wallets that understand Stellar pay links (Lobstr, Solar, Freighter, xBull). Otherwise scan the QR, or copy the address and memo into any exchange or wallet that supports memos.</p>
+        <p class="boost-address"><strong data-i18n="dir.boost.address">Wallet address</strong><br><span id="boostAddressText"></span><button class="copy-action-btn small" id="addrCopyBtn" onclick="copyAddress()" data-i18n="dir.boost.copy">Copy</button></p>
+        <p class="boost-hint"><a href="boosthelp.html" target="_blank" style="color: var(--accent-cyan);" data-i18n="dir.boost.help">Need help? Read the boost guide &#8599;</a></p>
+      </div>
+    </div>
   </div>
 </div>
 
 <div id="ageGateModal" class="modal-overlay">
   <div class="modal-content nsfw-modal-content">
-    <h2 style="color: #ff4d4d; font-size: 1.5rem; margin-bottom: 12px;">🔞 Age Verification Required</h2>
-    <p style="color: var(--text-secondary); line-height: 1.5; font-size: 0.95rem;">Please confirm you are at least 18 years old to access NSFW content.</p>
+    <h2 style="color: #ff4d4d; font-size: 1.5rem; margin-bottom: 12px;" data-i18n="dir.age.title">🔞 Age Verification Required</h2>
+    <p style="color: var(--text-secondary); line-height: 1.5; font-size: 0.95rem;" data-i18n="dir.age.body">Please confirm you are at least 18 years old to access NSFW content.</p>
     <div class="nsfw-btn-container">
-      <button class="nsfw-confirm-btn" onclick="confirmAgeGate(true)">Confirm (18+)</button>
-      <button class="nsfw-cancel-btn" onclick="confirmAgeGate(false)">Cancel</button>
+      <button class="nsfw-confirm-btn" onclick="confirmAgeGate(true)" data-i18n="dir.age.confirm">Confirm (18+)</button>
+      <button class="nsfw-cancel-btn" onclick="confirmAgeGate(false)" data-i18n="dir.age.cancel">Cancel</button>
     </div>
   </div>
 </div>
 
 <footer class="footer">
   <div class="container">
-    <p class="footer-text">&copy; <span id="year"></span> Dewrito.net — Community-run infrastructure.</p>
+    <p class="footer-text" data-i18n-html="footer.text">&copy; <span id="year"></span> Dewrito.net &mdash; Community-run server infrastructure.</p>
+    <ul class="footer-links">
+      <li><a href="register.html" data-i18n="footer.register">Register</a></li>
+      <li><a href="getting-started.html" data-i18n="footer.guide">Guide</a></li>
+      <li><a href="status.html" data-i18n="footer.status">Status</a></li>
+      <li><a href="terms.html" data-i18n="footer.terms">Terms</a></li>
+      <li><a href="privacy.html" data-i18n="footer.privacy">Privacy</a></li>
+      <li><a href="contact.html" data-i18n="footer.contact">Contact</a></li>
+      <li><a href="donate.html" data-i18n="footer.support">Support Us</a></li>
+    </ul>
   </div>
 </footer>
 
 <script src="js/starfield.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="js/listings.js"></script>
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
   const navbar = document.getElementById('navbar');
   const navToggle = document.getElementById('navToggle');
-  if(navToggle) navToggle.addEventListener('click', () => navbar.classList.toggle('mobile-open'));
+  if(navToggle) navToggle.addEventListener('click', () => navToggle.setAttribute('aria-expanded', String(navbar.classList.toggle('mobile-open'))));
 
-  const XLM_WALLET = "GCCL23ZM4PLTMULZ2K5KQHBLK3WHSCXXLFCHOMDSLJFQ2UN532WN3HYR";
-  const SUPABASE_URL = "https://emdooqonibsgrazbcvzp.supabase.co"; 
-  const SUPABASE_ANON_KEY = "sb_publishable_r7eqc_NvhJI77DBNhvvQjA_ohkMfrKE";
-  const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
-  
-  let filterState = { category: "All", platform: "All", language: "All", rating: "SFW" };
+  const T = (k, f) => (window.i18n ? window.i18n.t(k, f) : f);
+  const CAT_KEYS = { "Gaming": "cat.gaming", "Politics & Opinion": "cat.politics", "Art & Music": "cat.art", "Entertainment": "cat.entertainment", "Education": "cat.education", "Science & Technology": "cat.tech", "Content Creator": "cat.creator", "Anime & Manga": "cat.anime", "Movies & TV": "cat.movies", "Vtuber": "cat.vtuber", "Furry": "cat.furry", "LGBT+": "cat.lgbt", "Other": "cat.other" };
+  const LANG_KEYS = { "English": "lang.english", "Russian": "lang.russian", "Spanish": "lang.spanish", "German": "lang.german", "French": "lang.french", "Chinese": "lang.chinese", "Portuguese": "lang.portuguese", "Other": "lang.other" };
+  const catLabel = c => c === 'All' ? T('dir.all', 'All') : T(CAT_KEYS[c] || '', c);
+  const langLabel = l => T(LANG_KEYS[l] || '', l);
+  const fmt = (key, fallback, vars) => Object.entries(vars).reduce((str, [k, v]) => str.split('{' + k + '}').join(v), T(key, fallback));
+  const L = window.DewritoListings;
+  // Free tier: submissions that were never boosted are listed below the boosted ones. Set to false to hide them.
+  const SHOW_UNBOOSTED = true;
+  const CATEGORIES = ["All", "Gaming", "Politics & Opinion", "Art & Music", "Entertainment", "Education", "Science & Technology", "Content Creator", "Anime & Manga", "Movies & TV", "Vtuber", "Furry", "LGBT+", "Other"];
+  // Extra words refused at submit time, on top of the shared directory filter.
+  const SUBMIT_BANNED = [...L.BAD_WORDS, "crypto-pump", "lewd-content"];
+  const MAX_BOOST_MONTHS = 12;
+
+  let filterState = { category: "All", platform: "All", language: "All", rating: "SFW", search: "", sort: "boost" };
   let isAdultVerified = false;
+
+  // Filters live in the URL (?category=Gaming&platform=Matrix&q=...), so a filtered view can be shared.
+  const URL_KEYS = { category: 'category', platform: 'platform', language: 'language', rating: 'rating', search: 'q', sort: 'sort' };
+  const DEFAULTS = { ...filterState };
+  function readFiltersFromUrl() {
+    const params = new URLSearchParams(location.search);
+    const pick = (key, allowed) => { const v = params.get(URL_KEYS[key]); return v !== null && (!allowed || allowed.includes(v)) ? v : DEFAULTS[key]; };
+    filterState.category = pick('category', CATEGORIES);
+    filterState.platform = pick('platform', ['All', 'Matrix', 'Fluxer']);
+    filterState.language = pick('language', [...document.getElementById('filterLanguage').options].map(o => o.value));
+    filterState.sort = pick('sort', ['boost', 'members', 'newest']);
+    filterState.search = (params.get('q') || '').trim().toLowerCase().slice(0, 80);
+    const rating = pick('rating', ['SFW', 'All', 'NSFW']);
+    filterState.rating = 'SFW'; // an NSFW view from the URL is applied only after the age gate below is confirmed
+    document.getElementById('filterPlatform').value = filterState.platform;
+    document.getElementById('filterLanguage').value = filterState.language;
+    document.getElementById('filterSort').value = filterState.sort;
+    document.getElementById('filterSearch').value = params.get('q') || '';
+    document.getElementById('filterRating').value = rating;
+    if (rating !== 'SFW') document.getElementById('ageGateModal').classList.add('active');
+  }
+  function writeFiltersToUrl() {
+    const params = new URLSearchParams();
+    for (const [key, name] of Object.entries(URL_KEYS)) {
+      const v = key === 'search' ? document.getElementById('filterSearch').value.trim() : filterState[key];
+      if (v && v !== DEFAULTS[key]) params.set(name, v);
+    }
+    const qs = params.toString();
+    history.replaceState(null, '', location.pathname + (qs ? '?' + qs : '') + location.hash);
+  }
   let globalPromoCache = [];
   let activeMemo = "";
-
-  const CATEGORIES = ["All", "Gaming", "Politics & Opinion", "Art & Music", "Entertainment", "Education", "Science & Technology", "Content Creator", "Anime & Manga", "Movies & TV", "Vtuber", "Furry", "LGBT+", "Other"];
-  const BLOCKED_DOMAINS = ["cutefunny.art", "midov.pl", "dropnet.ch", "nicheart.online", "lolisho.chat", "cuteness-overdose.com", "capybara.pictures", "nerdsin.space"];
-  
-  // Local text filter configuration definitions
-  const BANNED_KEYWORDS = ["fuck", "scam", "crypto-pump", "gore", "lewd-content"];
+  let activeMonths = 1;
 
   function toggleUrlInputs() {
     const platform = document.getElementById('formPlatform').value;
-    const matrixBox = document.getElementById('matrixUrlContainer');
-    const fluxerBox = document.getElementById('fluxerUrlContainer');
-    
-    if (platform === "Fluxer") {
-      matrixBox.style.display = "none";
-      fluxerBox.style.display = "block";
-    } else {
-      matrixBox.style.display = "block";
-      fluxerBox.style.display = "none";
-    }
+    document.getElementById('matrixUrlContainer').style.display = platform === "Fluxer" ? "none" : "block";
+    document.getElementById('fluxerUrlContainer').style.display = platform === "Fluxer" ? "block" : "none";
   }
 
   function setupCategoryFilters() {
     const container = document.getElementById('categoryFilters');
     if(!container) return;
     container.innerHTML = CATEGORIES.map(cat => `
-      <button class="filter-chip ${cat === filterState.category ? 'active' : ''}" onclick="setCategoryBubble('${cat}')">${cat}</button>
+      <button class="filter-chip ${cat === filterState.category ? 'active' : ''}" onclick="setCategoryBubble(${JSON.stringify(cat).replace(/"/g, '&quot;')})">${L.escapeHtml(catLabel(cat))}</button>
     `).join('');
   }
 
   function setCategoryBubble(category) {
     filterState.category = category;
     setupCategoryFilters();
-    renderPromos(globalPromoCache);
+    writeFiltersToUrl();
+    renderPromos();
   }
 
   function handleFilterChange(axis) {
@@ -396,7 +528,10 @@
     filterState.platform = document.getElementById('filterPlatform').value;
     filterState.language = document.getElementById('filterLanguage').value;
     filterState.rating = ratingSelect.value;
-    renderPromos(globalPromoCache);
+    filterState.search = document.getElementById('filterSearch').value.trim().toLowerCase();
+    filterState.sort = document.getElementById('filterSort').value;
+    writeFiltersToUrl();
+    renderPromos();
   }
 
   function confirmAgeGate(isApproved) {
@@ -412,85 +547,65 @@
   function updateCharCount(textarea) { document.getElementById('charCount').textContent = 90 - textarea.value.length; }
   function generateShortID() { return Math.random().toString(36).substring(2, 7).toUpperCase(); }
 
-  // Step 1: Open Content Checker Preview
-  function openReviewModal() {
-    const displayName = document.getElementById('formDisplayName').value.trim();
+  function readForm() {
     const platform = document.getElementById('formPlatform').value;
-    const category = document.getElementById('formCategory').value;
-    const language = document.getElementById('formLanguage').value;
-    const rating = document.getElementById('formRating').value;
-    const description = document.getElementById('formDescription').value.trim();
-    
     let url = "";
     if (platform === "Matrix") {
       const name = document.getElementById('urlNamePart').value.trim();
       const host = document.getElementById('urlHostPart').value.trim();
-      if(!name || !host) return alert("Fill Matrix address segments.");
-      url = `${name}:${host}`;
+      url = name && host ? `${name}:${host}` : "";
     } else {
       url = document.getElementById('fluxerUrlInput').value.trim();
-      if(!url) return alert("Enter Fluxer link.");
     }
+    return {
+      displayName: document.getElementById('formDisplayName').value.trim(),
+      platform, url,
+      category: document.getElementById('formCategory').value,
+      language: document.getElementById('formLanguage').value,
+      rating: document.getElementById('formRating').value,
+      description: document.getElementById('formDescription').value.trim()
+    };
+  }
 
-    if (BLOCKED_DOMAINS.some(d => url.toLowerCase().includes(d))) return alert("Domain Blocked.");
-    if (!displayName) return alert("Please specify a display name.");
-    
-    // Safety check block validation verification runs over values before modal summary loads
-    const combinedContent = `${displayName} ${description}`.toLowerCase();
-    if (BANNED_KEYWORDS.some(keyword => combinedContent.includes(keyword))) {
-      return alert("Submission contains flagged terms. Please adjust your text.");
-    }
+  // Step 1: validate and preview
+  function openReviewModal() {
+    const f = readForm();
+    if (!f.url) return alert(f.platform === "Matrix" ? T('dir.alert.matrixParts', 'Fill in both parts of the Matrix address.') : T('dir.alert.fluxerLink', 'Enter the Fluxer invite link.'));
+    if (L.safeHref(f) === '#') return alert(f.platform === "Fluxer" ? T('dir.alert.fluxerHttps', 'Enter a full https:// Fluxer invite link.') : T('dir.alert.matrixFormat', 'Enter a valid Matrix address like #room:server.tld'));
+    if (L.isBlockedDomain(f.url)) return alert(T('dir.alert.blocked', 'That homeserver is not accepted in the directory.'));
+    if (!f.displayName) return alert(T('dir.alert.name', 'Please specify a display name.'));
+    if (L.matchesBannedWord(`${f.displayName} ${f.description}`, SUBMIT_BANNED)) return alert(T('dir.alert.flagged', 'Submission contains flagged terms. Please adjust your text.'));
+    if (window.grecaptcha && typeof grecaptcha.getResponse === 'function' && !grecaptcha.getResponse()) return alert(T('dir.alert.captcha', 'Please complete the captcha first.'));
 
-    // Inject parameters into text review summary layout box
     document.getElementById('reviewDetailsSummary').innerHTML = `
-      <strong>Community:</strong> ${displayName}<br>
-      <strong>Platform:</strong> ${platform}<br>
-      <strong>Endpoint:</strong> <span style="color:var(--accent-cyan); word-break:break-all;">${url}</span><br>
-      <strong>Classification:</strong> ${category} • ${language} • ${rating}<br>
-      <strong>Description:</strong> <em>${description || 'No summary text provided'}</em>
+      <strong>${T('dir.review.community', 'Community')}:</strong> ${L.escapeHtml(f.displayName)}<br>
+      <strong>${T('dir.review.platform', 'Platform')}:</strong> ${L.escapeHtml(f.platform)}<br>
+      <strong>${T('dir.review.endpoint', 'Endpoint')}:</strong> <span style="color:var(--accent-cyan); word-break:break-all;">${L.escapeHtml(f.url)}</span><br>
+      <strong>${T('dir.review.classification', 'Classification')}:</strong> ${L.escapeHtml(catLabel(f.category))} • ${L.escapeHtml(langLabel(f.language))} • ${L.escapeHtml(f.rating)}<br>
+      <strong>${T('dir.review.description', 'Description')}:</strong> <em>${L.escapeHtml(f.description) || T('dir.review.noSummary', 'No summary text provided')}</em>
     `;
-    
     document.getElementById('reviewModal').classList.add('active');
   }
 
   function closeReviewModal() { document.getElementById('reviewModal').classList.remove('active'); }
 
-  // Step 2: Write parameters to DB after validation confirmation targets hit
+  // Step 2: write the listing, then show the payment details
   async function confirmAndExecuteSubmit() {
     closeReviewModal();
-    
-    const displayName = document.getElementById('formDisplayName').value.trim();
-    const platform = document.getElementById('formPlatform').value;
-    const category = document.getElementById('formCategory').value;
-    const language = document.getElementById('formLanguage').value;
-    const rating = document.getElementById('formRating').value;
-    const description = document.getElementById('formDescription').value.trim();
-    
-    let url = "";
-    if (platform === "Matrix") {
-      url = `${document.getElementById('urlNamePart').value.trim()}:${document.getElementById('urlHostPart').value.trim()}`;
-    } else {
-      url = document.getElementById('fluxerUrlInput').value.trim();
-    }
-
+    const f = readForm();
     const shortID = generateShortID();
-    // Keeping the original database table identifier 'community_ads' as requested
-    const { error } = await supabaseClient.from('community_ads').insert([{
-      id: shortID, name: displayName, url: url, description: description,
-      category: category, language: language, content_rating: rating, platform: platform
+    const { error } = await L.supabaseClient.from('community_ads').insert([{
+      id: shortID, name: f.displayName, url: f.url, description: f.description,
+      category: f.category, language: f.language, content_rating: f.rating, platform: f.platform
     }]);
-
     if (error) return alert("Database Error: " + error.message);
     showBoostInfo(shortID);
     clearForm();
+    loadDirectory();
   }
 
   function clearForm() {
-    document.getElementById('formDisplayName').value = '';
-    document.getElementById('urlNamePart').value = '';
-    document.getElementById('urlHostPart').value = '';
-    document.getElementById('fluxerUrlInput').value = '';
-    document.getElementById('formDescription').value = '';
+    ['formDisplayName', 'urlNamePart', 'urlHostPart', 'fluxerUrlInput', 'formDescription'].forEach(id => document.getElementById(id).value = '');
     document.getElementById('formCategory').value = 'Other';
     document.getElementById('formLanguage').value = 'English';
     document.getElementById('formRating').value = 'SFW';
@@ -501,129 +616,159 @@
     document.querySelector('.collapsible-wrapper').removeAttribute('open');
   }
 
-  async function fetchXLMTransactions() {
-    if(!supabaseClient) return;
+  // ---------- directory ----------
+  // A link like community.html#listing-ABCDE scrolls to that row. Member counts arrive a few seconds
+  // after the first render and re-sort the table, so we scroll again then, unless the reader has moved.
+  let lastAutoScrollY = null;
+  function scrollToLinkedListing() {
+    if (!location.hash.startsWith('#listing-')) return;
+    const row = document.getElementById(location.hash.slice(1));
+    if (!row) return;
+    if (lastAutoScrollY !== null && Math.abs(window.scrollY - lastAutoScrollY) > 2) return; // reader scrolled
+    row.scrollIntoView({ block: 'center', behavior: 'instant' });
+    lastAutoScrollY = window.scrollY;
+  }
+
+  async function loadDirectory() {
     try {
-      const { data: dbRecords } = await supabaseClient.from('community_ads').select('*');
-      const dbMap = new Map((dbRecords || []).map(item => [item.id.toLowerCase(), item]));
-      
-      let res = await fetch(`https://horizon.stellar.org/accounts/${XLM_WALLET}/transactions?limit=200&order=desc`);
-      let data = await res.json();
-      
-      const communityMap = new Map();
-      for (let tx of (data._embedded?.records || [])) {
-        if (tx.memo_type === "text" && tx.memo) {
-          const memoKey = tx.memo.trim().toLowerCase();
-          if (dbMap.has(memoKey)) {
-            const matched = dbMap.get(memoKey);
-            const key = matched.url.toLowerCase();
-            if(!communityMap.has(key)) {
-              communityMap.set(key, { ...matched, platform: matched.platform || (matched.url.startsWith('http') ? 'Fluxer' : 'Matrix'), totalXlm: 0, boosts: [] });
-            }
-            const entry = communityMap.get(key);
-            entry.boosts.push(new Date(tx.created_at));
-            entry.totalXlm += 25; 
-          }
-        }
-      }
-
-      dbRecords.forEach(item => {
-        if(parseInt(item.is_permanent) === 1 && !communityMap.has(item.url.toLowerCase())) {
-          communityMap.set(item.url.toLowerCase(), { ...item, platform: item.platform || (item.url.startsWith('http') ? 'Fluxer' : 'Matrix'), boosts: [new Date()], totalXlm: 100 });
-        }
-      });
-
-      globalPromoCache = Array.from(communityMap.values()).map(com => {
-        const isPermanent = parseInt(com.is_permanent) === 1;
-        const totalMonthsPaid = Math.max(1, Math.floor(com.totalXlm / 25));
-        return { ...com, months: totalMonthsPaid, isExpired: !isPermanent && (new Date() - new Date(Math.max(...com.boosts))) > (totalMonthsPaid * 2592000000) };
-      });
-      renderPromos(globalPromoCache);
-    } catch(e) { console.error(e); }
-  }
-
-  function renderPromos(promos) {
-    const filtered = promos.filter(ad => {
-      const catMatch = filterState.category === "All" || ad.category === filterState.category;
-      const netMatch = filterState.platform === "All" || ad.platform === filterState.platform;
-      const langMatch = filterState.language === "All" || ad.language === filterState.language;
-      const safeMatch = filterState.rating === "All" || ad.content_rating === filterState.rating;
-      
-      // Filter matching text strings out of layout parsing loops entirely
-      const combinedLower = `${ad.name || ''} ${ad.description || ''}`.toLowerCase();
-      const contentIsSafe = !BANNED_KEYWORDS.some(keyword => combinedLower.includes(keyword));
-      
-      return catMatch && netMatch && langMatch && safeMatch && contentIsSafe;
-    });
-
-    const activePromos = filtered.filter(a => !a.isExpired);
-    const expiredPromos = filtered.filter(a => a.isExpired);
-
-    let html = '';
-    
-    const appendRow = (ad) => {
-      const cleanHref = ad.platform === "Fluxer" ? ad.url : `https://matrix.to/#/${ad.url}`;
-      const netLabel = ad.platform === "Fluxer" ? `<span class="cat-label net-tag-fluxer">Fluxer</span>` : `<span class="cat-label net-tag-matrix">Matrix</span>`;
-      const isPin = parseInt(ad.is_permanent) === 1;
-      
-      const durationText = isPin ? "1 month" : `${ad.months || 1} month${(ad.months || 1) > 1 ? 's' : ''}`;
-      const durationLabel = `<span class="cat-label" style="background: rgba(0, 204, 255, 0.1); color: var(--accent-cyan); border: 1px solid rgba(0, 204, 255, 0.15);">${durationText}</span>`;
-
-      const catClass = ad.category === "Gaming" ? "cat-gaming" : 
-                       ad.category === "Politics & Opinion" ? "cat-politics" :
-                       ad.category === "Art & Music" ? "cat-art" :
-                       ad.category === "Science & Technology" ? "cat-tech" :
-                       ad.category === "Content Creator" ? "cat-creator" :
-                       ad.category === "Anime & Manga" ? "cat-anime" :
-                       ad.category === "Vtuber" ? "cat-vtuber" :
-                       ad.category === "Furry" ? "cat-furry" : "";
-
-      const langClass = ad.language === "Russian" ? "lang-ru" : 
-                        ad.language === "Spanish" ? "lang-es" : "";
-
-      return `
-        <tr class="promo-row ${ad.isExpired ? 'legacy-expired' : ''}">
-          <td class="col-name" style="width: 35%;">
-            <a href="${cleanHref}" target="_blank" rel="noopener">${ad.name}</a><br>
-            <div class="meta-labels-container">
-              ${netLabel} 
-              <span class="cat-label ${catClass}">${ad.category}</span> 
-              <span class="cat-label ${langClass}">${ad.language}</span>
-              ${durationLabel}
-              ${ad.content_rating === 'NSFW' ? '<span class="cat-label nsfw-tag">NSFW</span>' : ''}
-            </div>
-          </td>
-          <td class="col-desc" style="width: 55%;">${ad.description || '<i>No description provided</i>'}</td>
-          <td style="text-align: center; width: 10%;"><button class="list-boost-btn" onclick="showBoostInfo('${ad.id}')">🚀</button></td>
-        </tr>`;
-    };
-
-    activePromos.forEach(ad => html += appendRow(ad));
-    
-    if (expiredPromos.length > 0) {
-      html += `<tr><td colspan="3" class="legacy-sep-header" style="padding: 8px 16px; font-weight: 700; text-transform: uppercase;">💎 Legacy Backers (Window Concluded)</td></tr>`;
-      expiredPromos.forEach(ad => html += appendRow(ad));
+      const { listings } = await L.load();
+      globalPromoCache = listings.filter(l => L.passesContentRules(l, { allowNsfw: true }));
+      renderPromos();
+      scrollToLinkedListing();
+      // Member counts and topics arrive a little later; re-render as they do.
+      L.enrichWithRoomInfo(globalPromoCache, renderPromos).then(scrollToLinkedListing);
+    } catch(e) {
+      console.error(e);
+      document.getElementById('promoListBody').innerHTML = `<tr><td colspan="3" style="text-align:center; padding:20px;">${T('dir.loadError', 'The directory could not be loaded. Please try again in a moment.')}</td></tr>`;
     }
-
-    document.getElementById('promoListBody').innerHTML = html || '<tr><td colspan="3" style="text-align:center; padding:20px;">No communities found.</td></tr>';
   }
+
+  function matchesFilters(ad) {
+    const catMatch = filterState.category === "All" || ad.category === filterState.category;
+    const netMatch = filterState.platform === "All" || ad.platform === filterState.platform;
+    const langMatch = filterState.language === "All" || ad.language === filterState.language;
+    const safeMatch = filterState.rating === "All" || (ad.content_rating || 'SFW') === filterState.rating;
+    const haystack = `${ad.name || ''} ${ad.description || ''} ${ad.url || ''} ${ad.room?.topic || ''}`.toLowerCase();
+    const searchMatch = !filterState.search || haystack.includes(filterState.search);
+    return catMatch && netMatch && langMatch && safeMatch && searchMatch;
+  }
+
+  function sortListings(list) {
+    const members = a => (a.room && Number.isFinite(a.room.members)) ? a.room.members : -1;
+    const byName = (a, b) => String(a.name || '').localeCompare(String(b.name || ''));
+    if (filterState.sort === 'newest') return list.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0) || byName(a, b));
+    if (filterState.sort === 'members') return list.sort((a, b) => members(b) - members(a) || b.rank - a.rank || byName(a, b));
+    return list.sort((a, b) => b.rank - a.rank || members(b) - members(a) || byName(a, b));
+  }
+
+  function renderPromos() {
+    const filtered = globalPromoCache.filter(matchesFilters);
+    const active = sortListings(filtered.filter(a => a.tier === 'boosted' || a.tier === 'pinned'));
+    const expired = sortListings(filtered.filter(a => a.tier === 'expired'));
+    const unboosted = SHOW_UNBOOSTED ? sortListings(filtered.filter(a => a.tier === 'unboosted')) : [];
+
+    let html = active.map(appendRow).join('');
+    if (expired.length) {
+      html += `<tr class="section-sep"><td colspan="3">${T('dir.sec.legacy', '💎 Legacy Backers (boost ended)')}</td></tr>` + expired.map(appendRow).join('');
+    }
+    if (unboosted.length) {
+      html += `<tr class="section-sep"><td colspan="3">${T('dir.sec.unboosted', '📋 Unboosted listings (not yet boosted)')}</td></tr>` + unboosted.map(appendRow).join('');
+    }
+    document.getElementById('promoListBody').innerHTML = html || `<tr><td colspan="3" style="text-align:center; padding:20px;">${T('dir.noMatch', 'No communities match these filters.')}</td></tr>`;
+  }
+
+  const CAT_CLASS = { "Gaming": "cat-gaming", "Politics & Opinion": "cat-politics", "Art & Music": "cat-art", "Science & Technology": "cat-tech", "Content Creator": "cat-creator", "Anime & Manga": "cat-anime", "Vtuber": "cat-vtuber", "Furry": "cat-furry" };
+  const LANG_CLASS = { "Russian": "lang-ru", "Spanish": "lang-es" };
+
+  function tierLabel(ad) {
+    if (ad.tier === 'pinned') return `<span class="cat-label tier-pinned" title="${L.escapeHtml(T('dir.tier.pinnedTitle', 'Listed permanently by the Dewrito team'))}">${T('dir.tier.pinned', '📌 Pinned')}</span>`;
+    if (ad.tier === 'boosted' && ad.expiresSoon) { const days = ad.daysLeft <= 0 ? T('dir.tier.lessThanDay', 'less than a day') : fmt(ad.daysLeft > 1 ? 'dir.tier.days' : 'dir.tier.day', ad.daysLeft > 1 ? '{n} days' : '{n} day', { n: ad.daysLeft }); return `<span class="cat-label tier-soon" title="${L.escapeHtml(fmt('dir.tier.soonTitle', 'Boost ends {date}. Boost again to keep it listed.', { date: L.formatDate(ad.expiresAt) }))}">${fmt('dir.tier.soon', '⏳ Ends in {days}', { days })}</span>`; }
+    if (ad.tier === 'boosted') { const months = fmt(ad.months > 1 ? 'dir.tier.months' : 'dir.tier.month', ad.months > 1 ? '{n} months' : '{n} month', { n: ad.months }); return `<span class="cat-label tier-boosted">${L.escapeHtml(fmt('dir.tier.boosted', '⚡ {months} · until {date}', { months, date: L.formatDate(ad.expiresAt) }))}</span>`; }
+    if (ad.tier === 'expired') return `<span class="cat-label tier-expired">${L.escapeHtml(fmt('dir.tier.ended', 'Boost ended {date}', { date: L.formatDate(ad.expiresAt) }))}</span>`;
+    return `<span class="cat-label tier-unboosted">${T('dir.tier.unboosted', 'Unboosted')}</span>`;
+  }
+
+  function appendRow(ad) {
+    const netLabel = ad.platform === "Fluxer" ? `<span class="cat-label net-tag-fluxer">Fluxer</span>` : `<span class="cat-label net-tag-matrix">Matrix</span>`;
+    const membersLabel = (ad.room && Number.isFinite(ad.room.members)) ? `<span class="cat-label members-tag" title="${L.escapeHtml(T('dir.members', 'Joined members'))}">👥 ${ad.room.members.toLocaleString()}</span>` : '';
+    let desc = ad.description ? L.escapeHtml(ad.description) : '';
+    if (!desc && ad.room && ad.room.topic) desc = `<span class="from-topic">${L.escapeHtml(ad.room.topic.slice(0, 140))}${ad.room.topic.length > 140 ? '…' : ''}</span>`;
+    if (!desc) desc = `<i>${T('dir.noDesc', 'No description provided')}</i>`;
+    const rowId = 'listing-' + String(ad.id).replace(/[^A-Za-z0-9_-]/g, '');
+    const highlight = location.hash === '#' + rowId ? ' highlight' : '';
+    const reportHref = 'mailto:abuse@dewrito.net?' + new URLSearchParams({
+      subject: `Directory listing report: ${ad.id}`,
+      body: `Listing: ${ad.name}\nAddress: ${ad.url}\nLink: ${location.origin + location.pathname}#${rowId}\n\nWhat is wrong with it:\n`
+    }).toString().replace(/\+/g, '%20');
+    return `
+      <tr class="promo-row ${ad.tier === 'expired' || ad.tier === 'unboosted' ? 'legacy-expired' : ''}${highlight}" id="${rowId}">
+        <td class="col-name" style="width: 35%;">
+          <a href="${L.escapeHtml(ad.href)}" target="_blank" rel="noopener">${L.escapeHtml(ad.name)}</a><br>
+          <div class="meta-labels-container">
+            ${netLabel}
+            <span class="cat-label ${CAT_CLASS[ad.category] || ''}">${L.escapeHtml(catLabel(ad.category))}</span>
+            <span class="cat-label ${LANG_CLASS[ad.language] || ''}">${L.escapeHtml(langLabel(ad.language))}</span>
+            ${membersLabel}
+            ${tierLabel(ad)}
+            ${ad.content_rating === 'NSFW' ? '<span class="cat-label nsfw-tag">NSFW</span>' : ''}
+          </div>
+        </td>
+        <td class="col-desc" style="width: 55%;">${desc}</td>
+        <td style="text-align: center; width: 10%;">
+          <div class="row-actions">
+            <button class="list-boost-btn" title="${L.escapeHtml(T('dir.boostTitle', 'Boost this listing'))}" onclick="showBoostInfo(${L.escapeHtml(JSON.stringify(String(ad.id)))})">🚀</button>
+            <a class="report-btn" href="${L.escapeHtml(reportHref)}" title="${L.escapeHtml(T('dir.reportTitle', 'Report this listing to the moderators'))}">${T('dir.report', '⚑ Report')}</a>
+          </div>
+        </td>
+      </tr>`;
+  }
+
+  // ---------- boost modal ----------
+  function initBoostModal() {
+    const sel = document.getElementById('boostMonths');
+    const current = sel.value || '1';
+    sel.innerHTML = Array.from({ length: MAX_BOOST_MONTHS }, (_, i) => `<option value="${i + 1}">${fmt(i ? 'dir.boost.monthsOpt' : 'dir.boost.monthOpt', i ? '{n} months' : '{n} month', { n: i + 1 })}</option>`).join('');
+    sel.value = current;
+    document.getElementById('boostAddressText').textContent = L.XLM_WALLET;
+  }
+  initBoostModal();
 
   function showBoostInfo(memo) {
     activeMemo = memo;
     document.getElementById('modalMemoText').textContent = memo;
+    document.getElementById('boostMonths').value = '1';
+    setBoostMonths(1);
     document.getElementById('boostModal').classList.add('active');
   }
-  function closeBoostModal() { document.getElementById('boostModal').classList.remove('active'); }
-  function copyMemoText() {
-    navigator.clipboard.writeText(activeMemo).then(() => {
-      document.getElementById('modalCopyBtn').textContent = "Copied!";
-      setTimeout(() => document.getElementById('modalCopyBtn').textContent = "Copy Memo", 2000);
-    });
+
+  function setBoostMonths(n) {
+    activeMonths = Math.max(1, Math.min(MAX_BOOST_MONTHS, parseInt(n) || 1));
+    const uri = L.stellarPayUri(activeMemo, activeMonths);
+    document.getElementById('boostAmount').textContent = `${activeMonths * L.XLM_PER_MONTH} XLM`;
+    document.getElementById('boostPayLink').href = uri;
+    const qr = document.getElementById('boostQr');
+    qr.innerHTML = '';
+    if (window.QRCode) {
+      try { new QRCode(qr, { text: uri, width: 160, height: 160, colorDark: '#000000', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.M }); }
+      catch (e) { qr.innerHTML = '<div class="boost-qr-fallback">QR unavailable, use the link or copy the details.</div>'; }
+    } else {
+      qr.innerHTML = '<div class="boost-qr-fallback">QR unavailable, use the link or copy the details.</div>';
+    }
   }
 
+  function closeBoostModal() { document.getElementById('boostModal').classList.remove('active'); }
+  function flashButton(id, text, original) {
+    const b = document.getElementById(id); b.textContent = text; b.classList.add('copied');
+    setTimeout(() => { b.textContent = original; b.classList.remove('copied'); }, 2000);
+  }
+  function copyMemoText() { navigator.clipboard.writeText(activeMemo).then(() => flashButton('modalCopyBtn', T('dir.boost.copied', 'Copied!'), T('dir.boost.copyMemo', 'Copy Memo'))); }
+  function copyAddress() { navigator.clipboard.writeText(L.XLM_WALLET).then(() => flashButton('addrCopyBtn', T('dir.boost.copied', 'Copied!'), T('dir.boost.copy', 'Copy'))); }
+
+  readFiltersFromUrl();
   setupCategoryFilters();
-  fetchXLMTransactions();
-  setInterval(fetchXLMTransactions, 30000);
+  loadDirectory();
+  document.addEventListener('i18n:ready', () => { setupCategoryFilters(); initBoostModal(); renderPromos(); });
+  setInterval(loadDirectory, 60000);
 </script>
 </body>
 </html>

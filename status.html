@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Dewrito | Status</title>
+  <meta charset="UTF-8">
+  <meta name="description" content="Live status of Dewrito services: Matrix homeserver, Sable web client, Fluxer, and website, plus maintenance notices.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Dewrito">
+  <meta property="og:title" content="Dewrito | Status">
+  <meta property="og:description" content="Live status of Dewrito services: Matrix homeserver, Sable web client, Fluxer, and website, plus maintenance notices.">
+  <meta property="og:url" content="https://dewrito.net/status.html">
+  <meta property="og:image" content="https://dewrito.net/img/logo.png">
+  <meta name="twitter:card" content="summary">
+  <link rel="me" href="https://bsky.app/profile/dewrito.net">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="img/favicon.ico" rel="shortcut icon"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/site.css">
+  <script src="js/i18n.js"></script>
+  <script src="js/analytics.js" defer></script>
+  <style>
+    @keyframes statusPulse { 0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(62,207,142,0.5)} 50%{opacity:0.7;box-shadow:0 0 0 6px rgba(62,207,142,0)} }
+    .overall { display: flex; align-items: center; justify-content: center; gap: 10px; margin: var(--space-md) auto 0; padding: 12px 20px; border-radius: var(--radius-pill); border: 1px solid var(--border-subtle); background: var(--bg-card); font-weight: 500; width: max-content; max-width: 100%; }
+    .overall-dot { width: 10px; height: 10px; border-radius: 50%; position: relative; background: var(--text-muted); flex-shrink: 0; }
+    .overall-dot::after { content: ''; position: absolute; inset: -4px; border-radius: 50%; animation: statusPulse 2s ease-in-out infinite; }
+    .overall.status-up { color: var(--accent-green); } .overall.status-up .overall-dot { background: var(--accent-green); }
+    .overall.status-degraded { color: #ffaa00; } .overall.status-degraded .overall-dot { background: #ffaa00; }
+    .overall.status-down { color: #ff4d4d; } .overall.status-down .overall-dot { background: #ff4d4d; animation: none; } .overall.status-down .overall-dot::after { display: none; }
+    .svc-list { display: flex; flex-direction: column; gap: var(--space-sm); margin-top: var(--space-xl); }
+    .svc { display: grid; grid-template-columns: 14px 1fr auto auto; gap: 14px; align-items: center; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 14px 18px; }
+    .svc-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--text-muted); position: relative; }
+    .svc-dot::after { content: ''; position: absolute; inset: -4px; border-radius: 50%; animation: statusPulse 2s ease-in-out infinite; }
+    .status-up .svc-dot { background: var(--accent-green); } .status-degraded .svc-dot { background: #ffaa00; }
+    .status-down .svc-dot { background: #ff4d4d; animation: none; } .status-down .svc-dot::after { display: none; }
+    .svc-name { font-weight: 500; } .svc-desc { font-size: 0.8rem; color: var(--text-muted); font-family: var(--font-mono); margin: 0; }
+    .svc-badge { font-size: 0.75rem; padding: 3px 10px; border-radius: 999px; font-weight: 600; white-space: nowrap; }
+    .status-up .svc-badge { background: rgba(62,207,142,0.12); color: var(--accent-green); }
+    .status-degraded .svc-badge { background: rgba(255,170,0,0.12); color: #ffaa00; }
+    .status-down .svc-badge { background: rgba(255,77,77,0.12); color: #ff4d4d; }
+    .status-checking .svc-badge { background: rgba(255,255,255,0.05); color: var(--text-muted); }
+    .svc-ms { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); min-width: 60px; text-align: right; }
+    .refresh-note { text-align: center; font-size: 0.8rem; color: var(--text-muted); margin-top: var(--space-md); }
+    .ann { border-left: 3px solid var(--border-strong); background: var(--bg-card); padding: 14px 18px; border-radius: 0 var(--radius-md) var(--radius-md) 0; margin-bottom: var(--space-sm); }
+    .ann h3 { font-size: 1rem; margin: 0 0 4px !important; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .ann p { margin: 0 !important; font-size: 0.9rem; }
+    .ann-date { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); font-weight: 400; }
+    .ann-level { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.08em; padding: 2px 8px; border-radius: 999px; font-weight: 600; }
+    .ann.info { border-color: var(--accent-cyan); } .ann.info .ann-level { background: var(--accent-cyan-dim); color: var(--accent-cyan); }
+    .ann.maintenance { border-color: #ffaa00; } .ann.maintenance .ann-level { background: rgba(255,170,0,0.12); color: #ffaa00; }
+    .ann.incident { border-color: #ff4d4d; } .ann.incident .ann-level { background: rgba(255,77,77,0.12); color: #ff4d4d; }
+    .ann.resolved { border-color: var(--accent-green); } .ann.resolved .ann-level { background: var(--accent-green-dim); color: var(--accent-green); }
+    .ann.past { opacity: 0.6; }
+    .empty { color: var(--text-muted); font-size: 0.9rem; }
+    @media (max-width: 600px) { .svc { grid-template-columns: 14px 1fr auto; } .svc-ms { display: none; } }
+  </style>
+</head>
+<body>
+
+<a class="skip-link" href="#main" data-i18n="nav.skip">Skip to content</a>
+<canvas id="starfield"></canvas>
+
+<nav class="navbar" id="navbar">
+  <div class="container">
+    <a href="index.html" class="nav-logo"><img src="img/logo.png" alt="Dewrito"></a>
+    <ul class="nav-links">
+      <li><a href="index.html#features" data-i18n="nav.features">Features</a></li>
+      <li><a href="index.html#community" data-i18n="nav.community">Community</a></li>
+      <li><a href="community.html" data-i18n="nav.directory">Directory</a></li>
+      <li><a href="getting-started.html" data-i18n="nav.guide">Guide</a></li>
+      <li><a href="register.html" data-i18n="nav.register">Register</a></li>
+      <li><a href="contact.html" data-i18n="nav.contact">Contact</a></li>
+    </ul>
+    <a class="nav-bsky" href="https://bsky.app/profile/dewrito.net" target="_blank" rel="me noopener" aria-label="Dewrito on Bluesky" title="@dewrito.net on Bluesky"><svg class="bsky-icon" viewBox="0 0 568 501" aria-hidden="true"><path fill="currentColor" d="M123.121 33.664C188.241 82.553 258.281 181.68 284 234.873c25.719-53.192 95.759-152.32 160.879-201.21C491.866-1.611 568-28.906 568 57.947c0 17.346-9.945 145.713-15.778 166.555-20.275 72.453-94.155 90.933-159.875 79.748C507.222 323.8 536.444 388.56 473.333 453.32c-119.86 122.992-172.272-30.859-185.702-70.281-2.462-7.227-3.614-10.608-3.631-7.733-.017-2.875-1.169.506-3.631 7.733-13.43 39.422-65.842 193.273-185.702 70.281-63.111-64.76-33.89-129.52 80.986-149.071-65.72 11.185-139.6-7.295-159.875-79.748C9.945 203.659 0 75.291 0 57.946 0-28.906 76.135-1.612 123.121 33.664z"/></svg></a>
+    <div class="nav-cta"><a href="index.html" class="btn-secondary" data-i18n="nav.backHome">Back Home</a></div>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" data-i18n-attr="aria-label:nav.toggle" aria-expanded="false"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<header class="page-header" id="main" tabindex="-1">
+  <span class="mono-label section-label" data-i18n="status.pageLabel">Service Status</span>
+  <h1 data-i18n="status.title">Is it up?</h1>
+  <p style="margin: 0 auto;" data-i18n="status.intro">Live checks run from your browser every 30 seconds. Notices and maintenance windows are posted below.</p>
+  <div class="overall status-checking" id="overall"><span class="overall-dot"></span><span id="overallText" data-i18n="status.checking">Checking&hellip;</span></div>
+</header>
+
+<section class="content-section">
+  <div class="svc-list" id="svcList"></div>
+  <p class="refresh-note" data-i18n-html="status.refreshNote">Last checked <span id="lastChecked">&mdash;</span>. "Reachable" means the service answered but did not expose an HTTP status to this page.</p>
+  <p id="historyWrap" style="text-align:center; margin-top: var(--space-md); display:none;"><a id="historyLink" class="btn-secondary" href="#" target="_blank" rel="noopener" data-i18n="status.history">View uptime history &#8599;</a></p>
+
+  <hr class="divider">
+
+  <h2 data-i18n="status.notices">Notices</h2>
+  <div id="annActive"></div>
+  <details style="margin-top: var(--space-md);">
+    <summary style="cursor:pointer; color: var(--text-secondary); font-size: 0.9rem;" data-i18n="status.pastNotices">Past notices</summary>
+    <div id="annPast" style="margin-top: var(--space-sm);"></div>
+  </details>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <p class="footer-text" data-i18n-html="footer.text">&copy; <span id="year"></span> Dewrito.net &mdash; Community-run server infrastructure.</p>
+    <ul class="footer-links">
+      <li><a href="register.html" data-i18n="footer.register">Register</a></li>
+      <li><a href="getting-started.html" data-i18n="footer.guide">Guide</a></li>
+      <li><a href="status.html" data-i18n="footer.status">Status</a></li>
+      <li><a href="terms.html" data-i18n="footer.terms">Terms</a></li>
+      <li><a href="privacy.html" data-i18n="footer.privacy">Privacy</a></li>
+      <li><a href="contact.html" data-i18n="footer.contact">Contact</a></li>
+      <li><a href="donate.html" data-i18n="footer.support">Support Us</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script src="js/starfield.js"></script>
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+  const navbar = document.getElementById('navbar');
+  const navToggle = document.getElementById('navToggle');
+  navToggle.addEventListener('click', () => navToggle.setAttribute('aria-expanded', String(navbar.classList.toggle('mobile-open'))));
+
+  // Optional: link to a public uptime-history page (for example a self-hosted Uptime Kuma status page).
+  const UPTIME_HISTORY_URL = "";
+
+  // mode 'cors' = we can read the real HTTP status; 'no-cors' = reachable/unreachable only.
+  const T = (k, f) => (window.i18n ? window.i18n.t(k, f) : f);
+  const SERVICES = [
+    { id: 'matrix', name: 'Matrix homeserver', desc: 'matrix.dewrito.net \u00b7 client API', url: 'https://matrix.dewrito.net/_matrix/client/versions', mode: 'cors' },
+    { id: 'calls',  name: 'Voice & video calls', desc: 'LiveKit service', url: 'https://matrix.dewrito.net/livekit-jwt-service/healthz', mode: 'no-cors' },
+    { id: 'sable',  name: 'Sable web client',  desc: 'sable.dewrito.net', url: 'https://sable.dewrito.net/', mode: 'no-cors' },
+    { id: 'fluxer', name: 'Fluxer',            desc: 'fluxer.dewrito.net', url: 'https://fluxer.dewrito.net/', mode: 'no-cors' },
+    { id: 'site',   name: 'Website',           desc: 'dewrito.net', url: 'https://dewrito.net/', mode: 'no-cors' }
+  ];
+  const LABEL = () => ({ up: T('status.up', 'Operational'), reachable: T('status.reachable', 'Reachable'), degraded: T('status.degraded', 'Degraded'), down: T('status.down', 'Down'), checking: T('status.checkingShort', 'Checking') });
+
+  const list = document.getElementById('svcList');
+  function buildList() {
+    list.innerHTML = SERVICES.map(s => `
+    <div class="svc status-checking" id="svc-${s.id}">
+      <span class="svc-dot"></span>
+      <div><div class="svc-name">${T('status.svc.' + s.id, s.name)}</div><p class="svc-desc">${s.desc}</p></div>
+      <span class="svc-badge" id="badge-${s.id}">${T('status.checkingShort', 'Checking')}</span>
+      <span class="svc-ms" id="ms-${s.id}">&mdash;</span>
+    </div>`).join('');
+  }
+  buildList();
+
+  if (UPTIME_HISTORY_URL) {
+    document.getElementById('historyLink').href = UPTIME_HISTORY_URL;
+    document.getElementById('historyWrap').style.display = '';
+  }
+
+  async function checkOne(svc) {
+    const start = performance.now();
+    let state = 'down';
+    try {
+      const controller = new AbortController();
+      const t = setTimeout(() => controller.abort(), 8000);
+      const res = await fetch(svc.url, { method: 'GET', mode: svc.mode, cache: 'no-store', signal: controller.signal });
+      clearTimeout(t);
+      const ms = Math.round(performance.now() - start);
+      if (res.type === 'opaque') state = ms > 2500 ? 'degraded' : 'reachable';
+      else if (res.ok) state = ms > 2500 ? 'degraded' : 'up';
+      else if (res.status < 500) state = 'degraded';
+      return { svc, state, ms };
+    } catch (e) {
+      return { svc, state: 'down', ms: Math.round(performance.now() - start) };
+    }
+  }
+
+  function paint({ svc, state, ms }) {
+    const row = document.getElementById('svc-' + svc.id);
+    row.className = 'svc status-' + (state === 'reachable' ? 'up' : state);
+    document.getElementById('badge-' + svc.id).textContent = LABEL()[state];
+    document.getElementById('ms-' + svc.id).textContent = state === 'down' ? '\u2014' : ms + ' ms';
+  }
+
+  async function runChecks() {
+    const results = await Promise.all(SERVICES.map(async s => { const r = await checkOne(s); paint(r); return r; }));
+    const overall = document.getElementById('overall');
+    const text = document.getElementById('overallText');
+    const anyDown = results.some(r => r.state === 'down');
+    const anyDegraded = results.some(r => r.state === 'degraded');
+    overall.className = 'overall ' + (anyDown ? 'status-down' : anyDegraded ? 'status-degraded' : 'status-up');
+    text.textContent = anyDown ? T('status.someDown', 'Some services are down') : anyDegraded ? T('status.someSlow', 'Some services are slow') : T('status.allUp', 'All systems operational');
+    document.getElementById('lastChecked').textContent = new Date().toLocaleTimeString();
+  }
+  runChecks();
+  setInterval(runChecks, 30000);
+  document.addEventListener('i18n:ready', () => { buildList(); runChecks(); renderNotices(); });
+
+  // Notices come from data/announcements.json (edit that file to post one).
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  let noticeItems = null;
+  function renderNotices() {
+    if (!noticeItems) return;
+    const items = noticeItems;
+    const render = (a, past) => `
+      <div class="ann ${esc(a.level || 'info')}${past ? ' past' : ''}">
+        <h3><span class="ann-level">${esc(a.level || 'info')}</span>${esc(a.title)}<span class="ann-date">${esc(a.date)}</span></h3>
+        <p>${esc(a.body)}</p>
+      </div>`;
+    const active = items.filter(a => a.active);
+    const past = items.filter(a => !a.active);
+    document.getElementById('annActive').innerHTML = active.length ? active.map(a => render(a, false)).join('') : `<p class="empty">${T('status.noActive', 'No active notices. Nothing planned, nothing broken that we know of.')}</p>`;
+    document.getElementById('annPast').innerHTML = past.length ? past.map(a => render(a, true)).join('') : `<p class="empty">${T('status.noPast', 'No past notices yet.')}</p>`;
+  }
+  fetch('data/announcements.json', { cache: 'no-cache' }).then(r => r.json()).then(j => {
+    noticeItems = (j.items || []).slice().sort((a, b) => String(b.date).localeCompare(String(a.date)));
+    renderNotices();
+  }).catch(() => {
+    document.getElementById('annActive').innerHTML = `<p class="empty">${T('status.loadError', 'Notices could not be loaded.')}</p>`;
+  });
+</script>
+</body>
+</html>

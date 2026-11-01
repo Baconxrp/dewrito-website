@@ -4,13 +4,24 @@
   <title>Dewrito | Contact</title>
   <meta charset="UTF-8">
   <meta name="description" content="Contact Dewrito — reporting, support, and federation admin information.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Dewrito">
+  <meta property="og:title" content="Dewrito | Contact">
+  <meta property="og:description" content="Contact Dewrito — reporting, support, and federation admin information.">
+  <meta property="og:url" content="https://dewrito.net/contact.html">
+  <meta property="og:image" content="https://dewrito.net/img/logo.png">
+  <meta name="twitter:card" content="summary">
+  <link rel="me" href="https://bsky.app/profile/dewrito.net">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="img/favicon.ico" rel="shortcut icon"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/site.css">
+  <script src="js/i18n.js"></script>
+  <script src="js/analytics.js" defer></script>
 </head>
 <body>
 
+<a class="skip-link" href="#main" data-i18n="nav.skip">Skip to content</a>
 <canvas id="starfield"></canvas>
 
 <!-- Navigation -->
@@ -18,19 +29,22 @@
   <div class="container">
     <a href="index.html" class="nav-logo"><img src="img/logo.png" alt="Dewrito"></a>
     <ul class="nav-links">
-      <li><a href="index.html#features">Features</a></li>
-      <li><a href="index.html#community">Community</a></li>
-      <li><a href="register.html">Register</a></li>
-      <li><a href="contact.html">Contact</a></li>
+      <li><a href="index.html#features" data-i18n="nav.features">Features</a></li>
+      <li><a href="index.html#community" data-i18n="nav.community">Community</a></li>
+      <li><a href="community.html" data-i18n="nav.directory">Directory</a></li>
+      <li><a href="getting-started.html" data-i18n="nav.guide">Guide</a></li>
+      <li><a href="register.html" data-i18n="nav.register">Register</a></li>
+      <li><a href="contact.html" data-i18n="nav.contact">Contact</a></li>
     </ul>
-    <div class="nav-cta"><a href="index.html" class="btn-secondary">Back Home</a></div>
-    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation"><span></span><span></span><span></span></button>
+    <a class="nav-bsky" href="https://bsky.app/profile/dewrito.net" target="_blank" rel="me noopener" aria-label="Dewrito on Bluesky" title="@dewrito.net on Bluesky"><svg class="bsky-icon" viewBox="0 0 568 501" aria-hidden="true"><path fill="currentColor" d="M123.121 33.664C188.241 82.553 258.281 181.68 284 234.873c25.719-53.192 95.759-152.32 160.879-201.21C491.866-1.611 568-28.906 568 57.947c0 17.346-9.945 145.713-15.778 166.555-20.275 72.453-94.155 90.933-159.875 79.748C507.222 323.8 536.444 388.56 473.333 453.32c-119.86 122.992-172.272-30.859-185.702-70.281-2.462-7.227-3.614-10.608-3.631-7.733-.017-2.875-1.169.506-3.631 7.733-13.43 39.422-65.842 193.273-185.702 70.281-63.111-64.76-33.89-129.52 80.986-149.071-65.72 11.185-139.6-7.295-159.875-79.748C9.945 203.659 0 75.291 0 57.946 0-28.906 76.135-1.612 123.121 33.664z"/></svg></a>
+    <div class="nav-cta"><a href="index.html" class="btn-secondary" data-i18n="nav.backHome">Back Home</a></div>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" data-i18n-attr="aria-label:nav.toggle" aria-expanded="false"><span></span><span></span><span></span></button>
   </div>
 </nav>
 
-<header class="page-header">
-  <h1>Contact & Reporting</h1>
-  <p style="margin: 0 auto;">Help us keep the community safe. Report violations or reach out for support.</p>
+<header class="page-header" id="main" tabindex="-1">
+  <h1 data-i18n="contact.title">Contact & Reporting</h1>
+  <p style="margin: 0 auto;" data-i18n="contact.intro">Help us keep the community safe. Report violations or reach out for support.</p>
 </header>
 
 <section class="content-section">
@@ -39,60 +53,74 @@
     <div class="contact-card">
       <h3>
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-        General Support
+        <span data-i18n="contact.support.title">General Support</span>
       </h3>
-      <p style="margin-bottom: var(--space-sm);">For account issues, registration help, or general questions about our services.</p>
-      <p><strong>Email:</strong> <a href="mailto:support@dewrito.net" style="color: var(--accent-cyan);">support@dewrito.net</a></p>
+      <p style="margin-bottom: var(--space-sm);" data-i18n="contact.support.body">For account issues, registration help, or general questions about our services.</p>
+      <p><strong data-i18n="contact.email">Email:</strong> <a href="mailto:support@dewrito.net" style="color: var(--accent-cyan);">support@dewrito.net</a></p>
     </div>
 
     <!-- Abuse Reporting -->
     <div class="contact-card">
       <h3>
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-        Report Abuse
+        <span data-i18n="contact.abuse.title">Report Abuse</span>
       </h3>
-      <p style="margin-bottom: var(--space-sm);">Report users or content violating our Terms of Service. Include details, timestamps, and context for faster action.</p>
-      <p><strong>Email:</strong> <a href="mailto:abuse@dewrito.net" style="color: #f87171;">abuse@dewrito.net</a></p>
+      <p style="margin-bottom: var(--space-sm);" data-i18n-html="contact.abuse.body">Report users or content violating our Terms of Service. Include details, timestamps, and context for faster action. See <a href="moderation.html" style="color: var(--accent-cyan);">how reports are handled</a>.</p>
+      <p><strong data-i18n="contact.email">Email:</strong> <a href="mailto:abuse@dewrito.net" style="color: #f87171;">abuse@dewrito.net</a></p>
     </div>
 
     <!-- Federation Admins -->
     <div class="contact-card">
       <h3>
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3ecf8e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        Federation Admins
+        <span data-i18n="contact.fed.title">Federation Admins</span>
       </h3>
-      <p style="margin-bottom: var(--space-sm);">We work with other Matrix homeserver admins to enforce our terms against dewrito.net users causing issues on your server.</p>
-      <p><strong>Email:</strong> <a href="mailto:support@dewrito.net" style="color: var(--accent-green);">support@dewrito.net</a></p>
+      <p style="margin-bottom: var(--space-sm);" data-i18n="contact.fed.body">We work with other Matrix homeserver admins to enforce our terms against dewrito.net users causing issues on your server.</p>
+      <p><strong data-i18n="contact.email">Email:</strong> <a href="mailto:support@dewrito.net" style="color: var(--accent-green);">support@dewrito.net</a></p>
     </div>
 
     <!-- Community Spaces -->
     <div class="contact-card">
       <h3>
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        Community Spaces
+        <span data-i18n="contact.spaces.title">Community Spaces</span>
       </h3>
-      <p style="margin-bottom: var(--space-sm);">Join our official spaces to chat, get help, and stay updated.</p>
+      <p style="margin-bottom: var(--space-sm);" data-i18n="contact.spaces.body">Join our official spaces to chat, get help, and stay updated.</p>
       <ul style="font-size: 0.875rem; color: var(--text-secondary); list-style: none; padding: 0;">
         <li style="margin-bottom: var(--space-xs);">📡 <a href="https://matrix.to/#/#dewrito:dewrito.net" target="_blank" rel="noopener" style="color: var(--accent-cyan);">#dewrito:dewrito.net</a></li>
-        <li>⚡ <a href="https://fluxer.dewrito.net/invite/BQVNmkEW" target="_blank" rel="noopener" style="color: var(--accent-green);">Fluxer Invite</a></li>
+        <li>⚡ <a href="https://fluxer.dewrito.net/invite/BQVNmkEW" target="_blank" rel="noopener" style="color: var(--accent-green);" data-i18n="contact.fluxerInvite">Fluxer Invite</a></li>
       </ul>
+    </div>
+  </div>
+
+  <div class="contact-grid" style="margin-top: var(--space-lg);">
+    <div class="contact-card">
+      <h3>
+        <span style="color:#0085ff; display:inline-flex;"><svg class="bsky-icon" style="width:20px;height:18px;" viewBox="0 0 568 501" aria-hidden="true"><path fill="currentColor" d="M123.121 33.664C188.241 82.553 258.281 181.68 284 234.873c25.719-53.192 95.759-152.32 160.879-201.21C491.866-1.611 568-28.906 568 57.947c0 17.346-9.945 145.713-15.778 166.555-20.275 72.453-94.155 90.933-159.875 79.748C507.222 323.8 536.444 388.56 473.333 453.32c-119.86 122.992-172.272-30.859-185.702-70.281-2.462-7.227-3.614-10.608-3.631-7.733-.017-2.875-1.169.506-3.631 7.733-13.43 39.422-65.842 193.273-185.702 70.281-63.111-64.76-33.89-129.52 80.986-149.071-65.72 11.185-139.6-7.295-159.875-79.748C9.945 203.659 0 75.291 0 57.946 0-28.906 76.135-1.612 123.121 33.664z"/></svg></span>
+        <span data-i18n="contact.bsky.title">Follow on Bluesky</span>
+      </h3>
+      <p style="margin-bottom: var(--space-sm);" data-i18n="contact.bsky.body">Announcements, maintenance notices and community news.</p>
+      <p><a href="https://bsky.app/profile/dewrito.net" target="_blank" rel="me noopener" style="color: #0085ff;">@dewrito.net</a></p>
     </div>
   </div>
 
   <hr class="divider">
 
-  <h3>Reporting on Matrix</h3>
-  <p>If you use your Matrix client to report remote users, only dewrito.net will receive the report. For comprehensive reports, please include as much detail as possible — usernames, timestamps, room context, and screenshots if available.</p>
+  <h3 data-i18n="contact.reporting.title">Reporting on Matrix</h3>
+  <p data-i18n="contact.reporting.body">If you use your Matrix client to report remote users, only dewrito.net will receive the report. For comprehensive reports, please include as much detail as possible — usernames, timestamps, room context, and screenshots if available.</p>
 </section>
 
 <footer class="footer">
   <div class="container">
-    <p class="footer-text">&copy; <span id="year"></span> Dewrito.net — Community-run server infrastructure.</p>
+    <p class="footer-text" data-i18n-html="footer.text">&copy; <span id="year"></span> Dewrito.net &mdash; Community-run server infrastructure.</p>
     <ul class="footer-links">
-      <li><a href="register.html">Register</a></li>
-      <li><a href="terms.html">Terms</a></li>
-      <li><a href="contact.html">Contact</a></li>
-      <li><a href="donate.html">Support Us</a></li>
+      <li><a href="register.html" data-i18n="footer.register">Register</a></li>
+      <li><a href="getting-started.html" data-i18n="footer.guide">Guide</a></li>
+      <li><a href="status.html" data-i18n="footer.status">Status</a></li>
+      <li><a href="terms.html" data-i18n="footer.terms">Terms</a></li>
+      <li><a href="privacy.html" data-i18n="footer.privacy">Privacy</a></li>
+      <li><a href="contact.html" data-i18n="footer.contact">Contact</a></li>
+      <li><a href="donate.html" data-i18n="footer.support">Support Us</a></li>
     </ul>
   </div>
 </footer>
@@ -102,7 +130,7 @@
   document.getElementById('year').textContent = new Date().getFullYear();
   const navbar = document.getElementById('navbar');
   const navToggle = document.getElementById('navToggle');
-  navToggle.addEventListener('click', () => navbar.classList.toggle('mobile-open'));
+  navToggle.addEventListener('click', () => navToggle.setAttribute('aria-expanded', String(navbar.classList.toggle('mobile-open'))));
   document.querySelectorAll('.nav-links a').forEach(link => link.addEventListener('click', () => navbar.classList.remove('mobile-open')));
 </script>
 </body>

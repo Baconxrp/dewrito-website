@@ -7,6 +7,8 @@
     if (!canvas) return;
 
     const ctx = canvas.getContext('2d');
+    // Honour the OS "reduce motion" setting: render one static frame instead of animating.
+    const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     let stars = [];
     let width = 0;
     let height = 0;
@@ -42,6 +44,7 @@
       width = canvas.width = window.innerWidth;
       height = canvas.height = window.innerHeight;
       createStars();
+      if (reduceMotion) drawStars(0);
     }
 
     function drawStars(time) {
@@ -118,7 +121,7 @@
         }
       }
 
-      requestAnimationFrame(drawStars);
+      if (!reduceMotion) requestAnimationFrame(drawStars);
     }
 
     // ==================== FIXED TIMING ====================

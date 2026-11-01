@@ -4,13 +4,25 @@
   <title>Dewrito | Terms of Service</title>
   <meta charset="UTF-8">
   <meta name="description" content="Dewrito.net Terms of Service and Community Guidelines.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Dewrito">
+  <meta property="og:title" content="Dewrito | Terms of Service">
+  <meta property="og:description" content="Dewrito.net Terms of Service and Community Guidelines.">
+  <meta property="og:url" content="https://dewrito.net/terms.html">
+  <meta property="og:image" content="https://dewrito.net/img/logo.png">
+  <meta name="twitter:card" content="summary">
+  <link rel="me" href="https://bsky.app/profile/dewrito.net">
+  <meta name="i18n-coverage" content="chrome">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="img/favicon.ico" rel="shortcut icon"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/site.css">
+  <script src="js/i18n.js"></script>
+  <script src="js/analytics.js" defer></script>
 </head>
 <body>
 
+<a class="skip-link" href="#main" data-i18n="nav.skip">Skip to content</a>
 <canvas id="starfield"></canvas>
 
 <!-- Navigation -->
@@ -18,17 +30,20 @@
   <div class="container">
     <a href="index.html" class="nav-logo"><img src="img/logo.png" alt="Dewrito"></a>
     <ul class="nav-links">
-      <li><a href="index.html#features">Features</a></li>
-      <li><a href="index.html#community">Community</a></li>
-      <li><a href="register.html">Register</a></li>
-      <li><a href="contact.html">Contact</a></li>
+      <li><a href="index.html#features" data-i18n="nav.features">Features</a></li>
+      <li><a href="index.html#community" data-i18n="nav.community">Community</a></li>
+      <li><a href="community.html" data-i18n="nav.directory">Directory</a></li>
+      <li><a href="getting-started.html" data-i18n="nav.guide">Guide</a></li>
+      <li><a href="register.html" data-i18n="nav.register">Register</a></li>
+      <li><a href="contact.html" data-i18n="nav.contact">Contact</a></li>
     </ul>
-    <div class="nav-cta"><a href="index.html" class="btn-secondary">Back Home</a></div>
-    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation"><span></span><span></span><span></span></button>
+    <a class="nav-bsky" href="https://bsky.app/profile/dewrito.net" target="_blank" rel="me noopener" aria-label="Dewrito on Bluesky" title="@dewrito.net on Bluesky"><svg class="bsky-icon" viewBox="0 0 568 501" aria-hidden="true"><path fill="currentColor" d="M123.121 33.664C188.241 82.553 258.281 181.68 284 234.873c25.719-53.192 95.759-152.32 160.879-201.21C491.866-1.611 568-28.906 568 57.947c0 17.346-9.945 145.713-15.778 166.555-20.275 72.453-94.155 90.933-159.875 79.748C507.222 323.8 536.444 388.56 473.333 453.32c-119.86 122.992-172.272-30.859-185.702-70.281-2.462-7.227-3.614-10.608-3.631-7.733-.017-2.875-1.169.506-3.631 7.733-13.43 39.422-65.842 193.273-185.702 70.281-63.111-64.76-33.89-129.52 80.986-149.071-65.72 11.185-139.6-7.295-159.875-79.748C9.945 203.659 0 75.291 0 57.946 0-28.906 76.135-1.612 123.121 33.664z"/></svg></a>
+    <div class="nav-cta"><a href="index.html" class="btn-secondary" data-i18n="nav.backHome">Back Home</a></div>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" data-i18n-attr="aria-label:nav.toggle" aria-expanded="false"><span></span><span></span><span></span></button>
   </div>
 </nav>
 
-<header class="page-header">
+<header class="page-header" id="main" tabindex="-1">
   <h1>Terms of Service & Community Guidelines</h1>
   <p style="margin: 0 auto;"><strong>Effective:</strong> March 8, 2026 · <strong>Last Updated:</strong> March 8, 2026</p>
 </header>
@@ -82,13 +97,13 @@
   <p>Paid plans use PayPal or Stripe. Comply with their AUP/Prohibited lists. Fees are non-refundable except as required by law.</p>
 
   <h2>7. Moderation, Enforcement, and Termination</h2>
-  <p>We may remove content, suspend/limit/terminate accounts for violations, legal needs, or risk. Appeals: <strong>support@dewrito.net</strong>. Providers may suspend services independently.</p>
+  <p>We may remove content, suspend/limit/terminate accounts for violations, legal needs, or risk. Appeals: <strong>support@dewrito.net</strong>. Providers may suspend services independently. How reports are handled is described on the <a href="moderation.html">moderation page</a>.</p>
 
   <h2>8. Disclaimers and Liability</h2>
   <p>Service provided "AS IS" — no warranties regarding availability, security, or federation/VoIP quality. Not liable for data loss, third-party actions, or indirect damages. You indemnify us and our providers.</p>
 
   <h2>9. Privacy</h2>
-  <p>Data processed per applicable law. Matrix federation shares metadata; Fluxer instances are user-controlled.</p>
+  <p>Data processed per applicable law. Matrix federation shares metadata; Fluxer instances are user-controlled. See our <a href="privacy.html">Privacy Policy</a> for what we store and how to have it removed.</p>
 
   <h2>10. Governing Law</h2>
   <p>United States law applies. Class action waiver where permitted.</p>
@@ -99,12 +114,15 @@
 
 <footer class="footer">
   <div class="container">
-    <p class="footer-text">&copy; <span id="year"></span> Dewrito.net — Community-run server infrastructure.</p>
+    <p class="footer-text" data-i18n-html="footer.text">&copy; <span id="year"></span> Dewrito.net &mdash; Community-run server infrastructure.</p>
     <ul class="footer-links">
-      <li><a href="register.html">Register</a></li>
-      <li><a href="terms.html">Terms</a></li>
-      <li><a href="contact.html">Contact</a></li>
-      <li><a href="donate.html">Support Us</a></li>
+      <li><a href="register.html" data-i18n="footer.register">Register</a></li>
+      <li><a href="getting-started.html" data-i18n="footer.guide">Guide</a></li>
+      <li><a href="status.html" data-i18n="footer.status">Status</a></li>
+      <li><a href="terms.html" data-i18n="footer.terms">Terms</a></li>
+      <li><a href="privacy.html" data-i18n="footer.privacy">Privacy</a></li>
+      <li><a href="contact.html" data-i18n="footer.contact">Contact</a></li>
+      <li><a href="donate.html" data-i18n="footer.support">Support Us</a></li>
     </ul>
   </div>
 </footer>
@@ -114,7 +132,7 @@
   document.getElementById('year').textContent = new Date().getFullYear();
   const navbar = document.getElementById('navbar');
   const navToggle = document.getElementById('navToggle');
-  navToggle.addEventListener('click', () => navbar.classList.toggle('mobile-open'));
+  navToggle.addEventListener('click', () => navToggle.setAttribute('aria-expanded', String(navbar.classList.toggle('mobile-open'))));
   document.querySelectorAll('.nav-links a').forEach(link => link.addEventListener('click', () => navbar.classList.remove('mobile-open')));
 </script>
 </body>
