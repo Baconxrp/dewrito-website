@@ -14,8 +14,14 @@
   <link rel="me" href="https://bsky.app/profile/dewrito.net">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="img/favicon.ico" rel="shortcut icon"/>
+  <link rel="preconnect" href="https://matrix.dewrito.net" crossorigin>
+  <link rel="preconnect" href="https://fluxer.dewrito.net" crossorigin>
+  <link rel="preconnect" href="https://sable.dewrito.net" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/site.css">
+  <noscript><style>
+    .noscript-note { max-width: 760px; margin: 0 auto var(--space-lg); padding: 12px 16px; border-left: 3px solid var(--accent-cyan); background: rgba(0, 212, 255, 0.05); border-radius: 0 8px 8px 0; color: var(--text-secondary); font-size: 0.9rem; }
+  </style></noscript>
   <script src="js/i18n.js"></script>
   <script src="js/analytics.js" defer></script>
   <style>
@@ -83,6 +89,7 @@
 </header>
 
 <section class="content-section">
+  <noscript><p class="noscript-note">Live checks run in your browser, so they need JavaScript. For outages and maintenance, follow <a href="https://bsky.app/profile/dewrito.net">@dewrito.net on Bluesky</a> or check <a href="data/announcements.json">the notices file</a>.</p></noscript>
   <div class="svc-list" id="svcList"></div>
   <p class="refresh-note" data-i18n-html="status.refreshNote">Last checked <span id="lastChecked">&mdash;</span>. "Reachable" means the service answered but did not expose an HTTP status to this page.</p>
   <p id="historyWrap" style="text-align:center; margin-top: var(--space-md); display:none;"><a id="historyLink" class="btn-secondary" href="#" target="_blank" rel="noopener" data-i18n="status.history">View uptime history &#8599;</a></p>
@@ -175,19 +182,29 @@
     document.getElementById('ms-' + svc.id).textContent = state === 'down' ? '\u2014' : ms + ' ms';
   }
 
+  let lastResults = null, lastCheckedAt = null;
   async function runChecks() {
     const results = await Promise.all(SERVICES.map(async s => { const r = await checkOne(s); paint(r); return r; }));
+    lastResults = results; lastCheckedAt = new Date();
+    paintOverall(results);
+  }
+  function paintOverall(results) {
     const overall = document.getElementById('overall');
     const text = document.getElementById('overallText');
     const anyDown = results.some(r => r.state === 'down');
     const anyDegraded = results.some(r => r.state === 'degraded');
     overall.className = 'overall ' + (anyDown ? 'status-down' : anyDegraded ? 'status-degraded' : 'status-up');
     text.textContent = anyDown ? T('status.someDown', 'Some services are down') : anyDegraded ? T('status.someSlow', 'Some services are slow') : T('status.allUp', 'All systems operational');
-    document.getElementById('lastChecked').textContent = new Date().toLocaleTimeString();
+    if (lastCheckedAt) document.getElementById('lastChecked').textContent = lastCheckedAt.toLocaleTimeString();
   }
   runChecks();
   setInterval(runChecks, 30000);
-  document.addEventListener('i18n:ready', () => { buildList(); runChecks(); renderNotices(); });
+  // A language change rebuilds the labels from the last results; it doesn't hit the servers again.
+  document.addEventListener('i18n:ready', () => {
+    buildList();
+    if (lastResults) { lastResults.forEach(paint); paintOverall(lastResults); }
+    renderNotices();
+  });
 
   // Notices come from data/announcements.json (edit that file to post one).
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));

@@ -14,8 +14,18 @@
   <link rel="me" href="https://bsky.app/profile/dewrito.net">
   <title>Dewrito</title>
   <link href="img/favicon.ico" rel="shortcut icon"/>
+  <link rel="preconnect" href="https://emdooqonibsgrazbcvzp.supabase.co" crossorigin>
+  <link rel="preconnect" href="https://horizon.stellar.org" crossorigin>
+  <link rel="preconnect" href="https://matrix.dewrito.net" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/site.css">
+  <noscript><style>
+    /* Without JavaScript the live bars can't load: hide them and close the gap they leave. */
+    .boost-bar, .status-strip { display: none !important; }
+    body { padding-top: 81px !important; padding-bottom: 0 !important; }
+    .noscript-note { max-width: 760px; margin: 0 auto var(--space-lg); padding: 12px 16px; border-left: 3px solid var(--accent-cyan); background: rgba(0, 212, 255, 0.05); border-radius: 0 8px 8px 0; color: var(--text-secondary); font-size: 0.9rem; }
+  </style></noscript>
   <script src="js/i18n.js"></script>
   <script src="js/analytics.js" defer></script>
   <style>
@@ -366,7 +376,7 @@
   }
 
   fetchAndProcessSliderData();
-  document.addEventListener('i18n:ready', () => { if (processedAds.length) renderActiveSlide(); checkServiceHealth(); });
+  document.addEventListener('i18n:ready', () => { if (processedAds.length) renderActiveSlide(); relabelStatus(); });
 
   // --- Boost tooltip: toggle + close on outside click ---
   const boostHelpBtn = document.getElementById('boostHelpBtn');
@@ -464,14 +474,22 @@
           status = 'degraded';
         }
         updateStatusRow(svc, status, latency);
-        results.push({ id: svc.id, status });
+        results.push({ id: svc.id, status, latency, svc });
       } catch (e) {
-        const latency = Math.round(performance.now() - start);
         updateStatusRow(svc, 'down', 0);
-        results.push({ id: svc.id, status: 'down' });
+        results.push({ id: svc.id, status: 'down', latency: 0, svc });
       }
     }));
+    lastStatusResults = results;
     updateOverallStatus(results);
+  }
+
+  // A language change only relabels the last results; it doesn't hit the servers again.
+  let lastStatusResults = null;
+  function relabelStatus() {
+    if (!lastStatusResults) return;
+    lastStatusResults.forEach(r => updateStatusRow(r.svc, r.status, r.latency));
+    updateOverallStatus(lastStatusResults);
   }
 
   // Initial check + auto-refresh every 30s
