@@ -121,6 +121,7 @@ body {
 }
 
 .title-img {
+  mix-blend-mode: screen;
   width: 100%;
   max-width: 720px;
   height: auto;
