@@ -333,3 +333,66 @@ body {
   .hub { flex-direction: column; text-align: center; gap: 1rem; }
   .nav { flex-wrap: wrap; gap: 1rem; }
 }
+
+/* Screenshot-matching refinements */
+.logo-mark {
+  font-size: 1.8rem;
+  filter: drop-shadow(0 0 6px var(--gold));
+}
+
+.btn-get-started {
+  background: linear-gradient(135deg, #00c6ff, #0072ff);
+  border: 1px solid rgba(0, 200, 255, 0.5);
+  box-shadow: 0 0 18px rgba(0, 180, 216, 0.55);
+}
+
+.hero {
+  grid-template-columns: 380px 1fr;
+  padding: 2.5rem 3rem 1.5rem;
+}
+
+.anime-girl {
+  filter: drop-shadow(0 0 35px rgba(123, 44, 191, 0.7)) drop-shadow(0 0 15px rgba(255, 100, 200, 0.3));
+}
+
+.title-img {
+  max-width: 680px;
+  mix-blend-mode: screen;
+  filter: drop-shadow(0 0 30px rgba(240, 193, 75, 0.7));
+}
+
+.section-label {
+  font-size: 1.05rem;
+  letter-spacing: 4px;
+  color: #f0c14b;
+  text-shadow: 0 0 10px rgba(240, 193, 75, 0.5);
+}
+
+.card {
+  border: 2px solid rgba(240, 193, 75, 0.55);
+  box-shadow: 0 0 30px rgba(123, 44, 191, 0.4), inset 0 0 20px rgba(0,0,0,0.3);
+}
+
+.card-overlay h3 {
+  font-size: 1.7rem;
+  text-shadow: 0 0 8px rgba(240, 193, 75, 0.6);
+}
+
+.feature {
+  border: 1px solid rgba(240, 193, 75, 0.4);
+  background: rgba(10, 6, 20, 0.7);
+}
+
+.feature .icon {
+  filter: drop-shadow(0 0 8px var(--gold));
+}
+
+.support {
+  background: linear-gradient(90deg, rgba(123, 44, 191, 0.55), rgba(5, 3, 10, 0.75));
+  border: 1px solid rgba(240, 193, 75, 0.4);
+}
+
+.support-btn {
+  background: linear-gradient(135deg, #9b4dca, #6a1b9a);
+  box-shadow: 0 0 22px rgba(155, 77, 202, 0.6);
+}
