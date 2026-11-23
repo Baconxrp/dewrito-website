@@ -29,7 +29,7 @@
   <main>
     <section class="hero">
       <div class="hero-character">
-        <img src="qUGfy.jpg" alt="Dewrito Guardian" class="anime-girl">
+        <img src="hero-girl.jpg" alt="Dewrito Guardian" class="anime-girl" id="heroChar">
       </div>
       <div class="hero-content">
         <h1>Dewrito</h1>
@@ -43,7 +43,7 @@
 
     <section class="boosted" id="community">
       <div class="section-label">BOOSTED COMMUNITIES</div>
-      <div class="cards">
+      <div class="cards" id="boostCards">
         <div class="card politics">
           <img src="bzF4l.jpg" alt="Politics">
           <div class="card-overlay">
@@ -104,12 +104,22 @@
     </section>
 
     <section class="support">
-      <img src="07sWh.jpg" alt="Support" class="chibi">
+      <img src="support-chibi.jpg" alt="Support" class="chibi">
       <div class="support-text">
         <p>Help keep the servers running. <strong>Fuel the mission.</strong></p>
       </div>
       <a href="#support" class="btn support-btn">SUPPORT US ✦</a>
     </section>
   </main>
+
+  <script>
+    // Simple character rotation
+    const chars = ['hero-girl.jpg', 'hero-bear.jpg'];
+    let idx = 0;
+    setInterval(() => {
+      idx = (idx + 1) % chars.length;
+      document.getElementById('heroChar').src = chars[idx];
+    }, 8000);
+  </script>
 </body>
 </html>
