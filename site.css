@@ -396,3 +396,85 @@ body {
   background: linear-gradient(135deg, #9b4dca, #6a1b9a);
   box-shadow: 0 0 22px rgba(155, 77, 202, 0.6);
 }
+
+/* Closer match refinements */
+.nav {
+  padding: 0.8rem 2rem;
+  background: rgba(5, 3, 10, 0.8);
+  border-bottom: 1px solid rgba(240, 193, 75, 0.3);
+}
+
+.logo {
+  font-size: 1.4rem;
+  letter-spacing: 0.3px;
+}
+
+.hero {
+  grid-template-columns: 340px 1fr;
+  padding: 2rem 2.5rem 1rem;
+  min-height: 480px;
+}
+
+.anime-girl {
+  max-width: 360px;
+  filter: drop-shadow(0 0 40px rgba(123, 44, 191, 0.75)) drop-shadow(0 0 20px rgba(200, 100, 255, 0.3));
+}
+
+.title-img {
+  max-width: 640px;
+  margin-bottom: 0.8rem;
+  filter: drop-shadow(0 0 35px rgba(240, 193, 75, 0.75));
+}
+
+.tagline {
+  font-size: 1.25rem;
+  line-height: 1.4;
+  color: #e0e0e0;
+}
+
+.section-label {
+  font-size: 1.1rem;
+  letter-spacing: 3.5px;
+  margin: 1.5rem 0 1rem;
+}
+
+.cards {
+  gap: 1.2rem;
+  max-width: 1050px;
+}
+
+.card {
+  border: 2px solid rgba(240, 193, 75, 0.6);
+  box-shadow: 0 0 28px rgba(123, 44, 191, 0.45), 0 0 10px rgba(240, 193, 75, 0.2);
+  border-radius: 12px;
+}
+
+.card-overlay {
+  background: linear-gradient(to top, rgba(5,3,10,0.9) 0%, rgba(5,3,10,0.4) 40%, transparent 70%);
+  padding: 1rem 1.1rem;
+}
+
+.card-overlay h3 {
+  font-size: 1.5rem;
+  letter-spacing: 1px;
+}
+
+.features {
+  gap: 1.2rem;
+  max-width: 1050px;
+}
+
+.feature {
+  padding: 1.2rem 1.3rem;
+  border-radius: 10px;
+  border: 1px solid rgba(240, 193, 75, 0.35);
+}
+
+.hub, .support {
+  max-width: 1050px;
+  border-radius: 12px;
+}
+
+.support {
+  padding: 0.9rem 1.5rem;
+}
