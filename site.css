@@ -21,7 +21,7 @@ body {
 .cosmic-bg {
   position: fixed;
   inset: 0;
-  background: url('A1tjx.jpg') center/cover no-repeat;
+  background: url('cosmic-bg.jpg') center/cover no-repeat;
   z-index: -2;
   opacity: 0.85;
 }
