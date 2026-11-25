@@ -478,3 +478,11 @@ body {
 .support {
   padding: 0.9rem 1.5rem;
 }
+
+.logo-mark-img {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 8px rgba(240, 193, 75, 0.7));
+  mix-blend-mode: screen;
+}
