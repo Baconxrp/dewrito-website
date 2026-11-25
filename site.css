@@ -575,3 +575,93 @@ body {
   align-items: center;
   gap: 1rem;
 }
+
+/* Fluid template match */
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem 0.5rem;
+  min-height: auto;
+  gap: 1rem;
+  background: none;
+  border: none;
+}
+
+.hero-character {
+  flex: 0 0 340px;
+  background: none;
+  border: none;
+  box-shadow: none;
+}
+
+.anime-girl {
+  width: 100%;
+  max-width: 340px;
+  height: auto;
+  background: none;
+  border: none;
+  box-shadow: none;
+  filter: drop-shadow(0 0 30px rgba(123, 44, 191, 0.6));
+}
+
+.hero-content {
+  flex: 1;
+  background: none;
+  border: none;
+  box-shadow: none;
+  padding: 0 1rem;
+  text-align: left;
+}
+
+.title-img {
+  max-width: 520px;
+  background: none;
+  border: none;
+  box-shadow: none;
+  display: block;
+}
+
+.boosted, .features, .hub, .support {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  margin: 0.8rem auto;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  max-width: 980px;
+  margin: 0.5rem auto 1.5rem;
+}
+
+.card {
+  background: none;
+  border: 2px solid rgba(240, 193, 75, 0.4);
+  box-shadow: 0 0 20px rgba(123, 44, 191, 0.3);
+  border-radius: 12px;
+}
+
+.feature {
+  background: rgba(10, 6, 20, 0.6);
+  border: 1px solid rgba(240, 193, 75, 0.25);
+  border-radius: 10px;
+}
+
+.hub {
+  background: rgba(20, 8, 40, 0.65);
+  border: 1px solid rgba(240, 193, 75, 0.25);
+  border-radius: 10px;
+  padding: 0.9rem 1.4rem;
+  max-width: 980px;
+}
+
+.support {
+  background: rgba(20, 8, 40, 0.65);
+  border: 1px solid rgba(240, 193, 75, 0.25);
+  border-radius: 10px;
+  padding: 0.7rem 1.2rem;
+  max-width: 980px;
+}
