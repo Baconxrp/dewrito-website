@@ -98,27 +98,37 @@
       document.getElementById('heroChar').src = chars[charIdx];
     }, 8000);
 
-    // Boosted communities data (SFW categories, top 3 style)
+    // Boosted communities matching dewrito.net categories (SFW)
     const categories = [
       { name: 'ALL', items: [
         { name: 'POLITICS', room: '#politics:dewrito.net', img: 'bzF4l.jpg' },
         { name: 'US POLITICS', room: '#us-politics:dewrito.net', img: 'NSbn6.jpg' },
         { name: 'BARK!', room: '#bark:dewrito.net', img: 'THc71.jpg' }
       ]},
-      { name: 'TECH', items: [
-        { name: 'NEON CITY', room: '#tech:dewrito.net', img: 'tech-city.jpg' },
-        { name: 'CODE LAB', room: '#code:dewrito.net', img: 'tech-city.jpg' },
-        { name: 'FUTURE NET', room: '#future:dewrito.net', img: 'tech-city.jpg' }
+      { name: 'GAMING', items: [
+        { name: 'BARK! GAMING', room: '#bark:dewrito.net', img: 'THc71.jpg' },
+        { name: 'GAMES', room: '#games:dewrito.net', img: 'tech-city.jpg' },
+        { name: '/V/ VIDEO GAMES', room: '#v:dewrito.net', img: 'tech-city.jpg' }
       ]},
-      { name: 'BOOKS', items: [
-        { name: 'STAR LIBRARY', room: '#books:dewrito.net', img: 'library.jpg' },
-        { name: 'MYTH READS', room: '#myth:dewrito.net', img: 'library.jpg' },
-        { name: 'NIGHT PAGES', room: '#pages:dewrito.net', img: 'library.jpg' }
+      { name: 'POLITICS & OPINION', items: [
+        { name: 'POLITICS', room: '#politics:dewrito.net', img: 'bzF4l.jpg' },
+        { name: 'US POLITICS', room: '#us-politics:dewrito.net', img: 'NSbn6.jpg' },
+        { name: 'VEGAN SPACE', room: '#vegan:dewrito.net', img: 'library.jpg' }
       ]},
-      { name: 'FANTASY', items: [
-        { name: 'GLOW FOREST', room: '#fantasy:dewrito.net', img: 'fantasy-forest.jpg' },
-        { name: 'MYSTIC GROVE', room: '#mystic:dewrito.net', img: 'fantasy-forest.jpg' },
-        { name: 'DREAM WOODS', room: '#dream:dewrito.net', img: 'fantasy-forest.jpg' }
+      { name: 'ANIME & MANGA', items: [
+        { name: 'OTAKU', room: '#otaku:dewrito.net', img: 'fantasy-forest.jpg' },
+        { name: '/A/ ANIME', room: '#a:dewrito.net', img: 'fantasy-forest.jpg' },
+        { name: '🌸 ANIME', room: '#anime:dewrito.net', img: 'fantasy-forest.jpg' }
+      ]},
+      { name: 'MOVIES & TV', items: [
+        { name: 'MOVIES & TV', room: '#movies:dewrito.net', img: 'library.jpg' },
+        { name: 'GLASGOW CLUB', room: '#glasgow:dewrito.net', img: 'library.jpg' },
+        { name: 'SCREEN TALK', room: '#screen:dewrito.net', img: 'library.jpg' }
+      ]},
+      { name: 'FURRY', items: [
+        { name: 'BARK!', room: '#bark:dewrito.net', img: 'THc71.jpg' },
+        { name: 'FUZZY GAMERS', room: '#fuzzy:dewrito.net', img: 'THc71.jpg' },
+        { name: 'PAW SPACE', room: '#paw:dewrito.net', img: 'THc71.jpg' }
       ]}
     ];
 
