@@ -42,30 +42,8 @@
     </section>
 
     <section class="boosted" id="community">
-      <div class="section-label">BOOSTED COMMUNITIES</div>
-      <div class="cards" id="boostCards">
-        <div class="card politics">
-          <img src="bzF4l.jpg" alt="Politics">
-          <div class="card-overlay">
-            <h3>POLITICS</h3>
-            <p>#politics:dewrito.net</p>
-          </div>
-        </div>
-        <div class="card us-politics">
-          <img src="NSbn6.jpg" alt="US Politics">
-          <div class="card-overlay">
-            <h3>US POLITICS</h3>
-            <p>#us-politics:dewrito.net</p>
-          </div>
-        </div>
-        <div class="card bark">
-          <img src="THc71.jpg" alt="Bark">
-          <div class="card-overlay">
-            <h3>BARK!</h3>
-            <p>#bark:dewrito.net</p>
-          </div>
-        </div>
-      </div>
+      <div class="section-label" id="boostLabel">BOOSTED COMMUNITIES • ALL</div>
+      <div class="cards" id="boostCards"></div>
     </section>
 
     <section class="features" id="features">
@@ -113,13 +91,58 @@
   </main>
 
   <script>
-    // Simple character rotation
     const chars = ['hero-girl.jpg', 'hero-bear.jpg'];
-    let idx = 0;
+    let charIdx = 0;
     setInterval(() => {
-      idx = (idx + 1) % chars.length;
-      document.getElementById('heroChar').src = chars[idx];
+      charIdx = (charIdx + 1) % chars.length;
+      document.getElementById('heroChar').src = chars[charIdx];
     }, 8000);
+
+    // Boosted communities data (SFW categories, top 3 style)
+    const categories = [
+      { name: 'ALL', items: [
+        { name: 'POLITICS', room: '#politics:dewrito.net', img: 'bzF4l.jpg' },
+        { name: 'US POLITICS', room: '#us-politics:dewrito.net', img: 'NSbn6.jpg' },
+        { name: 'BARK!', room: '#bark:dewrito.net', img: 'THc71.jpg' }
+      ]},
+      { name: 'TECH', items: [
+        { name: 'NEON CITY', room: '#tech:dewrito.net', img: 'tech-city.jpg' },
+        { name: 'CODE LAB', room: '#code:dewrito.net', img: 'tech-city.jpg' },
+        { name: 'FUTURE NET', room: '#future:dewrito.net', img: 'tech-city.jpg' }
+      ]},
+      { name: 'BOOKS', items: [
+        { name: 'STAR LIBRARY', room: '#books:dewrito.net', img: 'library.jpg' },
+        { name: 'MYTH READS', room: '#myth:dewrito.net', img: 'library.jpg' },
+        { name: 'NIGHT PAGES', room: '#pages:dewrito.net', img: 'library.jpg' }
+      ]},
+      { name: 'FANTASY', items: [
+        { name: 'GLOW FOREST', room: '#fantasy:dewrito.net', img: 'fantasy-forest.jpg' },
+        { name: 'MYSTIC GROVE', room: '#mystic:dewrito.net', img: 'fantasy-forest.jpg' },
+        { name: 'DREAM WOODS', room: '#dream:dewrito.net', img: 'fantasy-forest.jpg' }
+      ]}
+    ];
+
+    let catIdx = 0;
+    function renderBoost() {
+      const cat = categories[catIdx];
+      document.getElementById('boostLabel').textContent = 'BOOSTED COMMUNITIES • ' + cat.name;
+      const container = document.getElementById('boostCards');
+      container.innerHTML = cat.items.map(item => `
+        <a href="https://matrix.to/#/${item.room}" class="card" target="_blank" rel="noopener">
+          <img src="${item.img}" alt="${item.name}">
+          <img src="card-frame.jpg" class="card-frame" alt="">
+          <div class="card-overlay">
+            <h3>${item.name}</h3>
+            <p>${item.room}</p>
+          </div>
+        </a>
+      `).join('');
+    }
+    renderBoost();
+    setInterval(() => {
+      catIdx = (catIdx + 1) % categories.length;
+      renderBoost();
+    }, 10000);
   </script>
 </body>
 </html>
