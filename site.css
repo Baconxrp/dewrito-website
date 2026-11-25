@@ -486,3 +486,26 @@ body {
   filter: drop-shadow(0 0 8px rgba(240, 193, 75, 0.7));
   mix-blend-mode: screen;
 }
+
+.card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+}
+
+.card-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  opacity: 0.85;
+  z-index: 2;
+}
+
+.card-overlay {
+  z-index: 3;
+}
