@@ -509,3 +509,69 @@ body {
 .card-overlay {
   z-index: 3;
 }
+
+/* Template match refinements */
+.logo-full {
+  height: 48px;
+  width: auto;
+  filter: drop-shadow(0 0 8px rgba(240, 193, 75, 0.5));
+  mix-blend-mode: screen;
+}
+
+.hero {
+  grid-template-columns: 380px 1fr;
+  padding: 1.5rem 2rem 1rem;
+  min-height: 420px;
+  align-items: center;
+}
+
+.anime-girl {
+  max-width: 340px;
+  margin-left: -20px;
+}
+
+.title-img {
+  max-width: 580px;
+  margin-bottom: 0.6rem;
+}
+
+.tagline {
+  font-size: 1.15rem;
+  max-width: 480px;
+}
+
+.section-label {
+  font-size: 1rem;
+  letter-spacing: 2px;
+}
+
+.cards {
+  gap: 1rem;
+  max-width: 1000px;
+}
+
+.feature {
+  padding: 1rem 1.2rem;
+}
+
+.hub {
+  background: linear-gradient(90deg, rgba(40, 10, 60, 0.8), rgba(10, 5, 20, 0.7));
+  border: 1px solid rgba(240, 193, 75, 0.3);
+  padding: 1rem 1.5rem;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1000px;
+  margin: 1rem auto;
+}
+
+.support {
+  max-width: 1000px;
+  margin: 1rem auto 2rem;
+  padding: 0.8rem 1.2rem;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
