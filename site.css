@@ -665,3 +665,84 @@ body {
   padding: 0.7rem 1.2rem;
   max-width: 980px;
 }
+
+/* Closer template match - density and proportions */
+.nav {
+  padding: 0.6rem 1.5rem;
+  background: rgba(5, 3, 10, 0.75);
+}
+
+.logo-full {
+  height: 42px;
+}
+
+.hero {
+  padding: 0.8rem 1.5rem 0.4rem;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+
+.hero-character {
+  flex: 0 0 320px;
+}
+
+.anime-girl {
+  max-width: 310px;
+  margin-top: -10px;
+}
+
+.hero-content {
+  padding-top: 0.5rem;
+}
+
+.title-img {
+  max-width: 500px;
+  margin-bottom: 0.4rem;
+}
+
+.tagline {
+  font-size: 1.05rem;
+  margin-bottom: 1rem;
+  line-height: 1.35;
+}
+
+.hero-actions {
+  gap: 0.8rem;
+}
+
+.section-label {
+  margin: 0.6rem 0 0.5rem;
+  font-size: 0.95rem;
+}
+
+.cards {
+  max-width: 960px;
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.card {
+  aspect-ratio: 16/10.5;
+  border-width: 1.5px;
+}
+
+.features {
+  max-width: 960px;
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.feature {
+  padding: 0.9rem 1rem;
+}
+
+.hub, .support {
+  max-width: 960px;
+  margin: 0.6rem auto;
+  padding: 0.7rem 1.2rem;
+}
+
+.support .chibi {
+  width: 60px;
+  height: auto;
+}
