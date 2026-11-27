@@ -746,3 +746,42 @@ body {
   width: 60px;
   height: auto;
 }
+
+/* Fix logo, title overlap, and boosted spacing */
+.logo {
+  display: flex;
+  align-items: center;
+}
+.logo-full {
+  height: 46px;
+  width: auto;
+  mix-blend-mode: screen;
+  filter: drop-shadow(0 0 6px rgba(240,193,75,0.4));
+}
+.logo-text { display: none; }
+
+.hero {
+  position: relative;
+  min-height: 380px;
+  padding-bottom: 0;
+  overflow: visible;
+}
+.hero-content {
+  position: relative;
+  z-index: 3;
+  margin-top: -40px; /* push tagline/buttons up over title area */
+}
+.title-img {
+  position: relative;
+  z-index: 2;
+  margin-bottom: -20px;
+}
+.boosted {
+  position: relative;
+  z-index: 1;
+  margin-top: -30px; /* pull up slightly but not over the girl */
+}
+.hero-character {
+  position: relative;
+  z-index: 4;
+}
